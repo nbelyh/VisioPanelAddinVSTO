@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+
+  <?define Version="1.0.14.0"?>
+
+  <?if $(var.Platform)=x64 ?>
+  <?define Win64YesNo="yes" ?>
+  <?define pf="ProgramFiles64Folder" ?>
+  <?else ?>
+  <?define Win64YesNo="no" ?>
+  <?define pf="ProgramFilesFolder" ?>
+  <?endif ?>
+  
+
+  <!--
+	Replace:
+
+	Name          - with the name of your product.
+	Manufacturer  - with the name of your company
+	UpgradeCode   - !!! (importnant) replace with you own unique guid (you can generate one usin Visual Studio -> Tools -> Create New Guid
+  -->
+
+  <Product Id="*" 
+           Name="Wix Installer Visio Solution Sample $(var.Version) ($(var.Platform))" Language="1033" Codepage="1252"
+           Version="$(var.Version)" 
+           Manufacturer="Nikolay Belykh" 
+           UpgradeCode="{F705C3FC-7C07-4125-BA5B-C51E84816B6B}">
+
+    <Package 
+        InstallerVersion="310" 
+        Compressed="yes" 
+        Platform="$(var.Platform)"
+        InstallPrivileges="elevated"
+        InstallScope="perMachine"
+      />
+
+    <MajorUpgrade
+      DowngradeErrorMessage="A later version of [ProductName] is already installed. Setup will now exit." />
+    
+    <Property Id="MSIFASTINSTALL">1</Property>
+    <Media Id="1" Cabinet="media1.cab" EmbedCab="yes" />
+
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="$(var.pf)">
+
+	<!-- 
+	   replace Directory names with the names of your company (if needed) and product directories 
+        -->
+
+        <Directory Id="COMPANYDIR" Name="UnmanagedVisio" >
+          <Directory Id="INSTALLDIR" Name="Wix Installer Visio Solution Sample" FileSource="$(var.SolutionDir)\VisioFiles" >
+
+            <Component Id="StencilA" Guid="*" Win64="$(var.Win64YesNo)">
+              <File Name="StencilA.vss" />
+			  <Category Id="{CF1F488D-8D6F-499C-A78D-026E1DF38101}" Qualifier="1033\StencilA.vss" AppData="General\Stencil AStencilA.vss" />
+			  <Category Id="{6D9D8B6F-D0EF-4BC0-8DD4-09DD6CE2B101}" Qualifier="1033\StencilA.vss" AppData="General\Stencil A|StencilA.vss" />
+              <Category Id="{6D9D8B6F-D0EF-4BC0-8DD4-09DD6CE2B201}" Qualifier="1033\StencilA.vss" AppData="General\Stencil A|StencilA.vss" />
+            </Component>
+
+            <Component Id="StencilB" Guid="*" Win64="$(var.Win64YesNo)">
+              <File Name="StencilB.vssx" />
+			  <Category Id="{CF1F488D-8D6F-499C-A78D-026E1DF38101}" Qualifier="1033\StencilB.vssx" AppData="General\Stencil B|StencilB.vss" />
+			  <Category Id="{6D9D8B6F-D0EF-4BC0-8DD4-09DD6CE2B101}" Qualifier="1033\StencilB.vssx" AppData="General\Stencil B|StencilB.vss" />
+              <Category Id="{6D9D8B6F-D0EF-4BC0-8DD4-09DD6CE2B201}" Qualifier="1033\StencilB.vssx" AppData="General\Stencil B|StencilB.vss" />
+            </Component>
+
+            <Component Id="TemplateA" Guid="*" Win64="$(var.Win64YesNo)">
+              <File Name="TemplateA.vst" />
+              <Category Id="{CF1F488D-8D6F-499C-A78D-026E1DF38100}" Qualifier="1049\TemplateA.vst" AppData="X Vorlagen\Vorlage-A" />
+              <Category Id="{CF1F488D-8D6F-499C-A78D-026E1DF38100}" Qualifier="1033\TemplateA.vst" AppData="X Templates\Template-A" />
+            </Component>
+
+            <Component Id="TemplateB" Guid="*" Win64="$(var.Win64YesNo)">
+              <File Name="TemplateB.vst" />
+              <Category Id="{CF1F488D-8D6F-499C-A78D-026E1DF38100}" Qualifier="1049\TemplateB.vst" AppData="X Vorlagen\Vorlage-B" />
+              <Category Id="{CF1F488D-8D6F-499C-A78D-026E1DF38100}" Qualifier="1033\TemplateB.vst" AppData="X Templates\Template-B" />
+            </Component>
+            
+          </Directory>
+        </Directory>
+
+      </Directory>
+    </Directory>
+
+<!-- define script action to bump Visio counter -->
+
+<CustomAction Id="SetConfigChangeID" Script="vbscript" Execute="deferred" Impersonate="no" Return="check" Win64="$(var.Win64YesNo)">
+<![CDATA[
+Set shl = CreateObject("WScript.Shell")
+Key = "HKLM\Software\Microsoft\Office\Visio\ConfigChangeID"
+On Error Resume Next
+visChangeId = WshShell.RegRead(key)
+If Err = 0 Then WshShell.RegWrite key, visChangeId+1, "REG_DWORD"
+]]>
+</CustomAction>
+
+    <InstallExecuteSequence>
+      <Custom Action="SetConfigChangeID" After="InstallInitialize" />
+    </InstallExecuteSequence>
+
+    <!-- group your files into features they way you want to -->
+
+    <Feature Id="ProductFeature" Title="All Items" Level="1" Display="expand" >
+      
+      <Feature Id="StencilsFeature" Title="Install stencils" Level="1">
+        <ComponentRef Id="StencilA" />
+        <ComponentRef Id="StencilB" />
+      </Feature>
+
+      <Feature Id="TemplatesFeature" Title="Install templates" Level="1" >
+        <ComponentRef Id="TemplateA" />
+        <ComponentRef Id="TemplateB" />
+      </Feature>
+      
+    </Feature>
+
+    <!-- you can use any other UI from wix, or create your own -->
+
+    <UIRef Id="WixUI_FeatureTree" />
+    
+  </Product>
+</Wix>
