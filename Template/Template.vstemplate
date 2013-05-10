@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+  <TemplateData>
+    <Name>WiX Setup Project for Visio</Name>
+    <Description>Creates an WiX installer project to install Microsoft Visio content (stencils, templates, etc)</Description>
+    <Icon>Template.ico</Icon>
+    <ProjectType>WiX</ProjectType>
+    <RequiredFrameworkVersion>2.0</RequiredFrameworkVersion>
+    <SortOrder>1000</SortOrder>
+    <TemplateID>70771bfe-b2ce-472d-be8d-5ec72b76714b</TemplateID>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>Setup</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+  </TemplateData>
+  <TemplateContent>
+    <Project File="Setup.wixproj" ReplaceParameters="true">
+      <ProjectItem ReplaceParameters="true" OpenInEditor="true">Product.wxs</ProjectItem>
+      <ProjectItem ReplaceParameters="false">VisioFiles\Stencil_1_M.vss</ProjectItem>
+      <ProjectItem ReplaceParameters="false">VisioFiles\Template_1_M.vst</ProjectItem>
+    </Project>
+  </TemplateContent>
+</VSTemplate>

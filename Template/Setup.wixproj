@@ -1,36 +1,36 @@
-﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>3.0</ProductVersion>
-    <ProjectGuid>{892035c1-1004-416b-82c1-bdbcbb532abb}</ProjectGuid>
+    <ProjectGuid>$guid2$</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
-    <OutputName>WixSolutionSetup_$(Platform)</OutputName>
+    <OutputName>setup_$(Platform)</OutputName>
     <OutputType>Package</OutputType>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' AND '$(MSBuildExtensionsPath32)' != '' ">$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <OutputPath>$(SolutionDir)x86\$(Configuration)\</OutputPath>
-    <IntermediateOutputPath>$(SolutionDir)x86\$(Configuration)\obj\</IntermediateOutputPath>
+    <OutputPath>bin\$(Configuration)\$(Platform)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\$(Platform)\</IntermediateOutputPath>
     <DefineConstants>Debug</DefineConstants>
     <Cultures>
     </Cultures>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <OutputPath>$(SolutionDir)x86\$(Configuration)\</OutputPath>
-    <IntermediateOutputPath>$(SolutionDir)x86\$(Configuration)\obj\</IntermediateOutputPath>
+    <OutputPath>bin\$(Configuration)\$(Platform)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\$(Platform)\</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <DefineConstants>Debug</DefineConstants>
     <Cultures>
     </Cultures>
-    <OutputPath>$(SolutionDir)x64\$(Configuration)\</OutputPath>
-    <IntermediateOutputPath>$(SolutionDir)x64\$(Configuration)\obj\</IntermediateOutputPath>
+    <OutputPath>bin\$(Configuration)\$(Platform)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\$(Platform)\</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
-    <OutputPath>$(SolutionDir)x64\$(Configuration)\</OutputPath>
-    <IntermediateOutputPath>$(SolutionDir)x64\$(Configuration)\obj\</IntermediateOutputPath>
+    <OutputPath>bin\$(Configuration)\$(Platform)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\$(Platform)\</IntermediateOutputPath>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Product.wxs" />
@@ -40,6 +40,13 @@
       <HintPath>$(WixExtDir)\WixUIExtension.dll</HintPath>
       <Name>WixUIExtension</Name>
     </WixExtension>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="VisioFiles\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="VisioFiles\Stencil_1_M.vss" />
+    <Content Include="VisioFiles\Template_1_M.vst" />
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
   <!--

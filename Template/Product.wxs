@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 
+
+  Wix Project template to install (and publish) Visio component (stencils & templates)
+  Registers stencils/templates for all versions of Visio (2007 - 2013), both x32 and x64, all languages.
+  If you need to register for a specific version only or want to support Visio 2003 then you may need to use a different publishing guid (or language settings).
+  For details, please check 
+  
+  This template assumes that they are in sub-folder named "VisioFiles", but in fact they can be anywhere.
+  In case you want them in a differnet folder, you need to change FileSource attribute below
+  
+-->
+
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+
+  <!--
+  TODO: set product version, increment on each release 
+  -->
+  <?define Version="1.0.0.0"?>
+
+  <?define UpgradeCode="{$guid1$}" ?>
+
+  <?if $(var.Platform)=x64 ?>
+    <?define Win64YesNo="yes" ?>
+    <?define pf="ProgramFiles64Folder" ?>
+  <?else ?>
+    <?define Win64YesNo="no" ?>
+    <?define pf="ProgramFilesFolder" ?>
+  <?endif ?>
+
+  <!-- 
+  TODO: set proper product name and manufacturer 
+  -->
+  <Product Id="*"
+           Name="$projectname$ $(var.Version) ($(var.Platform))"
+           Language="1033"
+           Version="$(var.Version)"
+           Manufacturer="$username$"
+           UpgradeCode="$(var.UpgradeCode)">
+
+    <Package
+        InstallerVersion="310"
+        Compressed="yes"
+        Platform="$(var.Platform)"
+        InstallPrivileges="elevated"
+        InstallScope="perMachine"
+      />
+
+    <MajorUpgrade
+      DowngradeErrorMessage="A later version of [ProductName] is already installed. Setup will now exit." />
+
+    <Media Id="1" Cabinet="media1.cab" EmbedCab="yes" />
+
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="$(var.pf)">
+
+        <Directory Id="INSTALLDIR" Name="$safeprojectname$" FileSource="VisioFiles" >
+
+          <!-- 
+          TODO: add one component per stencil file you want to install 
+          -->
+          <Component Win64="$(var.Win64YesNo)">
+            <File Name="Stencil_1_M.vss" />
+            <Category Id="{CF1F488D-8D6F-499C-A78D-026E1DF38101}" Qualifier="1\Stencil_1_M.vss" AppData="$projectname$\My Stencil 1" />
+          </Component>
+
+          <!-- 
+          TODO: add one component per template file you want to install 
+          -->
+          <Component Win64="$(var.Win64YesNo)">
+            <File Name="Template_1_M.vst" />
+            <Category Id="{CF1F488D-8D6F-499C-A78D-026E1DF38100}" Qualifier="1\Template_1_M.vst" AppData="$projectname$\My Template 1" />
+          </Component>
+
+        </Directory>
+      </Directory>
+
+    </Directory>
+
+    <!-- define script action to bump Visio counter -->
+
+    <CustomAction Id="SetConfigChangeID" Script="vbscript" Execute="deferred" Impersonate="no" Return="check" Win64="$(var.Win64YesNo)">
+<![CDATA[
+Set shl = CreateObject("WScript.Shell")
+Key = "HKLM\Software\Microsoft\Office\Visio\ConfigChangeID"
+On Error Resume Next
+visChangeId = shl.RegRead(key)
+If Err = 0 Then shl.RegWrite key, visChangeId+1, "REG_DWORD"
+]]>
+    </CustomAction>
+
+    <InstallExecuteSequence>
+      <Custom Action="SetConfigChangeID" After="InstallInitialize" />
+    </InstallExecuteSequence>
+
+    <!-- 
+    TODO: if needed, you may group files into features they way you want 
+    -->
+
+    <Feature Id="ProductFeature" Title="All Items" Level="1" Display="expand" >
+
+      <Feature Id="StencilsFeature" Title="Install stencils" Level="1">
+        <ComponentRef Id="Stencil_1_M.vss" />
+      </Feature>
+
+      <Feature Id="TemplatesFeature" Title="Install templates" Level="1" >
+        <ComponentRef Id="Template_1_M.vst" />
+      </Feature>
+
+    </Feature>
+
+    <!-- 
+    TODO: you can use any other UI from wix, or create your own 
+    -->
+    <UIRef Id="WixUI_FeatureTree" />
+
+  </Product>
+</Wix>

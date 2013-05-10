@@ -1,10 +1,8 @@
 @echo off
-IF EXIST ship RMDIR /S /Q ship
-IF EXIST x86 RMDIR /S /Q x86
-IF EXIST x64 RMDIR /S /Q x64
-IF EXIST Setup\x64 RMDIR /S /Q Setup\x64
-IF EXIST Setup\x86 RMDIR /S /Q Setup\x86
-IF EXIST Setup\bin RMDIR /S /Q Setup\bin
+IF EXIST Template\bin RMDIR /S /Q Template\bin
+IF EXIST Template\obj RMDIR /S /Q Template\obj
+IF EXIST Template\*.user DEL /S /Q Template\*.user
 
-IF EXIST *.ncb DEL /S /Q *.ncb
-IF EXIST *.cache DEL /S /Q *.cache
+IF EXIST VSIX\bin RMDIR /S /Q VSIX\bin
+IF EXIST VSIX\obj RMDIR /S /Q VSIX\obj
+IF EXIST VSIX\*.user DEL /S /Q VSIX\*.user
