@@ -59,19 +59,33 @@
         <Directory Id="INSTALLDIR" Name="$safeprojectname$" FileSource="VisioFiles" >
 
           <!-- 
-          TODO: add one component per stencil file you want to install 
+          In the registration data (Category) attributes mean the following:
+          - Id:        <target Visio guid (2007/2010/2013) >
+          - Qualifier: <language (1 for all or lcid)> \ <stencil file name>
+          - AppData:   <menu name> | <alternate stencil names> | <number of quick shapes> | <target Visio bits (32/64/-1)>
           -->
+          
+          <!-- TODO: add one component per stencil file you want to install -->
           <Component Win64="$(var.Win64YesNo)">
             <File Name="Stencil_1_M.vss" />
-            <Category Id="{CF1F488D-8D6F-499C-A78D-026E1DF38101}" Qualifier="1\Stencil_1_M.vss" AppData="$projectname$\My Stencil 1" />
+            <Category Id="{6D9D8B6F-D0EF-4BC0-8DD4-09DD6CE2B001}" Qualifier="1\Stencil_1_M.vss" AppData="$projectname$\My Stencil 1||0" />
+            <Category Id="{6D9D8B6F-D0EF-4BC0-8DD4-09DD6CE2B101}" Qualifier="1\Stencil_1_M.vss" AppData="$projectname$\My Stencil 1||0|-1" />
+            <Category Id="{6D9D8B6F-D0EF-4BC0-8DD4-09DD6CE2B201}" Qualifier="1\Stencil_1_M.vss" AppData="$projectname$\My Stencil 1||0|-1" />
           </Component>
 
           <!-- 
-          TODO: add one component per template file you want to install 
+          In the registration data (Category) attributes mean the following:
+          - Id:        <target Visio guid (2007/2010/2013) >
+          - Qualifier: <language (1 for all or lcid)> \ <stencil file name>
+          - AppData:   <menu name> | <alternate stencil names> | <is featured> | <target Visio bits (32/64/-1)>
           -->
+          
+          <!-- TODO: add one component per template file you want to install -->
           <Component Win64="$(var.Win64YesNo)">
             <File Name="Template_1_M.vst" />
-            <Category Id="{CF1F488D-8D6F-499C-A78D-026E1DF38100}" Qualifier="1\Template_1_M.vst" AppData="$projectname$\My Template 1" />
+            <Category Id="{6D9D8B6F-D0EF-4BC0-8DD4-09DD6CE2B000}" Qualifier="1\Template_1_M.vst" AppData="$projectname$\My Template 1||1" />
+            <Category Id="{6D9D8B6F-D0EF-4BC0-8DD4-09DD6CE2B100}" Qualifier="1\Template_1_M.vst" AppData="$projectname$\My Template 1||1|-1" />
+            <Category Id="{6D9D8B6F-D0EF-4BC0-8DD4-09DD6CE2B200}" Qualifier="1\Template_1_M.vst" AppData="$projectname$\My Template 1||1|-1" />
           </Component>
 
         </Directory>
