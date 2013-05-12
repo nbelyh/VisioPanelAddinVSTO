@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Template", "Template\Templa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VSIX", "VSIX\VSIX.csproj", "{BE8A8B69-BAFE-4699-AD4D-EE02A405C29E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisioWixExtension", "VisioWixExtension\VisioWixExtension.csproj", "{814CBD03-4FFB-471A-AAF4-F5E04ADEE783}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,10 @@ Global
 		{BE8A8B69-BAFE-4699-AD4D-EE02A405C29E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BE8A8B69-BAFE-4699-AD4D-EE02A405C29E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BE8A8B69-BAFE-4699-AD4D-EE02A405C29E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{814CBD03-4FFB-471A-AAF4-F5E04ADEE783}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{814CBD03-4FFB-471A-AAF4-F5E04ADEE783}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{814CBD03-4FFB-471A-AAF4-F5E04ADEE783}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{814CBD03-4FFB-471A-AAF4-F5E04ADEE783}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
