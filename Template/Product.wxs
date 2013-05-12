@@ -68,9 +68,9 @@
           <!-- TODO: add one component per stencil file you want to install -->
           <Component Win64="$(var.Win64YesNo)">
             <File Name="Stencil_1_M.vss" />
-            <Category Id="{6D9D8B6F-D0EF-4BC0-8DD4-09DD6CE2B001}" Qualifier="1\Stencil_1_M.vss" AppData="$projectname$\My Stencil 1||0" />
-            <Category Id="{6D9D8B6F-D0EF-4BC0-8DD4-09DD6CE2B101}" Qualifier="1\Stencil_1_M.vss" AppData="$projectname$\My Stencil 1||0|-1" />
-            <Category Id="{6D9D8B6F-D0EF-4BC0-8DD4-09DD6CE2B201}" Qualifier="1\Stencil_1_M.vss" AppData="$projectname$\My Stencil 1||0|-1" />
+            <Category Id="{6D9D8B6F-D0EF-4BC0-8DD4-09DD6CE2B001}" Qualifier="1\Stencil_1_M.vss" AppData="$projectname$\My Stencil 1||2" />
+            <Category Id="{6D9D8B6F-D0EF-4BC0-8DD4-09DD6CE2B101}" Qualifier="1\Stencil_1_M.vss" AppData="$projectname$\My Stencil 1||2|-1" />
+            <Category Id="{6D9D8B6F-D0EF-4BC0-8DD4-09DD6CE2B201}" Qualifier="1\Stencil_1_M.vss" AppData="$projectname$\My Stencil 1||2|-1" />
           </Component>
 
           <!-- 
