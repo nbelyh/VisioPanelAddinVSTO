@@ -14,12 +14,10 @@ namespace VisioWixExtension
         {
             get
             {
-                if (null == this._compilerExtensionExtension)
-                {
-                    this._compilerExtensionExtension = new VisioCompilerExtension();
-                }
+                if (null == _compilerExtensionExtension)
+                    _compilerExtensionExtension = new VisioCompilerExtension();
 
-                return this._compilerExtensionExtension;
+                return _compilerExtensionExtension;
             }
         }
     }

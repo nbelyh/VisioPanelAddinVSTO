@@ -19,83 +19,93 @@
         <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="File" />
       </xs:appinfo>
       <xs:documentation>
-        Registers a stencil/template file for Microsoft Visio. The file to register should be the only file in the component.
+        Registers a stencil/template file for Microsoft Visio.
       </xs:documentation>
     </xs:annotation>
 
     <xs:complexType>
-      <xs:attribute name="Visio2003" type="wix:YesNoType">
+      <xs:attribute name="Visio2003" type="wix:YesNoType" use="optional">
         <xs:annotation>
           <xs:documentation>
-            Install for Visio 2003 and below (by default - no)
+            Install for Visio 2003 and below. By default is "no".
           </xs:documentation>
         </xs:annotation>
       </xs:attribute>
 
-      <xs:attribute name="Visio2007" type="wix:YesNoType">
+      <xs:attribute name="Visio2007" type="wix:YesNoType" use="optional">
         <xs:annotation>
           <xs:documentation>
-            Install for Visio 2007 (by default is true if file format is supported)
+            Install for Visio 2007. By default is "yes" if file format is supported by Visio 2007.
           </xs:documentation>
         </xs:annotation>
       </xs:attribute>
 
-      <xs:attribute name="Visio2010" type="wix:YesNoType">
+      <xs:attribute name="Visio2010" type="wix:YesNoType" use="optional">
         <xs:annotation>
           <xs:documentation>
-            Install for Visio 2010 (by default is true if file format is supported)
+            Install for Visio 2010. By default is "yes" if file format is supported by Visio 2010.
           </xs:documentation>
         </xs:annotation>
       </xs:attribute>
 
-      <xs:attribute name="Visio2013" type="wix:YesNoType">
+      <xs:attribute name="Visio2013" type="wix:YesNoType" use="optional">
         <xs:annotation>
           <xs:documentation>
-            Install for Visio 2013 (by default is true if file format is supported)
+            Install for Visio 2013. By default is "yes" if file format is supported by Visio 2013.
           </xs:documentation>
         </xs:annotation>
       </xs:attribute>
 
-      <xs:attribute name="VisioEdition" type="VisioEditionType">
+      <xs:attribute name="VisioEdition" type="VisioEditionType" use="optional">
         <xs:annotation>
           <xs:documentation>
-            Specifies Visio Edition the item should be registered with (x32/x64/All)
+            Specifies Visio Edition the item should be registered with (x32/x64/all)
           </xs:documentation>
         </xs:annotation>
       </xs:attribute>
       
-      <xs:attribute name="Language" type="VisioLanguageType">
+      <xs:attribute name="Language" type="xs:string" use="optional">
         <xs:annotation>
           <xs:documentation>
-            Specifies language the item should be registered with.
+            Specifies language the item should be registered with. You can specify either LCID, such as "1033" or language code, such as "en-us".
+            If not specified, publishing will be done in all languages.
           </xs:documentation>
         </xs:annotation>
       </xs:attribute>
 
-      <xs:attribute name="MenuPath" type="xs:string">
+      <xs:attribute name="MenuPath" type="xs:string" use="required">
         <xs:annotation>
           <xs:documentation>
-            Specifies the path 
+            Specifies the path for the template or stencil in Visio menus.
+            Use backslash to separate between levels, for example: "My Group\My Stencil".
           </xs:documentation>
         </xs:annotation>
       </xs:attribute>
 
-      <xs:attribute name="AltNames" type="xs:string">
+      <xs:attribute name="AltNames" type="xs:string" use="optional">
         <xs:annotation>
           <xs:documentation>
-            Specifies alternate names
+            Specifies alternate stencil or template names, comma separated (optional)
           </xs:documentation>
         </xs:annotation>
       </xs:attribute>
 
-      <xs:attribute name="QuickShapeCount" type="xs:integer">
+      <xs:attribute name="QuickShapeCount" type="xs:integer" use="optional">
         <xs:annotation>
           <xs:documentation>
-            Specifies number of quick shapes.
+            Specifies number of quick shapes. By default (if no specified) is 0.
           </xs:documentation>
         </xs:annotation>
       </xs:attribute>
       
+      <xs:attribute name="FeaturedTemplate" type="wix:YesNoType" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+            Specifies if the template is featured (Visio 2007). By default is "yes".
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
 
     </xs:complexType>
 
@@ -103,162 +113,12 @@
 
   <xs:simpleType name="VisioEditionType">
     <xs:annotation>
-      <xs:documentation>Values of this type could be "All" (default), "x32", "x64"</xs:documentation>
+      <xs:documentation>Values of this type could be "all" (default), "x32", "x64"</xs:documentation>
     </xs:annotation>
     <xs:restriction base='xs:NMTOKEN'>
-      <xs:enumeration value="All"/>
-      <xs:enumeration value="32bit"/>
-      <xs:enumeration value="64bit"/>
-    </xs:restriction>
-  </xs:simpleType>
-
-  <xs:simpleType name="VisioLanguageType">
-    <xs:annotation>
-      <xs:documentation>Values of this type could be "All" (default), or specific language</xs:documentation>
-    </xs:annotation>
-    <xs:restriction base='xs:NMTOKEN'>
-      <xs:enumeration value="All"><xs:annotation><xs:documentation></xs:documentation></xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="ar-sa">
-        <xs:annotation>
-          <xs:documentation>Arabic</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="zh-tw">
-        <xs:annotation>
-          <xs:documentation>Chinese - Taiwan</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="cs">
-        <xs:annotation>
-          <xs:documentation>Czech</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="da">
-        <xs:annotation>
-          <xs:documentation>Danish</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="de-de">
-        <xs:annotation>
-          <xs:documentation>German - Germany</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="el">
-        <xs:annotation>
-          <xs:documentation>Greek</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="en-us">
-        <xs:annotation>
-          <xs:documentation>English</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="fi">
-        <xs:annotation>
-          <xs:documentation>Finnish</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="fr-fr">
-        <xs:annotation>
-          <xs:documentation>French</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="he">
-        <xs:annotation>
-          <xs:documentation>Hebrew</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="hu">
-        <xs:annotation>
-          <xs:documentation>Hungarian</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="it-it">
-        <xs:annotation>
-          <xs:documentation>Italian</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="ja">
-        <xs:annotation>
-          <xs:documentation>Japanese</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="ko">
-        <xs:annotation>
-          <xs:documentation>Korean</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="nl">
-        <xs:annotation>
-          <xs:documentation>Dutch</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="no">
-        <xs:annotation>
-          <xs:documentation>Norwegian</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="pl">
-        <xs:annotation>
-          <xs:documentation>Polish</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="pt-br">
-        <xs:annotation>
-          <xs:documentation>Portuguese - Brazil</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="ro-ro">
-        <xs:annotation>
-          <xs:documentation>Romanian</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="ru">
-        <xs:annotation>
-          <xs:documentation>Russian</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="sk">
-        <xs:annotation>
-          <xs:documentation>Slovak</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="sv">
-        <xs:annotation>
-          <xs:documentation>Swedish</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="tr">
-        <xs:annotation>
-          <xs:documentation>Turkish</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="uk">
-        <xs:annotation>
-          <xs:documentation>Ukrainian</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="sl">
-        <xs:annotation>
-          <xs:documentation>Slovenian</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="zh-cn">
-        <xs:annotation>
-          <xs:documentation>Chinese - China</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="pt-pt">
-        <xs:annotation>
-          <xs:documentation>Portuguese</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="es-es">
-        <xs:annotation>
-          <xs:documentation>Spanish</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
+      <xs:enumeration value="all"/>
+      <xs:enumeration value="x86"/>
+      <xs:enumeration value="x64"/>
     </xs:restriction>
   </xs:simpleType>
 
