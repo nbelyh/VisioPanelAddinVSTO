@@ -3,7 +3,7 @@
   <Identifier Id="VisioWixSetup.UnmanagedVisio">
     <Name>WiX Setup Project for Visio</Name>
     <Author>Nikolay Belykh</Author>
-    <Version>1.0</Version>
+    <Version>1.1</Version>
     <Description xml:space="preserve">Creates an WiX installer project to install Microsoft Visio content (stencils, templates, etc)</Description>
     <Locale>1033</Locale>
     <License>license.txt</License>

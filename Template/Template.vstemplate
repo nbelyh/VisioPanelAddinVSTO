@@ -9,14 +9,16 @@
     <SortOrder>1000</SortOrder>
     <TemplateID>70771bfe-b2ce-472d-be8d-5ec72b76714b</TemplateID>
     <CreateNewFolder>true</CreateNewFolder>
-    <DefaultName>Setup</DefaultName>
+    <DefaultName>VisioSetupProject</DefaultName>
     <ProvideDefaultName>true</ProvideDefaultName>
   </TemplateData>
   <TemplateContent>
     <Project File="Setup.wixproj" ReplaceParameters="true">
       <ProjectItem ReplaceParameters="true" OpenInEditor="true">Product.wxs</ProjectItem>
-      <ProjectItem ReplaceParameters="false">VisioFiles\Stencil_1_M.vss</ProjectItem>
-      <ProjectItem ReplaceParameters="false">VisioFiles\Template_1_M.vst</ProjectItem>
+      <ProjectItem ReplaceParameters="false">Stencil_1_M.vss</ProjectItem>
+      <ProjectItem ReplaceParameters="false">Template_1_M.vst</ProjectItem>
+      <ProjectItem ReplaceParameters="false" >build/VisioWixExtension.xsd</ProjectItem>
+      <ProjectItem ReplaceParameters="false" >build/VisioWixExtension.dll</ProjectItem>
     </Project>
   </TemplateContent>
 </VSTemplate>

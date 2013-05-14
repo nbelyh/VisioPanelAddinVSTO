@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+
+  <Fragment>
+    <Binary
+      Id="VisioCustomActions"
+      SourceFile="$(var.SolutionDir)\$(var.Configuration)\VisioCustomActions.dll"/>
+
+  </Fragment>
+
+  <Fragment>
+    <CustomAction Id="SetConfigChangeID"
+                  BinaryKey="VisioCustomActions"
+                  DllEntry="UpdateVisioConfigChangeID"
+                  Execute="deferred"
+                  Impersonate="no"
+                  Return="check" />
+
+    <InstallExecuteSequence>
+      <Custom Action="SetConfigChangeID" After="InstallInitialize" />
+    </InstallExecuteSequence>
+
+  </Fragment>
+
+  <Fragment>
+    <CustomAction Id="SetConfigChangeID64"
+                    BinaryKey="VisioCustomActions"
+                    DllEntry="UpdateVisioConfigChangeID64"
+                    Execute="deferred"
+                    Impersonate="no"
+                    Return="check" />
+
+    <InstallExecuteSequence>
+      <Custom Action="SetConfigChangeID64" After="InstallInitialize" />
+    </InstallExecuteSequence>
+  </Fragment>
+    
+</Wix>

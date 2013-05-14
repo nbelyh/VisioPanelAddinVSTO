@@ -33,12 +33,12 @@
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <TargetFrameworkProfile />
+    <OutputPath>$(SolutionDir)\$(Configuration)\</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -47,7 +47,6 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -72,8 +71,10 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Data\Messages.resources" />
-    <EmbeddedResource Include="Xsd\Visio.xsd">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <EmbeddedResource Include="$(SolutionDir)\$(Configuration)\Visio.wixlib">
+      <Link>Data\Visio.wixlib</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Xsd\VisioWixExtension.xsd">
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
@@ -86,6 +87,8 @@
   <Target Name="BeforeBuild">
     <Exec Command="&quot;%WIX%\SDK\MsgGen.exe&quot; Data\Messages.xml Data\Messages.cs" />
   </Target>
-  <!-- Target Name="AfterBuild">
-  </Target -->
+  <Target Name="AfterBuild">
+    <Copy SourceFiles="$(SolutionDir)\$(Configuration)\VisioWixExtension.dll" DestinationFiles="$(SolutionDir)\Template\build\VisioWixExtension.dll" />
+    <Copy SourceFiles="Xsd\VisioWixExtension.xsd" DestinationFiles="$(SolutionDir)\Template\build\VisioWixExtension.xsd" />
+  </Target>
 </Project>

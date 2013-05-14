@@ -5,32 +5,12 @@
     <ProductVersion>3.0</ProductVersion>
     <ProjectGuid>$guid2$</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
-    <OutputName>setup_$(Platform)</OutputName>
+    <OutputName>setup</OutputName>
     <OutputType>Package</OutputType>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' AND '$(MSBuildExtensionsPath32)' != '' ">$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <OutputPath>bin\$(Configuration)\$(Platform)\</OutputPath>
-    <IntermediateOutputPath>obj\$(Configuration)\$(Platform)\</IntermediateOutputPath>
-    <DefineConstants>Debug</DefineConstants>
-    <Cultures>
-    </Cultures>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <OutputPath>bin\$(Configuration)\$(Platform)\</OutputPath>
-    <IntermediateOutputPath>obj\$(Configuration)\$(Platform)\</IntermediateOutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
-    <DefineConstants>Debug</DefineConstants>
-    <Cultures>
-    </Cultures>
-    <OutputPath>bin\$(Configuration)\$(Platform)\</OutputPath>
-    <IntermediateOutputPath>obj\$(Configuration)\$(Platform)\</IntermediateOutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
-    <OutputPath>bin\$(Configuration)\$(Platform)\</OutputPath>
-    <IntermediateOutputPath>obj\$(Configuration)\$(Platform)\</IntermediateOutputPath>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Product.wxs" />
@@ -40,13 +20,19 @@
       <HintPath>$(WixExtDir)\WixUIExtension.dll</HintPath>
       <Name>WixUIExtension</Name>
     </WixExtension>
+    <WixExtension Include="VisioWixExtension">
+      <HintPath>build\VisioWixExtension.dll</HintPath>
+      <Name>VisioWixExtension</Name>
+    </WixExtension>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="VisioFiles\" />
+    <Folder Include="build\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="VisioFiles\Stencil_1_M.vss" />
-    <Content Include="VisioFiles\Template_1_M.vst" />
+    <Content Include="Stencil_1_M.vss" />
+    <Content Include="Template_1_M.vst" />
+    <Content Include="build/VisioWixExtension.dll" />
+    <Content Include="build/VisioWixExtension.xsd" />
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
   <!--

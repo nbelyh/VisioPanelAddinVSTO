@@ -22,7 +22,7 @@ namespace VisioWixExtension
             get
             {
                 if (null == _schema)
-                    _schema = LoadXmlSchemaHelper(Assembly.GetExecutingAssembly(), "VisioWixExtension.Xsd.Visio.xsd");
+                    _schema = LoadXmlSchemaHelper(Assembly.GetExecutingAssembly(), "VisioWixExtension.Xsd.VisioWixExtension.xsd");
 
                 return _schema;
             }
@@ -74,6 +74,7 @@ namespace VisioWixExtension
         /// <summary>
         /// Supported Visio editions (All/32bit/64bit)
         /// </summary>
+        [Flags]
         private enum VisioEdition
         {
             X86,
@@ -91,8 +92,16 @@ namespace VisioWixExtension
         {
             var sourceLineNumbers = Preprocessor.GetSourceLineNumbers(node);
 
+            if (parentNode.Attributes == null || parentNode.Attributes["Name"] == null)
+            {
+                Core.OnMessage(VisioErrors.FileHasNoAttributes(sourceLineNumbers));
+                return;
+            }
+
             var attribFileName = parentNode.Attributes["Name"];
-            string fileName = Core.GetAttributeLongFilename(sourceLineNumbers, attribFileName, false);
+            
+            var fileName = 
+                Core.GetAttributeLongFilename(sourceLineNumbers, attribFileName, false);
 
             string component = null;
             string feature = null;
@@ -100,11 +109,17 @@ namespace VisioWixExtension
             var visioContentType = GetVisioContentType(sourceLineNumbers, fileName);
             var visioVersion = GetDefaultVisioVersion(fileName);
             var visioEdition = VisioEdition.All;
-            var visioLanguage = 1;
+
             string menuPath = null;
             string altNames = "";
-            uint quickShapesCount = 0;
 
+            var visioLanguage = 1;
+
+            uint quickShapesCount = 0;
+            if (visioContentType == VisioContentType.Template)
+                quickShapesCount = 1;
+
+            if (node.Attributes != null)
             foreach (XmlAttribute attrib in node.Attributes)
             {
                 switch (attrib.LocalName)
@@ -176,6 +191,12 @@ namespace VisioWixExtension
             if (menuPath == null)
                 Core.OnMessage(WixErrors.ExpectedAttribute(sourceLineNumbers, node.Name, "MenuPath"));
 
+            if ((visioEdition & VisioEdition.X86) == VisioEdition.X86)
+                Core.CreateWixSimpleReferenceRow(sourceLineNumbers, "CustomAction", "SetConfigChangeID");
+
+            if ((visioEdition & VisioEdition.X64) == VisioEdition.X64)
+                Core.CreateWixSimpleReferenceRow(sourceLineNumbers, "CustomAction", "SetConfigChangeID64");
+
             if (!Core.EncounteredError)
             {
                 var featureId = feature ?? Guid.Empty.ToString("B");
@@ -229,15 +250,7 @@ namespace VisioWixExtension
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sourceLineNumbers"></param>
-        /// <param name="visioComponentId"></param>
-        /// <param name="qualifier"></param>
-        /// <param name="appData"></param>
-        /// <param name="featureId"></param>
-        /// <param name="componentId"></param>
+
 
         private void GenerateRow(SourceLineNumberCollection sourceLineNumbers, string visioComponentId, string qualifier,
                                  string appData, string featureId, string componentId)
@@ -251,12 +264,8 @@ namespace VisioWixExtension
             row[4] = featureId;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sourceLineNumbers"></param>
-        /// <param name="attrib">Visio </param>
-        /// <returns></returns>
+
+
         private VisioEdition ParseVisioEditionAttributeValue(SourceLineNumberCollection sourceLineNumbers, XmlAttribute attrib)
         {
             string attribValue = Core.GetAttributeBundleVariableValue(sourceLineNumbers, attrib);
@@ -277,12 +286,8 @@ namespace VisioWixExtension
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="visioEdition"></param>
-        /// <returns></returns>
 
+        
         private static string GetVisioEditionCode(VisioEdition visioEdition)
         {
             switch (visioEdition)
@@ -310,10 +315,11 @@ namespace VisioWixExtension
         };
 
         /// <summary>
-        /// 
+        /// Returns default set of Visio versions to install. By Default, it is 2007/2010/2013.
+        /// For new file types (2013) the default is to publish for Visio 2013 only.
         /// </summary>
-        /// <param name="fileName"></param>
-        /// <returns></returns>
+        /// <param name="fileName">File name to analyze</param>
+        /// <returns>Set of Visio version to publish for by default</returns>
         private VisioVersion GetDefaultVisioVersion(string fileName)
         {
             switch (Path.GetExtension(fileName))
@@ -335,7 +341,8 @@ namespace VisioWixExtension
         }
 
         /// <summary>
-        /// 
+        /// Detects Visio content type based on file extension.
+        /// Reports error if file under which the publish component was located is not actually Visio file.
         /// </summary>
         /// <param name="sourceLineNumbers"></param>
         /// <param name="fileName"></param>
@@ -364,7 +371,7 @@ namespace VisioWixExtension
         }
 
         /// <summary>
-        /// 
+        /// Returns the ComponentID for PublishComponent table for given combination of version/content type.
         /// </summary>
         /// <param name="contentType"></param>
         /// <param name="visioVersion"></param>
@@ -391,7 +398,7 @@ namespace VisioWixExtension
         /// <param name="visioVersion"></param>
         /// <returns></returns>
 
-        private string GetVisioStencilComponentId(VisioVersion visioVersion)
+        private string GetVisioTemplateComponentId(VisioVersion visioVersion)
         {
             switch (visioVersion)
             {
@@ -418,7 +425,7 @@ namespace VisioWixExtension
         /// <param name="visioVersion"></param>
         /// <returns></returns>
 
-        private static string GetVisioTemplateComponentId(VisioVersion visioVersion)
+        private static string GetVisioStencilComponentId(VisioVersion visioVersion)
         {
             switch (visioVersion)
             {

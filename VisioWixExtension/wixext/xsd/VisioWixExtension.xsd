@@ -98,15 +98,6 @@
         </xs:annotation>
       </xs:attribute>
       
-      <xs:attribute name="FeaturedTemplate" type="wix:YesNoType" use="optional">
-        <xs:annotation>
-          <xs:documentation>
-            Specifies if the template is featured (Visio 2007). By default is "yes".
-          </xs:documentation>
-        </xs:annotation>
-      </xs:attribute>
-
-
     </xs:complexType>
 
   </xs:element>

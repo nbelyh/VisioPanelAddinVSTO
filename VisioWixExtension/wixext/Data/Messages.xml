@@ -50,6 +50,12 @@
           <Parameter Type="System.String" Name="value" />
         </Instance>
       </Message>
+
+      <Message Id="FileHasNoAttributes" Number="6505">
+        <Instance>
+          Unable to get File Name from the parent File element, as it has no attributes. File Name must be specified.
+        </Instance>
+      </Message>
       
     </Class>
 </Messages>

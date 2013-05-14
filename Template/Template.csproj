@@ -41,16 +41,22 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="Template.ico" />
-    <None Include="VisioFiles\Stencil_1_M.vss" />
-    <None Include="VisioFiles\Template_1_M.vst" />
+    <None Include="Stencil_1_M.vss" />
+    <None Include="Template_1_M.vst" />
   </ItemGroup>
   <ItemGroup>
     <VSTemplate Include="Template.vstemplate" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <Content Include="Product.wxs" />
-    <Content Include="Setup.wixproj" />
+    <Folder Include="build\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Product.wxs">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Setup.wixproj">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
