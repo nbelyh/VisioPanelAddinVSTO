@@ -55,13 +55,12 @@
   <ItemGroup>
     <Compile Include="Data\Messages.cs" />
     <Compile Include="VisioCompilerExtension.cs" />
+    <Compile Include="VisioPublishInfo.cs" />
     <Compile Include="VisioWixExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="wix, Version=3.0.0.0, Culture=neutral, PublicKeyToken=ce35f76fcda82bad, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

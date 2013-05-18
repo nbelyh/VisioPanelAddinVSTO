@@ -1,16 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using System.Xml;
 using System.Xml.Schema;
 using Microsoft.Tools.WindowsInstallerXml;
-using System.IO;
 using System.Globalization;
-using System.Text;
 
 namespace VisioWixExtension
 {
-    internal class VisioCompilerExtension : CompilerExtension
+    internal class RowGenerator : CompilerExtension
     {
         private XmlSchema _schema;
 
@@ -44,22 +42,29 @@ namespace VisioWixExtension
                 case "File":
                     string componentId = contextValues[1];
 
+                    var fileName = 
+                        Core.GetAttributeLongFilename(sourceLineNumbers, parentElement.Attributes["Name"], false);
+
                     switch (element.LocalName)
                     {
                         case "PublishStencil":
-                            ParseVisioElement(parentElement, element, componentId, VisioContentType.Stencil);
+                            ParseVisioElement(element, componentId, fileName, VisioContentType.Stencil);
                             break;
 
                         case "PublishTemplate":
-                            ParseVisioElement(parentElement, element, componentId, VisioContentType.Template);
+                            ParseVisioElement(element, componentId, fileName, VisioContentType.Template);
                             break;
 
                         case "PublishHelp":
-                            ParseVisioElement(parentElement, element, componentId, VisioContentType.Help);
+                            ParseVisioElement(element, componentId, fileName, VisioContentType.Help);
                             break;
 
                         case "PublishAddon":
-                            ParseVisioElement(parentElement, element, componentId, VisioContentType.Addon);
+                            ParseVisioElement(element, componentId, fileName, VisioContentType.Addon);
+                            break;
+
+                        case "Publish":
+                            Core.OnMessage(VisioErrors.UsingPublish(sourceLineNumbers));
                             break;
 
                         default:
@@ -74,121 +79,23 @@ namespace VisioWixExtension
         }
 
         /// <summary>
-        /// Supported Visio versions (2003/2007/2010/etc)
-        /// </summary>
-        [Flags]
-        private enum VisioVersion
-        {
-            Visio2003 = 1,
-            Visio2007 = 2,
-            Visio2010 = 4,
-            Visio2013 = 8,
-        };
-
-        /// <summary>
-        /// Supported Visio editions (All/32bit/64bit)
-        /// </summary>
-        [Flags]
-        private enum VisioEdition
-        {
-            X86,
-            X64,
-            All,
-        };
-
-        /// <summary>
-        /// 
-        /// </summary>
-        [Flags]
-        private enum AddonAttrs
-        {
-            PerformsActions = 1,
-            HasAboutBox = 2,
-            ProvidesHelp = 4,
-            DisplayWaitCursor = 8,
-            HideInUI = 16,
-        };
-
-        /// <summary>
-        /// 
-        /// </summary>
-        [Flags]
-        private enum EnablingPolicy
-        {
-            None = 0,
-
-            AlwaysEnabled = 0xffff,
-            DynamicallyEnabled = 0x0,
-            StaticallyEnabled = 0x1,
-            StaticallyThenDynamicallyEnabled = 0x8001,
-
-            Document = 0x1,
-            DocumentWindow = 0x2,
-            DrawingWindow = 0x7,
-            PageWindow = 0x87,
-            MasterWindow = 0x107,
-            StencilWindow = 0x0b,
-            SheetWindow = 0x13,
-            IconWindow = 0x23,
-            TargetContext = 0x41,
-            TargetContextPage = 0xC1,
-            TargetContextMaster = 0x141,
-            TargetContextSelection = 0x241,
-        };
-
-
-
-        /// <summary>
         /// Parses a "Visio" element.
         /// </summary>
         /// <param name="node">Element to parse.</param>
-        /// <param name="parentNode">Parent element (File)</param>
         /// <param name="contextComponentId">Identifier for parent component.</param>
+        /// <param name="fileName"></param>
         /// <param name="visioContentType"></param>
-        private void ParseVisioElement(XmlNode parentNode, XmlNode node, string contextComponentId, VisioContentType visioContentType)
+        private void ParseVisioElement(XmlNode node, string contextComponentId, string fileName, VisioContentType visioContentType)
         {
             var sourceLineNumbers = Preprocessor.GetSourceLineNumbers(node);
-
-            if (parentNode.Attributes == null || parentNode.Attributes["Name"] == null)
-            {
-                Core.OnMessage(VisioErrors.FileHasNoAttributes(sourceLineNumbers));
-                return;
-            }
-
-            var attribFileName = parentNode.Attributes["Name"];
-            
-            var fileName = 
-                Core.GetAttributeLongFilename(sourceLineNumbers, attribFileName, false);
 
             string component = null;
             string feature = null;
 
-            if (!ValidateVisioContentType(sourceLineNumbers, fileName, visioContentType))
-            {
-                return;
-            }
+            if (visioContentType != GetVisioContentType(fileName))
+                Core.OnMessage(VisioWarnings.InvalidFileExtension(sourceLineNumbers, fileName, Enum.GetName(typeof(VisioContentType), visioContentType)));
 
-            var visioVersion = GetDefaultVisioVersion(fileName);
-            var visioEdition = VisioEdition.All;
-
-            var addonAttrs = AddonAttrs.PerformsActions;
-
-            string menuPath = Path.GetFileName(fileName);
-            string altNames = "";
-
-            var visioLanguage = 1;
-
-            uint quickShapesCount = 0;
-            bool featuredTemplate = true;
-
-            string localizedName = Path.GetFileName(fileName);
-            string universalName = Path.GetFileName(fileName);
-
-            uint ordinal = 1;
-
-            var enablingPolicy = EnablingPolicy.AlwaysEnabled;
-            var staticEnableConditions = EnablingPolicy.None;
-            bool invokeOnStartup = false;
+            var publishInfo = new VisioPublishInfo(fileName);
 
             if (node.Attributes != null)
             foreach (XmlAttribute attrib in node.Attributes)
@@ -206,51 +113,39 @@ namespace VisioWixExtension
                         break;
 
                     case "Visio2003":
-                        if (YesNoType.Yes == Core.GetAttributeYesNoValue(sourceLineNumbers, attrib))
-                            visioVersion |= VisioVersion.Visio2003;
-                        else
-                            visioVersion &= ~VisioVersion.Visio2003;
+                        ParseVisioVersionAttribute(sourceLineNumbers, attrib, publishInfo, VisioVersion.Visio2003);
                         break;
 
                     case "Visio2007":
-                        if (YesNoType.Yes == Core.GetAttributeYesNoValue(sourceLineNumbers, attrib))
-                            visioVersion |= VisioVersion.Visio2007;
-                        else
-                            visioVersion &= ~VisioVersion.Visio2007;
+                        ParseVisioVersionAttribute(sourceLineNumbers, attrib, publishInfo, VisioVersion.Visio2007);
                         break;
 
                     case "Visio2010":
-                        if (YesNoType.Yes == Core.GetAttributeYesNoValue(sourceLineNumbers, attrib))
-                            visioVersion |= VisioVersion.Visio2010;
-                        else
-                            visioVersion &= ~VisioVersion.Visio2010;
+                        ParseVisioVersionAttribute(sourceLineNumbers, attrib, publishInfo, VisioVersion.Visio2010);
                         break;
 
                     case "Visio2013":
-                        if (YesNoType.Yes == Core.GetAttributeYesNoValue(sourceLineNumbers, attrib))
-                            visioVersion |= VisioVersion.Visio2013;
-                        else
-                            visioVersion &= ~VisioVersion.Visio2013;
+                        ParseVisioVersionAttribute(sourceLineNumbers, attrib, publishInfo, VisioVersion.Visio2013);
                         break;
 
                     case "VisioEdition":
-                        visioEdition = ParseVisioEditionAttributeValue(sourceLineNumbers, attrib);
+                        publishInfo.VisioEdition = ParseVisioEditionAttributeValue(sourceLineNumbers, attrib);
                         break;
 
                     case "Language":
-                        visioLanguage = ParseVisioLanguageCode(sourceLineNumbers, attrib);
+                        publishInfo.VisioLanguage = ParseVisioLanguageCode(sourceLineNumbers, attrib);
                         break;
 
                     case "MenuPath":
                         if (visioContentType == VisioContentType.Template || visioContentType == VisioContentType.Stencil || visioContentType == VisioContentType.Addon)
-                            menuPath = Core.GetAttributeBundleVariableValue(sourceLineNumbers, attrib);
+                            publishInfo.MenuPath = Core.GetAttributeBundleVariableValue(sourceLineNumbers, attrib);
                         else
                             Core.UnexpectedAttribute(sourceLineNumbers, attrib);
                         break;
 
                     case "AltNames":
                         if (visioContentType == VisioContentType.Template || visioContentType == VisioContentType.Stencil)
-                            altNames = Core.GetAttributeBundleVariableValue(sourceLineNumbers, attrib);
+                            publishInfo.AltNames = Core.GetAttributeBundleVariableValue(sourceLineNumbers, attrib);
                         else
                             Core.UnexpectedAttribute(sourceLineNumbers, attrib);
                         break;
@@ -259,7 +154,7 @@ namespace VisioWixExtension
 
                     case "QuickShapeCount":
                         if (visioContentType == VisioContentType.Stencil)
-                            quickShapesCount = ParseUint(sourceLineNumbers, attrib);
+                            publishInfo.QuickShapesCount = ParseUint(sourceLineNumbers, attrib);
                         else
                             Core.UnexpectedAttribute(sourceLineNumbers, attrib);
                         break;
@@ -268,7 +163,7 @@ namespace VisioWixExtension
 
                     case "FeaturedTemplate":
                         if (visioContentType == VisioContentType.Template)
-                            featuredTemplate = (YesNoType.Yes == Core.GetAttributeYesNoValue(sourceLineNumbers, attrib));
+                            publishInfo.FeaturedTemplate = (YesNoType.Yes == Core.GetAttributeYesNoValue(sourceLineNumbers, attrib));
                         else
                             Core.UnexpectedAttribute(sourceLineNumbers, attrib);
                         break;
@@ -277,111 +172,65 @@ namespace VisioWixExtension
 
                     case "LocalizedName":
                         if (visioContentType == VisioContentType.Addon)
-                            localizedName = Core.GetAttributeBundleVariableValue(sourceLineNumbers, attrib);
+                            publishInfo.LocalizedName = Core.GetAttributeBundleVariableValue(sourceLineNumbers, attrib);
                         else
                             Core.UnexpectedAttribute(sourceLineNumbers, attrib);
                         break;
 
                     case "UniversalName":
                         if (visioContentType == VisioContentType.Addon)
-                            universalName = Core.GetAttributeBundleVariableValue(sourceLineNumbers, attrib);
+                            publishInfo.UniversalName = Core.GetAttributeBundleVariableValue(sourceLineNumbers, attrib);
                         else
                             Core.UnexpectedAttribute(sourceLineNumbers, attrib);
                         break;
 
                     case "Ordinal":
                         if (visioContentType == VisioContentType.Addon)
-                            ordinal = ParseUint(sourceLineNumbers, attrib);
+                            publishInfo.Ordinal = ParseUint(sourceLineNumbers, attrib);
                         else
                             Core.UnexpectedAttribute(sourceLineNumbers, attrib);
                         break;
 
 
                     case "PerformsActions":
-                        if (visioContentType != VisioContentType.Addon)
-                            Core.UnexpectedAttribute(sourceLineNumbers, attrib);
-                        else
-                        {
-                            if (YesNoType.Yes == Core.GetAttributeYesNoValue(sourceLineNumbers, attrib))
-                                addonAttrs |= AddonAttrs.PerformsActions;
-                            else
-                                addonAttrs &= ~AddonAttrs.PerformsActions;
-                        }
+                        ParseAddonAttrs(visioContentType, sourceLineNumbers, attrib, publishInfo, AddonAttrs.PerformsActions);
                         break;
 
                     case "HasAboutBox":
-                        if (visioContentType != VisioContentType.Addon)
-                            Core.UnexpectedAttribute(sourceLineNumbers, attrib);
-                        else
-                        {
-                            if (YesNoType.Yes == Core.GetAttributeYesNoValue(sourceLineNumbers, attrib))
-                                addonAttrs |= AddonAttrs.HasAboutBox;
-                            else
-                                addonAttrs &= ~AddonAttrs.HasAboutBox;
-                        }
+                        ParseAddonAttrs(visioContentType, sourceLineNumbers, attrib, publishInfo, AddonAttrs.HasAboutBox);
                         break;
 
                     case "ProvidesHelp":
-                        if (visioContentType != VisioContentType.Addon)
-                            Core.UnexpectedAttribute(sourceLineNumbers, attrib);
-                        else
-                        {
-                            if (YesNoType.Yes == Core.GetAttributeYesNoValue(sourceLineNumbers, attrib))
-                                addonAttrs |= AddonAttrs.ProvidesHelp;
-                            else
-                                addonAttrs &= ~AddonAttrs.ProvidesHelp;
-                        }
+                        ParseAddonAttrs(visioContentType, sourceLineNumbers, attrib, publishInfo, AddonAttrs.ProvidesHelp);
                         break;
 
                     case "DisplayWaitCursor":
-                        if (visioContentType != VisioContentType.Addon)
-                            Core.UnexpectedAttribute(sourceLineNumbers, attrib);
-                        else
-                        {
-                            if (YesNoType.Yes == Core.GetAttributeYesNoValue(sourceLineNumbers, attrib))
-                                addonAttrs |= AddonAttrs.DisplayWaitCursor;
-                            else
-                                addonAttrs &= ~AddonAttrs.DisplayWaitCursor;
-                        }
+                        ParseAddonAttrs(visioContentType, sourceLineNumbers, attrib, publishInfo, AddonAttrs.DisplayWaitCursor);
                         break;
 
                     case "HideInUI":
-                        if (visioContentType != VisioContentType.Addon)
-                            Core.UnexpectedAttribute(sourceLineNumbers, attrib);
-                        else
-                        {
-                            if (YesNoType.Yes == Core.GetAttributeYesNoValue(sourceLineNumbers, attrib))
-                                addonAttrs |= AddonAttrs.HideInUI;
-                            else
-                                addonAttrs &= ~AddonAttrs.HideInUI;
-                        }
+                        ParseAddonAttrs(visioContentType, sourceLineNumbers, attrib, publishInfo, AddonAttrs.HideInUI);
                         break;
 
                     case "EnablingPolicy":
-                        if (visioContentType != VisioContentType.Addon)
-                            Core.UnexpectedAttribute(sourceLineNumbers, attrib);
+                        if (visioContentType == VisioContentType.Addon)
+                            publishInfo.EnablingPolicy = ParseEnablingPolicy(sourceLineNumbers, attrib);
                         else
-                        {
-                            enablingPolicy = ParseEnablingPolicy(sourceLineNumbers, attrib);
-                        }
+                            Core.UnexpectedAttribute(sourceLineNumbers, attrib);
                         break;
 
                     case "StaticEnableConditions":
-                        if (visioContentType != VisioContentType.Addon)
-                            Core.UnexpectedAttribute(sourceLineNumbers, attrib);
+                        if (visioContentType == VisioContentType.Addon)
+                            publishInfo.StaticEnableConditions = ParseStaticEnableConditions(sourceLineNumbers, attrib);
                         else
-                        {
-                            staticEnableConditions = ParseStaticEnableConditions(sourceLineNumbers, attrib);
-                        }
+                            Core.UnexpectedAttribute(sourceLineNumbers, attrib);
                         break;
 
                     case "InvokeOnStartup":
-                        if (visioContentType != VisioContentType.Addon)
-                            Core.UnexpectedAttribute(sourceLineNumbers, attrib);
+                        if (visioContentType == VisioContentType.Addon)
+                            publishInfo.InvokeOnStartup = (YesNoType.Yes == Core.GetAttributeYesNoValue(sourceLineNumbers, attrib));
                         else
-                        {
-                            invokeOnStartup = (YesNoType.Yes == Core.GetAttributeYesNoValue(sourceLineNumbers, attrib));
-                        }
+                            Core.UnexpectedAttribute(sourceLineNumbers, attrib);
                         break;
 
                     default:
@@ -390,177 +239,82 @@ namespace VisioWixExtension
                 }
             }
 
-            if (string.IsNullOrEmpty(menuPath))
+            if (string.IsNullOrEmpty(publishInfo.MenuPath))
             {
                 if (visioContentType == VisioContentType.Template || visioContentType == VisioContentType.Stencil)
                     Core.OnMessage(WixErrors.ExpectedAttribute(sourceLineNumbers, node.Name, "MenuPath"));
             }
 
-            if ((visioEdition & VisioEdition.X86) == VisioEdition.X86)
+            if ((publishInfo.VisioEdition & VisioEdition.X86) == VisioEdition.X86)
                 Core.CreateWixSimpleReferenceRow(sourceLineNumbers, "CustomAction", "SetConfigChangeID");
 
-            if ((visioEdition & VisioEdition.X64) == VisioEdition.X64)
+            if ((publishInfo.VisioEdition & VisioEdition.X64) == VisioEdition.X64)
                 Core.CreateWixSimpleReferenceRow(sourceLineNumbers, "CustomAction", "SetConfigChangeID64");
 
             if (Core.EncounteredError)
                 return;
 
             var featureId = feature ?? Guid.Empty.ToString("B");
-            string componentId = component ?? contextComponentId;
-            string editionCode = GetVisioEditionCode(visioEdition);
+            var componentId = component ?? contextComponentId;
 
-            var enablingPolicyCode = (int) (enablingPolicy | staticEnableConditions);
-            var addonAttrsCode = (int) (addonAttrs);
-            int invokeOnStartupCode = (invokeOnStartup ? 1 : 0);
-
-            if ((visioVersion & VisioVersion.Visio2003) == VisioVersion.Visio2003)
+            foreach (var rowInfo in publishInfo.GenerateRowInfos(visioContentType, fileName))
             {
-                string appData2003 = "";
-                    
-                switch (visioContentType)
-                {
-                    case VisioContentType.Stencil:
-                    case VisioContentType.Template:
-                        appData2003 = string.Format(@"{0}|{1}", menuPath, altNames);
-                        break;
+                var row = Core.CreateRow(sourceLineNumbers, "PublishComponent");
 
-                    case VisioContentType.Help:
-                        appData2003 = null;
-                        break;
+                row[0] = rowInfo.VisioComponentId;
+                row[1] = rowInfo.Qualifier;
+                row[2] = componentId;
+                row[3] = rowInfo.AppData;
+                row[4] = featureId;
+            }
+        }
 
-                    case VisioContentType.Addon:
-                        appData2003 = string.Format(@"{0}|{1}|{2}|{3}|{4}|{5}|{6}",
-                            menuPath, localizedName, universalName, ordinal, addonAttrsCode, enablingPolicyCode, invokeOnStartupCode);
-                        break;
-                }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="visioContentType"></param>
+        /// <param name="sourceLineNumbers"></param>
+        /// <param name="attrib"></param>
+        /// <param name="publishInfo"></param>
+        /// <param name="addonAttrs"></param>
 
-                if (visioLanguage == 1)
-                {
-                    foreach (var lcid in GetAllVisioLanguageCodes())
-                    {
-                        var qualifier2003 = MakeQualifier(visioContentType, lcid, fileName, ordinal);
-
-                        GenerateRow(sourceLineNumbers, GetVisioComponentId(visioContentType, VisioVersion.Visio2003),
-                                    qualifier2003, appData2003, featureId, componentId);
-                    }
-                }
+        private void ParseAddonAttrs(VisioContentType visioContentType, SourceLineNumberCollection sourceLineNumbers,
+                                     XmlAttribute attrib, VisioPublishInfo publishInfo, AddonAttrs addonAttrs)
+        {
+            if (visioContentType != VisioContentType.Addon)
+                Core.UnexpectedAttribute(sourceLineNumbers, attrib);
+            else
+            {
+                if (YesNoType.Yes == Core.GetAttributeYesNoValue(sourceLineNumbers, attrib))
+                    publishInfo.AddonAttrs |= addonAttrs;
                 else
-                {
-                    string qualifier2003 = MakeQualifier(visioContentType, visioLanguage, fileName, ordinal); 
-                        
-                    GenerateRow(sourceLineNumbers, GetVisioComponentId(visioContentType, VisioVersion.Visio2003),
-                                qualifier2003, appData2003, featureId, componentId);
-                }
-            }
-
-            string qualifier = MakeQualifier(visioContentType, visioLanguage, fileName, ordinal);
-
-            if ((visioVersion & VisioVersion.Visio2007) == VisioVersion.Visio2007)
-            {
-                string appData2007 = "";
-                    
-                switch (visioContentType)
-                {
-                    case VisioContentType.Stencil:
-                        appData2007 = string.Format(@"{0}|{1}", menuPath, altNames);
-                        break;
-
-                    case VisioContentType.Template:
-                        appData2007 = string.Format(@"{0}|{1}|{2}", menuPath, altNames, featuredTemplate ? 1 : 0);
-                        break;
-
-                    case VisioContentType.Help:
-                        appData2007 = "-1";
-                        break;
-
-                    case VisioContentType.Addon:
-                        appData2007 = string.Format(@"{0}|{1}|{2}|{3}|{4}|{5}|{6}",
-                            menuPath, localizedName, universalName, ordinal, addonAttrsCode, enablingPolicyCode, invokeOnStartupCode);
-                        break;
-                }
-
-                GenerateRow(sourceLineNumbers, GetVisioComponentId(visioContentType, VisioVersion.Visio2007),
-                            qualifier, appData2007, featureId, componentId);
-                    
-            }
-            if ((visioVersion & VisioVersion.Visio2010) == VisioVersion.Visio2010)
-            {
-                string appData2010 = "";
-                switch (visioContentType)
-                {
-                    case VisioContentType.Stencil:  
-                        appData2010 = string.Format(@"{0}|{1}|{2}|{3}", menuPath, altNames, quickShapesCount, editionCode);
-                        break;
-
-                    case VisioContentType.Template: 
-                        appData2010 = string.Format(@"{0}|{1}|{2}|{3}", menuPath, altNames, 1, editionCode);
-                        break;
-
-                    case VisioContentType.Help:
-                        appData2010 = "-1";
-                        break;
-
-                    case VisioContentType.Addon:
-                        appData2010 = string.Format(@"{0}|{1}|{2}|{3}|{4}|{5}|{6}|{7}",
-                            menuPath, localizedName, universalName, ordinal, addonAttrsCode, enablingPolicyCode, invokeOnStartupCode, editionCode);
-                        break;
-
-                }
-                    
-                GenerateRow(sourceLineNumbers, GetVisioComponentId(visioContentType, VisioVersion.Visio2010),
-                            qualifier, appData2010, featureId, componentId);
-            }
-
-            if ((visioVersion & VisioVersion.Visio2013) == VisioVersion.Visio2013)
-            {
-                string appData2013 = "";
-
-                switch (visioContentType)
-                {
-                    case VisioContentType.Stencil:
-                        appData2013 = string.Format(@"{0}|{1}|{2}|{3}", menuPath, altNames, quickShapesCount, editionCode);
-                        break;
-
-                    case VisioContentType.Template:
-                        appData2013 = string.Format(@"{0}|{1}|{2}|{3}", menuPath, altNames, 1, editionCode);
-                        break;
-
-                    case VisioContentType.Help:
-                        appData2013 = "-1";
-                        break;
-
-                    case VisioContentType.Addon:
-                        appData2013 = string.Format(@"{0}|{1}|{2}|{3}|{4}|{5}|{6}|{7}",
-                            menuPath, localizedName, universalName, ordinal, addonAttrsCode, enablingPolicyCode, invokeOnStartupCode, editionCode);
-                        break;
-                }
-
-                GenerateRow(sourceLineNumbers, GetVisioComponentId(visioContentType, VisioVersion.Visio2013),
-                            qualifier, appData2013, featureId, componentId);
+                    publishInfo.AddonAttrs &= ~addonAttrs;
             }
         }
 
-        private static string MakeQualifier(VisioContentType visioContentType, int lcid, string fileName, uint ordinal)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sourceLineNumbers"></param>
+        /// <param name="attrib"></param>
+        /// <param name="publishInfo"></param>
+        /// <param name="visioVersion"></param>
+
+        private void ParseVisioVersionAttribute(SourceLineNumberCollection sourceLineNumbers, XmlAttribute attrib,
+                                                VisioPublishInfo publishInfo, VisioVersion visioVersion)
         {
-            return (visioContentType == VisioContentType.Addon)
-                ? string.Format(@"{0}\{1}\{2}", lcid, ordinal - 1, fileName)
-                : string.Format(@"{0}\{1}", lcid, fileName);
+            if (YesNoType.Yes == Core.GetAttributeYesNoValue(sourceLineNumbers, attrib))
+                publishInfo.VisioVersion |= visioVersion;
+            else
+                publishInfo.VisioVersion &= ~visioVersion;
         }
 
-
-        private void GenerateRow(SourceLineNumberCollection sourceLineNumbers, string visioComponentId, string qualifier,
-                                 string appData, string featureId, string componentId)
-        {
-            Row row = Core.CreateRow(sourceLineNumbers, "PublishComponent");
-
-            row[0] = visioComponentId;
-            row[1] = qualifier;
-            row[2] = componentId;
-            row[3] = appData;
-            row[4] = featureId;
-        }
-
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sourceLineNumbers"></param>
+        /// <param name="attrib"></param>
+        /// <returns></returns>
 
         private VisioEdition ParseVisioEditionAttributeValue(SourceLineNumberCollection sourceLineNumbers, XmlAttribute attrib)
         {
@@ -579,6 +333,12 @@ namespace VisioWixExtension
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sourceLineNumbers"></param>
+        /// <param name="attrib"></param>
+        /// <returns></returns>
 
         private EnablingPolicy ParseEnablingPolicy(SourceLineNumberCollection sourceLineNumbers, XmlAttribute attrib)
         {
@@ -603,107 +363,58 @@ namespace VisioWixExtension
             }
         }
 
-        private EnablingPolicy ParseStaticEnableConditions(SourceLineNumberCollection sourceLineNumbers, XmlAttribute attrib)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sourceLineNumbers"></param>
+        /// <param name="attrib"></param>
+        /// <returns></returns>
+
+        private StaticEnableConditions ParseStaticEnableConditions(SourceLineNumberCollection sourceLineNumbers, XmlAttribute attrib)
         {
             string attribValue = Core.GetAttributeBundleVariableValue(sourceLineNumbers, attrib);
             switch (attribValue)
             {
                 case "Document":
-                    return EnablingPolicy.Document;
+                    return StaticEnableConditions.Document;
 
                 case "DocumentWindow":
-                    return EnablingPolicy.DocumentWindow;
+                    return StaticEnableConditions.DocumentWindow;
 
                 case "DrawingWindow":
-                    return EnablingPolicy.DrawingWindow;
+                    return StaticEnableConditions.DrawingWindow;
 
                 case "PageWindow":
-                    return EnablingPolicy.PageWindow;
+                    return StaticEnableConditions.PageWindow;
 
                 case "MasterWindow":
-                    return EnablingPolicy.MasterWindow;
+                    return StaticEnableConditions.MasterWindow;
 
                 case "StencilWindow":
-                    return EnablingPolicy.StencilWindow;
+                    return StaticEnableConditions.StencilWindow;
 
                 case "SheetWindow":
-                    return EnablingPolicy.SheetWindow;
+                    return StaticEnableConditions.SheetWindow;
 
                 case "IconWindow":
-                    return EnablingPolicy.IconWindow;
+                    return StaticEnableConditions.IconWindow;
 
                 case "TargetContext":
-                    return EnablingPolicy.TargetContext;
+                    return StaticEnableConditions.TargetContext;
 
                 case "TargetContextPage":
-                    return EnablingPolicy.TargetContextPage;
+                    return StaticEnableConditions.TargetContextPage;
 
                 case "TargetContextMaster":
-                    return EnablingPolicy.TargetContextMaster;
+                    return StaticEnableConditions.TargetContextMaster;
 
                 case "TargetContextSelection":
-                    return EnablingPolicy.TargetContextSelection;
+                    return StaticEnableConditions.TargetContextSelection;
                     
 
                 default:
                     Core.OnMessage(VisioErrors.InvalidVisioEdition(sourceLineNumbers, attribValue));
-                    return EnablingPolicy.Document;
-            }
-        }
-        
-        private static string GetVisioEditionCode(VisioEdition visioEdition)
-        {
-            switch (visioEdition)
-            {
-                case VisioEdition.All:
-                    return "-1";
-                case VisioEdition.X86:
-                    return "32";
-                case VisioEdition.X64:
-                    return "64";
-
-                default:
-                    throw new ArgumentOutOfRangeException("visioEdition");
-            }
-        }
-
-        /// <summary>
-        /// Type of Visio content to register: template/stencil/etc
-        /// </summary>
-        private enum VisioContentType
-        {
-            Template = 0,
-            Stencil = 1,
-            Help = 2,
-            Addon = 3,
-        };
-
-        /// <summary>
-        /// Returns default set of Visio versions to install. By Default, it is 2007/2010/2013.
-        /// For new file types (2013) the default is to publish for Visio 2013 only.
-        /// </summary>
-        /// <param name="fileName">File name to analyze</param>
-        /// <returns>Set of Visio version to publish for by default</returns>
-        private VisioVersion GetDefaultVisioVersion(string fileName)
-        {
-            switch (Path.GetExtension(fileName))
-            {
-                case ".chm":
-                case ".vsl":
-                case ".exe":
-                case ".vss":
-                case ".vst":
-                case ".vsx":
-                case ".vtx":
-                    return VisioVersion.Visio2007 | VisioVersion.Visio2010 | VisioVersion.Visio2013;
-
-                case ".vssx":
-                case ".vstx":
-                case ".vstm":
-                    return VisioVersion.Visio2013;
-
-                default:
-                    return VisioVersion.Visio2003;
+                    return StaticEnableConditions.Document;
             }
         }
 
@@ -711,100 +422,33 @@ namespace VisioWixExtension
         /// Detects Visio content type based on file extension.
         /// Reports error if file under which the publish component was located is not actually Visio file.
         /// </summary>
-        /// <param name="sourceLineNumbers"></param>
         /// <param name="fileName"></param>
-        /// <param name="visioContentType"></param>
         /// <returns></returns>
-        private bool ValidateVisioContentType(SourceLineNumberCollection sourceLineNumbers, string fileName, VisioContentType visioContentType)
+        static private VisioContentType GetVisioContentType(string fileName)
         {
-            var extension = Path.GetExtension(fileName);
-            switch (extension)
+            switch (Path.GetExtension(fileName))
             {
                 case ".vss":
                 case ".vsx":
                 case ".vssx":
                 case ".vssm":
-                    if (visioContentType != VisioContentType.Stencil)
-                    {
-                        Core.OnMessage(VisioErrors.InvalidStencilFileExtension(sourceLineNumbers, extension));
-                        return false;
-                    }
-                    break;
+                    return VisioContentType.Stencil;
 
                 case ".vst":
                 case ".vtx":
                 case ".vstx":
                 case ".vstm":
-                    if (visioContentType != VisioContentType.Template)
-                    {
-                        Core.OnMessage(VisioErrors.InvalidTemplateFileExtension(sourceLineNumbers, extension));
-                        return false;
-                    }
-                    break;
+                    return VisioContentType.Template;
 
                 case ".vsl":
                 case ".exe":
-                    if (visioContentType != VisioContentType.Addon)
-                    {
-                        Core.OnMessage(VisioErrors.InvalidAddonFileExtension(sourceLineNumbers, extension));
-                        return false;
-                    }
-                    break;
+                    return VisioContentType.Addon;
 
                 case ".chm":
-                    if (visioContentType != VisioContentType.Help)
-                    {
-                        Core.OnMessage(VisioErrors.InvalidHelpFileExtension(sourceLineNumbers, extension));
-                        return false;
-                    }
-                    break;
+                    return VisioContentType.Help;
 
                 default:
-                    Core.OnMessage(VisioErrors.InvalidFileExtension(sourceLineNumbers, extension));
-                    return false;
-            }
-
-            return true;
-        }
-
-        /// <summary>
-        /// Returns the ComponentID for PublishComponent table for given combination of version/content type.
-        /// </summary>
-        /// <param name="contentType"></param>
-        /// <param name="visioVersion"></param>
-        /// <returns></returns>
-
-        private string GetVisioComponentId(VisioContentType contentType, VisioVersion visioVersion)
-        {
-            var pattern = GetVisioBaseComponentId(visioVersion);
-
-            return pattern.Replace("X", Convert.ToInt32(contentType).ToString(CultureInfo.InvariantCulture));
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="visioVersion"></param>
-        /// <returns></returns>
-
-        private string GetVisioBaseComponentId(VisioVersion visioVersion)
-        {
-            switch (visioVersion)
-            {
-                case VisioVersion.Visio2003:
-                    return "{CF1F488D-8D6F-499C-A78D-026E1DF3810X}";
-
-                case VisioVersion.Visio2007:
-                    return "{6D9D8B6F-D0EF-4BC0-8DD4-09DD6CE2B00X}";
-
-                case VisioVersion.Visio2010:
-                    return "{6D9D8B6F-D0EF-4BC0-8DD4-09DD6CE2B10X}";
-
-                case VisioVersion.Visio2013:
-                    return "{6D9D8B6F-D0EF-4BC0-8DD4-09DD6CE2B20X}";
-
-                default:
-                    throw new ArgumentOutOfRangeException("visioVersion");
+                    return VisioContentType.Unknown;
             }
         }
 
@@ -855,25 +499,6 @@ namespace VisioWixExtension
                 Core.OnMessage(VisioErrors.InvalidLanguage(sourceLineNumbers, attribValue));
                 return 0;
             }
-        }
-
-        /// <summary>
-        /// List of all languages supported by Visio 2003. We need to add those explicitly for Visio 2003
-        /// </summary>
-        /// <returns></returns>
-        private IEnumerable<int> GetAllVisioLanguageCodes()
-        {
-            return new[]
-                       {
-                           1025, 1028, 1029, 1030, 
-                           1031, 1032, 1033, 1035, 
-                           1036, 1037, 1038, 1040, 
-                           1041, 1042, 1043, 1044, 
-                           1045, 1046, 1048, 1049, 
-                           1051, 1053, 1055, 1058, 
-                           1060, 2052, 2070, 3082
-                       };
-
         }
 
     }

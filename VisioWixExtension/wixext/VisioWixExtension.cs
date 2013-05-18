@@ -1,12 +1,11 @@
 ﻿using System.Reflection;
-using System.Windows.Forms;
 using Microsoft.Tools.WindowsInstallerXml;
 
 namespace VisioWixExtension
 {
     public class VisioWixExtension : WixExtension 
     {
-        private VisioCompilerExtension _compilerExtensionExtension;
+        private RowGenerator _compilerExtensionExtension;
 
         /// <summary>
         /// Gets the optional compiler extension.
@@ -17,7 +16,7 @@ namespace VisioWixExtension
             get
             {
                 if (null == _compilerExtensionExtension)
-                    _compilerExtensionExtension = new VisioCompilerExtension();
+                    _compilerExtensionExtension = new RowGenerator();
 
                 return _compilerExtensionExtension;
             }

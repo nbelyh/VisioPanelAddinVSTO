@@ -18,72 +18,48 @@
 
     <Message Id="InvalidVisioEdition" Number="6501">
       <Instance>
-        Invalid Visio edition specified: "{0}". The Visio Edition (platform) can be either "x86", "x64" or "all"
+        Invalid Visio edition specified: "{0}". The Visio Edition should be either "x86" or "x64"
+        If you want to publish for all platforms, then just omit this attribute.
         <Parameter Type="System.String" Name="value" />
       </Instance>
     </Message>
 
     <Message Id="InvalidLanguage" Number="6502">
       <Instance>
-        Invalid language specifid: "{0}". The language should be either LCID, such as "1033" or language code, such as "en-us".
+        Invalid language specifid: "{0}". 
+        The language should be either LCID, such as "1033" or language code, such as "en-us".
         <Parameter Type="System.String" Name="value" />
       </Instance>
     </Message>
 
     <Message Id="InvalidUint" Number="6503">
       <Instance>
-        Invalid value for {0} specifid: "{1}". The value should be non-negative integer.
+        Invalid value for {0} specifid: "{1}". 
+        The value should be non-negative integer.
         <Parameter Type="System.String" Name="attributeName" />
         <Parameter Type="System.String" Name="value" />
       </Instance>
     </Message>
 
-    <Message Id="InvalidStencilFileExtension" Number="6504">
+    <Message Id="UsingPublish" Number="6508">
       <Instance>
-        Invalid parent Visio stencil file extension: "{0}".
-        The parent file is expected to be a Visio stencil file (and have extension ".vss", ".vsx", ".vssx", or ".vssm")
-        <Parameter Type="System.String" Name="value" />
+        Please use typed element instead of &lt;Publis&lt;: &lt;PublishStencil&gt;, &lt;PublishTemplate&gt;, &lt;PublishAddon&gt;, &lt;PublishHelp&gt;
       </Instance>
     </Message>
+    
+  </Class>
 
-    <Message Id="InvalidTemplateFileExtension" Number="6505">
-      <Instance>
-        Invalid parent Visio template file extension: "{0}".
-        The parent file is expected to be a Visio template file (and have extension ".vst", ".vtx", ".vstx", or ".vstm")
-        <Parameter Type="System.String" Name="value" />
-      </Instance>
-    </Message>
+  <Class Name="VisioWarnings" ContainerName="VisioWarningEventArgs" BaseContainerName="WixWarningEventArgs">
 
-    <Message Id="InvalidAddonFileExtension" Number="6506">
+    <Message Id="InvalidFileExtension" Number="6507">
       <Instance>
-        Invalid parent Visio add-on file extension: "{0}".
-        The parent file is expected to be a Visio add-on file (and have extension ".vsl", ".exe")
-        <Parameter Type="System.String" Name="value" />
-      </Instance>
-    </Message>
-
-    <Message Id="InvalidHelpFileExtension" Number="6507">
-      <Instance>
-        Invalid parent Visio help file extension: "{0}".
-        The parent file is expected to be a Visio help file (and have extension ".chdm")
-        <Parameter Type="System.String" Name="value" />
-      </Instance>
-    </Message>
-
-    <Message Id="InvalidFileExtension" Number="6508">
-      <Instance>
-        Invalid parent Visio template file extension: "{0}".
-        The parent file is expected to be a Visio-related file and have one of Visio-related extensions.
-        <Parameter Type="System.String" Name="value" />
-      </Instance>
-    </Message>
-
-    <Message Id="FileHasNoAttributes" Number="6510">
-      <Instance>
-        Unable to get File Name from the parent File element, as it has no attributes. File Name must be specified.
+        Possibly invalid parent Visio file extension: "{0}". 
+        The parent file is expected to be a {1} file.
+        <Parameter Type="System.String" Name="fileName" />
+        <Parameter Type="System.String" Name="expectedVisioContentType" />
       </Instance>
     </Message>
 
   </Class>
-
+  
 </Messages>
