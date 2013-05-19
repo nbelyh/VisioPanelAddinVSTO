@@ -3,3 +3,4 @@ LIBRARY "VisioCustomActions"
 EXPORTS
 
 UpdateVisioConfigChangeID
+UpdateVisioConfigChangeID64
