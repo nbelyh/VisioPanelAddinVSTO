@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 
+  Wix Project template to install (and publish) Visio components (stencils & templates) 
+  <visio:Publish /> item which does all the work
+-->
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:visio="http://schemas.microsoft.com/wix/Visio">
+ 
+  <Product Id="*" Name="VisioWiXSetupTest" Language="1033" Version="1.0.0.0" 
+	Manufacturer="Nikolay" UpgradeCode="{b3590515-25d4-4dac-9ad5-21b0ee6088ef}">
+    <Package InstallerVersion="200" Compressed="yes" InstallPrivileges="elevated" InstallScope="perMachine" />
+
+    <MajorUpgrade AllowDowngrades="yes"/>
+    
+    <MediaTemplate EmbedCab="yes"/>
+    
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="INSTALLDIR" Name="VisioWiXSetupTest" FileSource="Visio" >
+
+          <!-- stencils -->
+          
+          <Component>
+            <File Name="s_2003_all_M.vss">
+              <visio:PublishStencil MenuPath="ALL\s_ALL_2003" Visio2003="yes" />
+            </File>
+          </Component>
+
+          <Component>
+            <File Name="s_2003_en_M.vss">
+              <visio:PublishStencil MenuPath="s_EN_2003" Visio2003="yes" Language="en-us" />
+            </File>
+          </Component>
+
+          <Component>
+            <File Name="s_2003_de_M.vss">
+              <visio:PublishStencil MenuPath="s_DE_2003" Visio2003="yes" Language="de-de" />
+            </File>
+          </Component>
+
+
+          <Component>
+            <File Name="s_2007_all_M.vss">
+              <visio:PublishStencil MenuPath="ALL\s_ALL_2007" Visio2007="yes" />
+            </File>
+          </Component>
+
+          <Component>
+            <File Name="s_2007_en_M.vss">
+              <visio:PublishStencil MenuPath="s_EN_2007" Visio2007="yes" Language="en-us" />
+            </File>
+          </Component>
+
+          <Component>
+            <File Name="s_2007_de_M.vss">
+              <visio:PublishStencil MenuPath="s_DE_2007" Visio2007="yes" Language="de-de" />
+            </File>
+          </Component>
+
+
+          <Component>
+            <File Name="s_2010_all_M.vss">
+              <visio:PublishStencil MenuPath="ALL\s_ALL_2010" Visio2010="yes" />
+            </File>
+          </Component>
+
+          <Component>
+            <File Name="s_2010_en_M.vss">
+              <visio:PublishStencil MenuPath="s_EN_2010" Visio2010="yes" Language="en-us" />
+            </File>
+          </Component>
+
+          <Component>
+            <File Name="s_2010_de_M.vss">
+              <visio:PublishStencil MenuPath="s_DE_2010" Visio2010="yes" Language="de-de" />
+            </File>
+          </Component>
+
+
+          <Component>
+            <File Name="s_2013_all_M.vss">
+              <visio:PublishStencil MenuPath="ALL\s_ALL_2013" Visio2013="yes" />
+            </File>
+          </Component>
+
+          <Component>
+            <File Name="s_2013_en_M.vss">
+              <visio:PublishStencil MenuPath="s_EN_2013" Visio2013="yes" Language="en-us" />
+            </File>
+          </Component>
+
+          <Component>
+            <File Name="s_2013_de_M.vss">
+              <visio:PublishStencil MenuPath="s_DE_2013" Visio2013="yes" Language="de-de" />
+            </File>
+          </Component>
+
+
+          <Component>
+            <File Name="s_2007_2010_all_M.vss">
+              <visio:PublishStencil MenuPath="ALL\s_ALL_2007_2010" Visio2007="yes" Visio2010="yes" QuickShapeCount="2" />
+            </File>
+          </Component>
+
+          <Component>
+            <File Name="s_2013_x86_all_M.vssx">
+              <visio:PublishStencil MenuPath="ALL\s_ALL_2013_x32" Visio2013="yes"  VisioEdition="x86" />
+            </File>
+          </Component>
+
+          <Component>
+            <File Name="s_2013_x64_all_M.vssx">
+              <visio:PublishStencil MenuPath="ALL\s_ALL_2013_x64" Visio2013="yes"  VisioEdition="x64" />
+            </File>
+          </Component>
+
+          <!-- templates -->
+
+          <Component>
+            <File Name="t_2003_all_M.vst">
+              <visio:PublishTemplate MenuPath="ALL\t_ALL_2003" Visio2003="yes" />
+            </File>
+          </Component>
+
+          <Component>
+            <File Name="t_2003_en_M.vst">
+              <visio:PublishTemplate MenuPath="t_EN_2003" Visio2003="yes" Language="en-us" />
+            </File>
+          </Component>
+
+          <Component>
+            <File Name="t_2003_de_M.vst">
+              <visio:PublishTemplate MenuPath="t_DE_2003" Visio2003="yes" Language="de-de" />
+            </File>
+          </Component>
+
+
+          <Component>
+            <File Name="t_2007_all_M.vst">
+              <visio:PublishTemplate MenuPath="ALL\t_ALL_2007" Visio2007="yes" />
+            </File>
+          </Component>
+
+          <Component>
+            <File Name="t_2007_en_M.vst">
+              <visio:PublishTemplate MenuPath="t_EN_2007" Visio2007="yes" Language="en-us" />
+            </File>
+          </Component>
+
+          <Component>
+            <File Name="t_2007_de_M.vst">
+              <visio:PublishTemplate MenuPath="t_DE_2007" Visio2007="yes" Language="de-de" />
+            </File>
+          </Component>
+
+
+          <Component>
+            <File Name="t_2010_all_M.vst">
+              <visio:PublishTemplate MenuPath="ALL\t_ALL_2010" Visio2010="yes" />
+            </File>
+          </Component>
+
+          <Component>
+            <File Name="t_2010_en_M.vst">
+              <visio:PublishTemplate MenuPath="t_EN_2010" Visio2010="yes" Language="en-us" />
+            </File>
+          </Component>
+
+          <Component>
+            <File Name="t_2010_de_M.vst">
+              <visio:PublishTemplate MenuPath="t_DE_2010" Visio2010="yes" Language="de-de" />
+            </File>
+          </Component>
+
+
+          <Component>
+            <File Name="t_2013_all_M.vst">
+              <visio:PublishTemplate MenuPath="ALL\t_ALL_2013" Visio2013="yes" />
+            </File>
+          </Component>
+
+          <Component>
+            <File Name="t_2013_en_M.vst">
+              <visio:PublishTemplate MenuPath="t_EN_2013" Visio2013="yes" Language="en-us" />
+            </File>
+          </Component>
+
+          <Component>
+            <File Name="t_2013_de_M.vst">
+              <visio:PublishTemplate MenuPath="t_DE_2013" Visio2013="yes" Language="de-de" />
+            </File>
+          </Component>
+
+          <Component>
+            <File Name="t_2007_2010_all_M.vst">
+              <visio:PublishTemplate MenuPath="ALL\t_ALL_2007_2010" Visio2007="yes" Visio2010="yes" FeaturedTemplate="no" />
+            </File>
+          </Component>
+
+          <Component>
+            <File Name="t_2013_x86_all_M.vstx">
+              <visio:PublishTemplate MenuPath="ALL\t_ALL_2013_x32" Visio2013="yes"  VisioEdition="x86" />
+            </File>
+          </Component>
+          
+          <Component>
+            <File Name="t_2013_x64_all_M.vstx">
+              <visio:PublishTemplate MenuPath="ALL\t_ALL_2013_x64" Visio2013="yes"  VisioEdition="x64" />
+            </File>
+          </Component>
+
+          <Component>
+            <File Name="TestHelp_de.chm">
+              <visio:PublishHelpFile Language="de-de" />
+            </File>
+          </Component>
+          
+          <Component>
+            <File Name="TestHelp_en.chm">
+              <visio:PublishHelpFile Language="en-us" />
+            </File>
+          </Component>
+
+          <Component>
+            <File Name="TestAddonVsl.vsl" Source="TestAddonVsl\$(var.Configuration)\TestAddonVsl.vsl" >
+              <visio:PublishAddon MenuPath="Test VSL Addon"
+                                  LocalizedName="Test VSL Addon Loc"
+                                  UniversalName="TestVslAddon"
+                                  HasAboutBox="yes" 
+                                  ProvidesHelp="yes" 
+                                  Ordinal="1"
+                                  EnablingPolicy="AlwaysEnabled"
+                                  VisioEdition="x86" 
+                                  PerformsActions="yes"
+                                  HideInUI="no" Visio2003="yes" Language="en-us"
+                                  />
+            </File>
+          </Component>
+
+          <Component>
+            <File Name="TestAddonExe.exe" Source="TestAddonExe\$(var.Configuration)\TestAddonExe.exe" >
+              <visio:PublishAddon MenuPath="EXE\Test EXE Addon"
+                                  LocalizedName="Test EXE Addon Loc"
+                                  UniversalName="TestExeAddon"
+                                  HasAboutBox="no"
+                                  DisplayWaitCursor="yes"
+                                  ProvidesHelp="yes"
+                                  InvokeOnStartup="yes"
+                                  EnablingPolicy="StaticallyEnabled"
+                                  StaticEnableConditions="Document"
+                                  PerformsActions="no"
+                                  VisioEdition="x86" Visio2003="yes" Language="en-us"
+                                  />
+            </File>
+          </Component>
+
+        </Directory>
+      </Directory>
+    </Directory>
+
+    
+    <Feature Id="ProductFeature" Title="All Items" Display="expand">
+
+      <Feature Id="Stencils" Title="Stencils">
+        
+        <ComponentRef Id="s_2003_all_M.vss" />
+        <ComponentRef Id="s_2003_de_M.vss" />
+        <ComponentRef Id="s_2003_en_M.vss" />
+
+        <ComponentRef Id="s_2007_all_M.vss" />
+        <ComponentRef Id="s_2007_de_M.vss" />
+        <ComponentRef Id="s_2007_en_M.vss" />
+
+        <ComponentRef Id="s_2010_all_M.vss" />
+        <ComponentRef Id="s_2010_de_M.vss" />
+        <ComponentRef Id="s_2010_en_M.vss" />
+
+        <ComponentRef Id="s_2013_all_M.vss" />
+        <ComponentRef Id="s_2013_de_M.vss" />
+        <ComponentRef Id="s_2013_en_M.vss" />
+
+        <ComponentRef Id="s_2007_2010_all_M.vss" />
+
+        <ComponentRef Id="s_2013_x86_all_M.vssx" />
+        <ComponentRef Id="s_2013_x64_all_M.vssx" />
+        
+
+      </Feature>
+
+      <Feature Id="Templates" Title="Templates">
+
+        <ComponentRef Id="t_2003_all_M.vst" />
+        <ComponentRef Id="t_2003_de_M.vst" />
+        <ComponentRef Id="t_2003_en_M.vst" />
+
+        <ComponentRef Id="t_2007_all_M.vst" />
+        <ComponentRef Id="t_2007_de_M.vst" />
+        <ComponentRef Id="t_2007_en_M.vst" />
+
+        <ComponentRef Id="t_2010_all_M.vst" />
+        <ComponentRef Id="t_2010_de_M.vst" />
+        <ComponentRef Id="t_2010_en_M.vst" />
+
+        <ComponentRef Id="t_2013_all_M.vst" />
+        <ComponentRef Id="t_2013_de_M.vst" />
+        <ComponentRef Id="t_2013_en_M.vst" />
+
+        <ComponentRef Id="t_2007_2010_all_M.vst" />
+
+        <ComponentRef Id="t_2013_x86_all_M.vstx" />
+        <ComponentRef Id="t_2013_x64_all_M.vstx" />
+
+      </Feature>
+
+      <Feature Id="HelpFiles" Title="HelpFiles">
+
+        <ComponentRef Id="TestHelp_de.chm"/>
+        <ComponentRef Id="TestHelp_en.chm"/>
+        
+      </Feature>
+
+      <Feature Id="Addon" Title="Addons">
+        <ComponentRef Id="TestAddonVsl.vsl" />
+        <ComponentRef Id="TestAddonExe.exe" />
+      </Feature>
+      
+    </Feature>
+
+    <UIRef Id="WixUI_FeatureTree" />
+
+  </Product>
+</Wix>
