@@ -55,7 +55,7 @@ namespace VisioWixExtension
                             ParseVisioElement(element, componentId, fileName, VisioContentType.Template);
                             break;
 
-                        case "PublishHelp":
+                        case "PublishHelpFile":
                             ParseVisioElement(element, componentId, fileName, VisioContentType.Help);
                             break;
 
@@ -245,6 +245,12 @@ namespace VisioWixExtension
                     Core.OnMessage(WixErrors.ExpectedAttribute(sourceLineNumbers, node.Name, "MenuPath"));
             }
 
+            if (publishInfo.VisioVersion == VisioVersion.Default)
+                publishInfo.VisioVersion = VisioPublishInfo.GetDefaultVisioVersion(fileName);
+
+            if (publishInfo.VisioEdition == VisioEdition.Default)
+                publishInfo.VisioEdition = (VisioEdition.X86 | VisioEdition.X64);
+
             if ((publishInfo.VisioEdition & VisioEdition.X86) == VisioEdition.X86)
                 Core.CreateWixSimpleReferenceRow(sourceLineNumbers, "CustomAction", "SetConfigChangeID");
 
@@ -329,7 +335,7 @@ namespace VisioWixExtension
 
                 default:
                     Core.OnMessage(VisioErrors.InvalidVisioEdition(sourceLineNumbers, attribValue));
-                    return VisioEdition.All;
+                    return VisioEdition.Default;
             }
         }
 

@@ -15,7 +15,7 @@ namespace VisioWixExtension
         Help = 2,
         Addon = 3,
 
-        Unknown = -1,
+        Unknown = -1
     };
 
     /// <summary>
@@ -28,6 +28,8 @@ namespace VisioWixExtension
         Visio2007 = 2,
         Visio2010 = 4,
         Visio2013 = 8,
+
+        Default = 0
     };
 
     /// <summary>
@@ -36,9 +38,10 @@ namespace VisioWixExtension
     [Flags]
     enum VisioEdition
     {
-        X86,
-        X64,
-        All,
+        X86 = 1,
+        X64 = 2,
+
+        Default = 0,
     };
 
     /// <summary>
@@ -60,8 +63,6 @@ namespace VisioWixExtension
     [Flags]
     internal enum EnablingPolicy
     {
-        None = 0,
-
         AlwaysEnabled = 0xffff,
         DynamicallyEnabled = 0x0,
         StaticallyEnabled = 0x1,
@@ -95,8 +96,8 @@ namespace VisioWixExtension
     {
         public VisioPublishInfo(string fileName)
         {
-            VisioVersion = GetDefaultVisioVersion(fileName);
-            VisioEdition = VisioEdition.All;
+            VisioVersion = VisioVersion.Default;
+            VisioEdition = VisioEdition.Default;
             AddonAttrs = AddonAttrs.PerformsActions;
 
             MenuPath = Path.GetFileName(fileName);
@@ -109,6 +110,9 @@ namespace VisioWixExtension
 
             LocalizedName = Path.GetFileName(fileName);
             UniversalName = Path.GetFileName(fileName);
+
+            EnablingPolicy = EnablingPolicy.AlwaysEnabled;
+            StaticEnableConditions = StaticEnableConditions.Document;
 
             Ordinal = 1;
         }
@@ -141,19 +145,10 @@ namespace VisioWixExtension
         /// </summary>
         /// <param name="fileName">File name to analyze</param>
         /// <returns>Set of Visio version to publish for by default</returns>
-        private VisioVersion GetDefaultVisioVersion(string fileName)
+        static public VisioVersion GetDefaultVisioVersion(string fileName)
         {
             switch (Path.GetExtension(fileName))
             {
-                case ".chm":
-                case ".vsl":
-                case ".exe":
-                case ".vss":
-                case ".vst":
-                case ".vsx":
-                case ".vtx":
-                    return VisioVersion.Visio2007 | VisioVersion.Visio2010 | VisioVersion.Visio2013;
-
                 case ".vssx":
                 case ".vstx":
                 case ".vstm":
@@ -218,10 +213,12 @@ namespace VisioWixExtension
         {
             switch (visioEdition)
             {
-                case VisioEdition.All:
+                case (VisioEdition.X86|VisioEdition.X64):
                     return "-1";
+
                 case VisioEdition.X86:
                     return "32";
+
                 case VisioEdition.X64:
                     return "64";
 

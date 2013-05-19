@@ -344,7 +344,7 @@
         </xs:annotation>
       </xs:attribute>
 
-      <xs:attribute name="HasHelp" type="wix:YesNoType" use="optional">
+      <xs:attribute name="ProvidesHelp" type="wix:YesNoType" use="optional">
         <xs:annotation>
           <xs:documentation>
             Specifies that add-on specific Help appears when the user presses CTRL and clicks Help in the Run Add-On dialog box. 
