@@ -11,7 +11,7 @@
   <?define Version="1.0.0.0"?>
   <?define UpgradeCode="{$guid1$}" ?>
 
-  <Product Id="*" Name="$projectname$ $(var.Version) ($(var.Platform))" Language="1033" Version="$(var.Version)" Manufacturer="$username$" UpgradeCode="$(var.UpgradeCode)">
+  <Product Id="*" Name="$projectname$ $(var.Version)" Language="1033" Version="$(var.Version)" Manufacturer="$username$" UpgradeCode="$(var.UpgradeCode)">
     <Package InstallerVersion="200" Compressed="yes" InstallPrivileges="elevated" InstallScope="perMachine" />
 
     <MajorUpgrade DowngradeErrorMessage="A later version of [ProductName] is already installed. Setup will now exit." />
@@ -23,13 +23,13 @@
 
           <Component>
             <File Name="Stencil_1_M.vss">
-              <visio:Publish MenuPath="$projectname$\Stencil 1" />
+              <visio:PublishStencil MenuPath="$projectname$\Stencil 1" />
             </File>
           </Component>
 
           <Component>
             <File Name="Template_1_M.vst">
-              <visio:Publish MenuPath="$projectname$\Template 1" />
+              <visio:PublishTemplate MenuPath="$projectname$\Template 1" />
             </File>
           </Component>
 
