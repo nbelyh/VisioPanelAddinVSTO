@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Vsix xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="1.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2010">
+  <Identifier Id="VisioPanelAddinVSTO.UnmanagedVisio">
+    <Name>Visio VSTO Panel Addin Project</Name>
+    <Author>Nikolay Belykh</Author>
+    <Version>1.0.1</Version>
+    <Description xml:space="preserve">Creates a Microsoft Visio VSTO Add-in for Microsoft Visio which provides some user interface to start with, including toolbar and docking Panel</Description>
+    <Locale>1033</Locale>
+    <License>license.txt</License>
+    <Icon>icon.ico</Icon>
+    <SupportedProducts>
+      <VisualStudio Version="10.0">
+        <Edition>Ultimate</Edition>
+        <Edition>Premium</Edition>
+        <Edition>Pro</Edition>
+      </VisualStudio>
+      <VisualStudio Version="11.0">
+        <Edition>Ultimate</Edition>
+        <Edition>Premium</Edition>
+        <Edition>Pro</Edition>
+      </VisualStudio>
+      <VisualStudio Version="12.0">
+        <Edition>Ultimate</Edition>
+        <Edition>Premium</Edition>
+        <Edition>Pro</Edition>
+      </VisualStudio>
+    </SupportedProducts>
+    <SupportedFrameworkRuntimeEdition MinVersion="4.0" MaxVersion="5.0" />
+  </Identifier>
+  <References />
+  <Content>
+    <Assembly AssemblyName="|PanelAddinWizard;AssemblyName|">|PanelAddinWizard|</Assembly>
+    <ProjectTemplate>ProjectTemplates</ProjectTemplate>
+  </Content>
+</Vsix>

@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VSIX", "VSIX\VSIX.csproj", "{6C783367-F675-4B8A-8FAF-81AE9E8BE2DF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Template", "Template\Template.csproj", "{5133DED2-2448-4536-8F18-8FD6E50EAD4D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PanelAddinWizard", "Wizard\PanelAddinWizard.csproj", "{B214D62D-7872-4D80-9387-ABBFAAF57A2C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6C783367-F675-4B8A-8FAF-81AE9E8BE2DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C783367-F675-4B8A-8FAF-81AE9E8BE2DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C783367-F675-4B8A-8FAF-81AE9E8BE2DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C783367-F675-4B8A-8FAF-81AE9E8BE2DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5133DED2-2448-4536-8F18-8FD6E50EAD4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5133DED2-2448-4536-8F18-8FD6E50EAD4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5133DED2-2448-4536-8F18-8FD6E50EAD4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5133DED2-2448-4536-8F18-8FD6E50EAD4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B214D62D-7872-4D80-9387-ABBFAAF57A2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B214D62D-7872-4D80-9387-ABBFAAF57A2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B214D62D-7872-4D80-9387-ABBFAAF57A2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B214D62D-7872-4D80-9387-ABBFAAF57A2C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

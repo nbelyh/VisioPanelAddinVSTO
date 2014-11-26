@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+  <TemplateData>
+    <Name>Visio Panel VSTO Addin</Name>
+    <Description>Creates Microsoft Visio Panel Addin VSTO-based project</Description>
+    <ProjectType>CSharp</ProjectType>
+    <RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
+    <SortOrder>1001</SortOrder>
+    <TemplateID>773A143B-BC75-495B-A849-FD548B59D45F</TemplateID>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>VisioPanelAddin</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+    <Icon>icon.ico</Icon>
+  </TemplateData>
+  <TemplateContent>
+    <Project File="Addin.csproj" ReplaceParameters="true">
+      <Folder Name="Properties" TargetFolderName="Properties">
+        <ProjectItem ReplaceParameters="true">Resources.resx</ProjectItem>
+        <ProjectItem ReplaceParameters="true">Resources.Designer.cs</ProjectItem>
+        <ProjectItem ReplaceParameters="true">AssemblyInfo.cs</ProjectItem>
+      </Folder>
+      <Folder Name="Resources" TargetFolderName="Resources">
+        <ProjectItem ReplaceParameters="false">Command1.ico</ProjectItem>
+        <ProjectItem ReplaceParameters="false">Command2.ico</ProjectItem>
+        <ProjectItem ReplaceParameters="false">TogglePanel.ico</ProjectItem>
+        <ProjectItem ReplaceParameters="true">Ribbon.xml</ProjectItem>
+      </Folder>
+      <ProjectItem ReplaceParameters="true">ThisAddin.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true">ThisAddin.Designer.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true">ThisAddin.Designer.xml</ProjectItem>
+      <ProjectItem ReplaceParameters="true" OpenInEditor="true">Addin.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true">AddinCommandBars.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true">AddinRibbon.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true">PanelFrame.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true">PanelManager.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true">TheForm.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true">TheForm.resx</ProjectItem>
+      <ProjectItem ReplaceParameters="true">TheForm.Designer.cs</ProjectItem>
+    </Project>
+  </TemplateContent>
+  <WizardExtension>
+    <Assembly>PanelAddinWizard, Version=1.0.0.0, Culture=neutral, PublicKeyToken=503912e9bf77d51f</Assembly>
+    <FullClassName>PanelAddinWizard.RootWizard</FullClassName>
+  </WizardExtension>
+</VSTemplate>
