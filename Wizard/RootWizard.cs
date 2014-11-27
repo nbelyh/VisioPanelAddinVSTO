@@ -1,6 +1,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Net.Configuration;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using EnvDTE;
@@ -63,20 +64,13 @@ namespace PanelAddinWizard
             replacementsDictionary["$taskpaneANDui$"] = wizardForm.TaskPane && (wizardForm.CommandBars || wizardForm.Ribbon) ? "true" : "false";
 
 
-            replacementsDictionary["$office$"] = GetMaxOfficeVersion();
+            replacementsDictionary["$office$"] = getOfficeVersion(dte);
         }
 
-	    string GetMaxOfficeVersion()
+	    string getOfficeVersion(DTE dte)
 	    {
-	        foreach (var version in new[] {"16.0", "15.0", "14.0", "12.0"})
-	        {
-	            var key = string.Format(@"HKEY_LOCAL_MACHINE\Software\Microsoft\Office\{0}\Visio\InstallRoot", version);
-	            var val = Registry.GetValue(key, "Path", null);
-	            if (val != null)
-	                return version;
-	        }
-
-	        return "14.0";
+            return Registry.GetValue(@"HKEY_LOCAL_MACHINE\Software\Microsoft\Office\14.0\Visio\InstallRoot", "Path", null) != null
+                ? "14.0" : "12.0";
 	    }
 
         public void RunFinished()
