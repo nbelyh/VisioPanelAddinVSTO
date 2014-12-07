@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<customUI xmlns="http://schemas.microsoft.com/office/2009/07/customui" onLoad="OnRibbonLoad">
+  <ribbon>
+    <tabs>
+      <tab idMso="TabHome">
+        <group id="Group1" label="$csprojectname$">
+
+          <button id="Command1" size="large" getLabel="OnGetRibbonLabel" onAction="OnRibbonButtonClick" getEnabled="IsRibbonCommandEnabled" getImage="GetRibbonImage" />
+          <button id="Command2" size="large" getLabel="OnGetRibbonLabel" onAction="OnRibbonButtonClick" getEnabled="IsRibbonCommandEnabled" getImage="GetRibbonImage" />
+          
+          <separator id="sep1" />
+          <toggleButton id="TogglePanel" getLabel="OnGetRibbonLabel" size="large" 
+                        onAction="OnRibbonButtonCheckClick" getEnabled="IsRibbonCommandEnabled" getImage="GetRibbonImage" getPressed="IsRibbonCommandChecked" />
+          
+        </group>
+      </tab>
+    </tabs>
+  </ribbon>
+</customUI>

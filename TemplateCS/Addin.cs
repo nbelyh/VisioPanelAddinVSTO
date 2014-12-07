@@ -44,8 +44,8 @@ namespace $csprojectname$
                 case "Command1":    // make command1 always enabled
                     return true;
 
-                case "Command2":    // make command2 enabled only if a shape is selected
-                    return Application != null && Application.ActiveWindow != null && Application.ActiveWindow.Selection.Count > 0;
+                case "Command2":    // make command2 enabled only if a drawing is opened
+                    return Application != null && Application.ActiveWindow != null;
                 $endif$$if$ ($taskpaneANDui$ == true)
                 case "TogglePanel": // make panel enabled only if we have an open drawing.
                     return IsPanelEnabled();
@@ -120,11 +120,11 @@ namespace $csprojectname$
             $if$ ($commandbars$ == true)ShutdownCommandBars();
             $endif$$if$ ($taskpane$ == true)_panelManager.Dispose();
         $endif$}
-        $if$ ($ui$ == true)
+        $if$ ($taskpaneORui$ == true)
         internal void UpdateUI()
         {
             $endif$$if$ ($commandbars$ == true) UpdateCommandBars();
             $endif$$if$ ($ribbon$ == true)UpdateRibbon();
-        $endif$$if$ ($ui$ == true)}
+        $endif$$if$ ($taskpaneORui$ == true)}
     $endif$}
 }

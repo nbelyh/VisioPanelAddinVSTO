@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
   <TemplateData>
-    <Name>Visio Panel VSTO Addin</Name>
-    <Description>Creates Microsoft Visio Panel Addin VSTO-based project</Description>
+    <Name>Visio VSTO C# Panel Addin Project</Name>
+    <Description>Creates a VSTO-based Visio Panel Addin Project</Description>
     <ProjectType>CSharp</ProjectType>
     <RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
     <SortOrder>1001</SortOrder>

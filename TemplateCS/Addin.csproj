@@ -102,12 +102,16 @@
     <EmbeddedResource Include="TheForm.resx">
       <DependentUpon>TheForm.cs</DependentUpon>
     </EmbeddedResource>
-    <Content Include="Resources\TogglePanel.ico" />
     <Compile Include="TheForm.Designer.cs">
       <DependentUpon>TheForm.cs</DependentUpon>
     </Compile>
     <Compile Include="PanelFrame.cs" />
     <Compile Include="PanelManager.cs" />
+  </ItemGroup>
+  $endif$
+  $if$ ($taskpaneANDui$ == true)
+  <ItemGroup>
+    <Content Include="Resources\TogglePanel.ico" />
   </ItemGroup>
   $endif$
   $if$ ($ui$ == true)

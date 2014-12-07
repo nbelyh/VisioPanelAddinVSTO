@@ -41,13 +41,21 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Template\Template.csproj">
+    <ProjectReference Include="..\TemplateCS\TemplateCS.csproj">
       <Project>{5133DED2-2448-4536-8F18-8FD6E50EAD4D}</Project>
-      <Name>Template</Name>
+      <Name>TemplateCS</Name>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
       <TemplateType>Project</TemplateType>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
+      <VSIXSubPath>TemplateCS</VSIXSubPath>
+    </ProjectReference>
+    <ProjectReference Include="..\TemplateVB\TemplateVB.vbproj">
+      <Project>{75B8D080-8DB7-4418-91FB-5E0501ACFEC1}</Project>
+      <Name>TemplateVB</Name>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+      <TemplateType>Project</TemplateType>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <VSIXSubPath>TemplateVB</VSIXSubPath>
     </ProjectReference>
     <ProjectReference Include="..\Wizard\PanelAddinWizard.csproj">
       <Project>{B214D62D-7872-4D80-9387-ABBFAAF57A2C}</Project>
@@ -61,7 +69,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="license.txt">
+    <Content Include="license.rtf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>

@@ -1,8 +1,4 @@
-
-using System;
-using System.ComponentModel;
-using System.Net.Configuration;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 using System.Collections.Generic;
 using EnvDTE;
 using Microsoft.VisualStudio.TemplateWizard;
@@ -16,15 +12,21 @@ namespace PanelAddinWizard
 	public class RootWizard 
         : IWizard
 	{
+        public static Dictionary<string, string> GlobalDictionary =
+            new Dictionary<string, string>();
+
+	    private DTE _dte;
+
         // Add global replacement parameters
         public void RunStarted(object automationObject,
             Dictionary<string, string> replacementsDictionary,
             WizardRunKind runKind, object[] customParams)
         {
-            var dte = automationObject as DTE;
-            if (dte != null)
+            _dte = automationObject as DTE;
+
+            if (_dte != null)
             {
-                var vstoKey = string.Format(@"HKEY_LOCAL_MACHINE\{0}\Setup\VSTO", dte.RegistryRoot);
+                var vstoKey = string.Format(@"HKEY_LOCAL_MACHINE\{0}\Setup\VSTO", _dte.RegistryRoot);
                 var val = Registry.GetValue(vstoKey, "ProductDir", null);
                 
                 if (null == val)
@@ -39,10 +41,11 @@ namespace PanelAddinWizard
                 }
             }
 
-            var wizardForm = new WizardForm();
-
-            wizardForm.TaskPane = true;
-            wizardForm.Ribbon = true;
+            var wizardForm = new WizardForm
+            {
+                TaskPane = true, 
+                Ribbon = true
+            };
 
             if (wizardForm.ShowDialog() == DialogResult.Cancel)
                 throw new WizardBackoutException();
@@ -61,13 +64,14 @@ namespace PanelAddinWizard
             replacementsDictionary["$commandbarsANDtaskpane$"] = wizardForm.CommandBars && wizardForm.TaskPane ? "true" : "false";
             replacementsDictionary["$taskpane$"] = wizardForm.TaskPane ? "true" : "false";
             replacementsDictionary["$ui$"] = (wizardForm.CommandBars || wizardForm.Ribbon) ? "true" : "false";
-            replacementsDictionary["$taskpaneANDui$"] = wizardForm.TaskPane && (wizardForm.CommandBars || wizardForm.Ribbon) ? "true" : "false";
+            replacementsDictionary["$taskpaneANDui$"] = (wizardForm.TaskPane && (wizardForm.CommandBars || wizardForm.Ribbon)) ? "true" : "false";
+            replacementsDictionary["$taskpaneORui$"] = (wizardForm.TaskPane || (wizardForm.CommandBars || wizardForm.Ribbon)) ? "true" : "false";
 
-
-            replacementsDictionary["$office$"] = getOfficeVersion(dte);
+            replacementsDictionary["$office$"] = GetOfficeVersion();
         }
 
-	    string getOfficeVersion(DTE dte)
+        // Don't return the latest version, even if it is installed, because it will cause problems by auto-upgrade
+	    static string GetOfficeVersion()
 	    {
             return Registry.GetValue(@"HKEY_LOCAL_MACHINE\Software\Microsoft\Office\14.0\Visio\InstallRoot", "Path", null) != null
                 ? "14.0" : "12.0";
