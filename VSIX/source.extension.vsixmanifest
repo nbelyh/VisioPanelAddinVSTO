@@ -30,6 +30,7 @@
   <References />
   <Content>
     <Assembly AssemblyName="|PanelAddinWizard;AssemblyName|">|PanelAddinWizard|</Assembly>
-    <ProjectTemplate>ProjectTemplates</ProjectTemplate>
+    <ProjectTemplate>TemplateCS</ProjectTemplate>
+    <ProjectTemplate>TemplateVB</ProjectTemplate>
   </Content>
 </Vsix>
