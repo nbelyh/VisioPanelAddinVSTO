@@ -3,7 +3,7 @@
   <Identifier Id="VisioPanelAddinVSTO.UnmanagedVisio">
     <Name>Visio VSTO Panel Addin Project</Name>
     <Author>Nikolay Belykh</Author>
-    <Version>1.0.2</Version>
+    <Version>1.0.3</Version>
     <Description xml:space="preserve">Creates a Microsoft Visio VSTO Add-in for Microsoft Visio which provides some user interface to start with, including toolbar and docking Panel</Description>
     <Locale>1033</Locale>
     <License>license.rtf</License>
@@ -30,7 +30,6 @@
   <References />
   <Content>
     <Assembly AssemblyName="|PanelAddinWizard;AssemblyName|">|PanelAddinWizard|</Assembly>
-    <ProjectTemplate>TemplateCS</ProjectTemplate>
-    <ProjectTemplate>TemplateVB</ProjectTemplate>
+    <ProjectTemplate>ProjectTemplates</ProjectTemplate>
   </Content>
 </Vsix>
