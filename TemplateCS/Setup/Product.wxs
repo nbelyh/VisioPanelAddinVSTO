@@ -17,11 +17,12 @@
     <!-- allow major upgrades -->
     <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
 
+    <Property Id="MSIFASTINSTALL" Value="7" />
+    
     <MediaTemplate EmbedCab="yes" />
 
     <Feature Id="ProductFeature" Title="Setup" Level="1">
-      <ComponentRef Id="$csprojectname$.dll" />
-      <ComponentRef Id="$csprojectname$.registration" />
+      <ComponentGroupRef Id="Components"/>
     </Feature>
 
     <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
@@ -34,17 +35,32 @@
       <Directory Id="ProgramFilesFolder">
         <Directory Id="INSTALLFOLDER" Name="$csprojectname$">
 
-          <Component Id="$csprojectname$.registration">
-            <RegistryKey Root="HKMU" Key="Software\Microsoft\Visio\Addins\$progid$">
-              <RegistryValue Name="CommandLineSafe" Type="integer" Value="0" />
-              <RegistryValue Name="FriendlyName" Type="string" Value="$csprojectname$" KeyPath="yes" />
-              <RegistryValue Name="LoadBehavior" Type="integer" Value="3" />
-            </RegistryKey>
-          </Component>
-
         </Directory>
       </Directory>
     </Directory>
-  </Fragment>
 
+    <ComponentGroup Id="Components" Directory="INSTALLFOLDER">
+      <Component>
+        <File Id="Addin_dll" Source="$(var.$csprojectname$.TargetPath)" />
+      </Component>
+      <Component>
+        <File Id="Addin_dll_manifest" Source="$(var.$csprojectname$.TargetPath).manifest"></File>
+      </Component>
+      <Component>
+        <File Id="Addin_vsto" Source="$(var.$csprojectname$.TargetDir)$(var.$csprojectname$.TargetName).vsto"></File>
+        <RegistryKey Root="HKLM" Key="Software\Microsoft\Visio\Addins\$csprojectname$.Addin">
+          <RegistryValue Name="Manifest" Type="string" Value="[#Addin_vsto]|vstolocal" />
+          <RegistryValue Name="Description" Type="string" Value="$csprojectname$" />
+          <RegistryValue Name="CommandLineSafe" Type="integer" Value="1" />
+          <RegistryValue Name="FriendlyName" Type="string" Value="$csprojectname$"/>
+          <RegistryValue Name="LoadBehavior" Type="integer" Value="3" />
+        </RegistryKey>
+      </Component>
+      <Component>
+        <File Source="$(var.$csprojectname$.TargetDir)Microsoft.Office.Tools.Common.v4.0.Utilities.dll"></File>
+      </Component>
+
+    </ComponentGroup>
+
+  </Fragment>
 </Wix>
