@@ -1,4 +1,7 @@
-﻿using System.Windows.Forms;
+﻿
+using System;
+using System.IO;
+using System.Windows.Forms;
 using System.Collections.Generic;
 using EnvDTE;
 using Microsoft.VisualStudio.TemplateWizard;
@@ -12,6 +15,7 @@ namespace PanelAddinWizard
 	public class RootWizard 
         : IWizard
 	{
+        // Use to communicate $saferootprojectname$ to ChildWizard
         public static Dictionary<string, string> GlobalDictionary =
             new Dictionary<string, string>();
 
@@ -50,24 +54,60 @@ namespace PanelAddinWizard
             if (wizardForm.ShowDialog() == DialogResult.Cancel)
                 throw new WizardBackoutException();
 
-            replacementsDictionary["$csprojectname$"] = replacementsDictionary["$safeprojectname$"];
-            replacementsDictionary["$progid$"] = replacementsDictionary["$safeprojectname$"] + ".Addin";
-            replacementsDictionary["$clsid$"] = replacementsDictionary["$guid1$"];
-            replacementsDictionary["$csprojectguid$"] = replacementsDictionary["$guid2$"];
-            replacementsDictionary["$mergeguid$"] = replacementsDictionary["$guid4$"];
+            GlobalDictionary["$csprojectname$"] = replacementsDictionary["$safeprojectname$"];
+            GlobalDictionary["$progid$"] = replacementsDictionary["$safeprojectname$"] + ".Addin";
+            GlobalDictionary["$clsid$"] = replacementsDictionary["$guid1$"];
+            GlobalDictionary["$wixproject$"] = replacementsDictionary["$guid2$"];
+            GlobalDictionary["$csprojectguid$"] = replacementsDictionary["$guid3$"];
 
-            replacementsDictionary["$ribbon$"] = wizardForm.Ribbon ? "true" : "false";
-            replacementsDictionary["$commandbars$"] = wizardForm.CommandBars ? "true" : "false";
+            GlobalDictionary["$mergeguid$"] = replacementsDictionary["$guid4$"];
 
-            replacementsDictionary["$ribbonORcommandbars$"] = wizardForm.Ribbon || wizardForm.CommandBars ? "true" : "false";
-            replacementsDictionary["$ribbonANDcommandbars$"] = wizardForm.Ribbon && wizardForm.CommandBars ? "true" : "false";
-            replacementsDictionary["$commandbarsANDtaskpane$"] = wizardForm.CommandBars && wizardForm.TaskPane ? "true" : "false";
-            replacementsDictionary["$taskpane$"] = wizardForm.TaskPane ? "true" : "false";
-            replacementsDictionary["$ui$"] = (wizardForm.CommandBars || wizardForm.Ribbon) ? "true" : "false";
-            replacementsDictionary["$taskpaneANDui$"] = (wizardForm.TaskPane && (wizardForm.CommandBars || wizardForm.Ribbon)) ? "true" : "false";
-            replacementsDictionary["$taskpaneORui$"] = (wizardForm.TaskPane || (wizardForm.CommandBars || wizardForm.Ribbon)) ? "true" : "false";
+            GlobalDictionary["$ribbon$"] = wizardForm.Ribbon ? "true" : "false";
+            GlobalDictionary["$commandbars$"] = wizardForm.CommandBars ? "true" : "false";
 
-            replacementsDictionary["$office$"] = GetOfficeVersion();
+            GlobalDictionary["$ribbonORcommandbars$"] = wizardForm.Ribbon || wizardForm.CommandBars ? "true" : "false";
+            GlobalDictionary["$ribbonANDcommandbars$"] = wizardForm.Ribbon && wizardForm.CommandBars ? "true" : "false";
+            GlobalDictionary["$commandbarsANDtaskpane$"] = wizardForm.CommandBars && wizardForm.TaskPane ? "true" : "false";
+            GlobalDictionary["$taskpane$"] = wizardForm.TaskPane ? "true" : "false";
+            GlobalDictionary["$ui$"] = (wizardForm.CommandBars || wizardForm.Ribbon) ? "true" : "false";
+            GlobalDictionary["$taskpaneANDui$"] = (wizardForm.TaskPane && (wizardForm.CommandBars || wizardForm.Ribbon)) ? "true" : "false";
+            GlobalDictionary["$taskpaneORui$"] = (wizardForm.TaskPane || (wizardForm.CommandBars || wizardForm.Ribbon)) ? "true" : "false";
+
+            GlobalDictionary["$office$"] = GetOfficeVersion();
+        }
+
+        static void GetVisioPath(RegistryKey key, string version, ref string path)
+        {
+            var subKey = key.OpenSubKey(string.Format(@"Software\Microsoft\Office\{0}\Visio\InstallRoot", version));
+            if (subKey == null)
+                return;
+
+            var value = subKey.GetValue("Path", null);
+            if (value == null)
+                return;
+
+            path = Path.Combine(value.ToString(), "Visio.exe");
+        }
+
+        public static string GetVisioPath32()
+        {
+            var key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32);
+            string path = null;
+            foreach (var item in new[] { "11.0", "12.0", "14.0", "15.0", "16.0" })
+                GetVisioPath(key, item, ref path);
+            return path;
+        }
+
+        public static string GetVisioPath64()
+        {
+            if (!Environment.Is64BitOperatingSystem)
+                return null;
+
+            var key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64);
+            string path = null;
+            foreach (var item in new [] {"14.0", "15.0", "16.0"})
+                GetVisioPath(key, item, ref path);
+            return path;
         }
 
         // Don't return the latest version, even if it is installed, because it will cause problems by auto-upgrade

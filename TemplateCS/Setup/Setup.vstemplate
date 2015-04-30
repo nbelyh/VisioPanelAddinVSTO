@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+  <TemplateData>
+    <Name>WiX Setup Project for .NET Visio VSTO Addin</Name>
+    <Description>Creates an WiX installer project to install .NET Visio VSTO Addin</Description>
+    <ProjectType>WiX</ProjectType>
+    <RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
+    <SortOrder>1000</SortOrder>
+    <TemplateID>4E28D2AE-A92E-4FC6-8315-9879A1B30E6C</TemplateID>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>Setup</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+  </TemplateData>
+  <TemplateContent>
+    <Project File="Setup.wixproj" ReplaceParameters="true">
+      <ProjectItem ReplaceParameters="true" >Product.wxs</ProjectItem>
+    </Project>
+  </TemplateContent>
+  <WizardExtension>
+    <Assembly>PanelAddinWizard, Version=1.0.0.0, Culture=neutral, PublicKeyToken=503912e9bf77d51f</Assembly>
+    <FullClassName>PanelAddinWizard.ChildWizard</FullClassName>
+  </WizardExtension>
+</VSTemplate>
