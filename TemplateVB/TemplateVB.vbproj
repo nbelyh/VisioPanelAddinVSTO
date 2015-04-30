@@ -61,6 +61,7 @@
     <Content Include="Addin\Resources\Command2.ico" />
     <Content Include="Addin\Resources\Ribbon.xml" />
     <Content Include="Addin\Resources\TogglePanel.ico" />
+    <Content Include="Addin\Template.vstemplate" />
     <Content Include="Addin\TheForm.vb" />
     <Content Include="Addin\TheForm.Designer.vb" />
     <Content Include="Addin\TheForm.resx" />
