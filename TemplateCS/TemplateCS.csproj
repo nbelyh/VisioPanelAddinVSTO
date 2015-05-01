@@ -57,7 +57,7 @@
     <Content Include="Addin\TheForm.cs" />
     <Content Include="Addin\TheForm.Designer.cs" />
     <Content Include="Addin\TheForm.resx" />
-    <Content Include="Addin\icon.ico" />
+    <Content Include="Addin\IconCS.ico" />
     <Content Include="Addin\Resources\Command1.ico" />
     <Content Include="Addin\Resources\Command2.ico" />
     <Content Include="Addin\Resources\Ribbon.xml" />

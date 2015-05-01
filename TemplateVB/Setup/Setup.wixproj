@@ -23,7 +23,7 @@
     <Compile Include="Product.wxs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\$csprojectname$\$csprojectname$.csproj">
+    <ProjectReference Include="..\$csprojectname$\$csprojectname$.vbproj">
       <Name>$csprojectname$</Name>
       <Project>$csprojectguid$</Project>
       <Private>True</Private>

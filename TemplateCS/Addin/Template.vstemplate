@@ -10,7 +10,7 @@
     <CreateNewFolder>true</CreateNewFolder>
     <DefaultName>VisioPanelAddin</DefaultName>
     <ProvideDefaultName>true</ProvideDefaultName>
-    <Icon>icon.ico</Icon>
+    <Icon>IconCS.ico</Icon>
   </TemplateData>
   <TemplateContent>
     <Project File="Addin.csproj" ReplaceParameters="true">

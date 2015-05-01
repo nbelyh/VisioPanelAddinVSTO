@@ -18,6 +18,12 @@ namespace PanelAddinWizard
             Dictionary<string, string> replacementsDictionary, 
             WizardRunKind runKind, object[] customParams)
         {
+            if (replacementsDictionary["$safeprojectname$"] == "Setup")
+            {
+                if (RootWizard.GlobalDictionary["$wixSetup$"] != "true")
+                    throw new WizardBackoutException("Cancel generation of wix setup project");
+            }
+
             // Add custom parameters.
             replacementsDictionary.Add("$csprojectname$", RootWizard.GlobalDictionary["$csprojectname$"]);
             replacementsDictionary.Add("$progid$", RootWizard.GlobalDictionary["$progid$"]);

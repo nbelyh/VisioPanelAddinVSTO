@@ -52,7 +52,7 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Addin\Addin.vb" />
-    <Content Include="Addin\icon.ico" />
+    <Content Include="Addin\IconVB.ico" />
     <Content Include="Addin\AddinCommandBars.vb" />
     <Content Include="Addin\AddinRibbon.vb" />
     <Content Include="Addin\PanelFrame.vb" />

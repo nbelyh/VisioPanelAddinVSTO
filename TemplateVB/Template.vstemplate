@@ -6,7 +6,7 @@
     <Description>Creates Visio VSTO Addin Project and WiX installer project</Description>
     <ProjectType>VisualBasic</ProjectType>
     <RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
-    <Icon>icon.ico</Icon>
+    <Icon>IconVB.ico</Icon>
   </TemplateData>
   <TemplateContent>
     <ProjectCollection>
@@ -20,6 +20,6 @@
   </TemplateContent>
   <WizardExtension>
     <Assembly>PanelAddinWizard, Version=1.0.0.0, Culture=neutral, PublicKeyToken=503912e9bf77d51f</Assembly>
-    <FullClassName>PanelAddinWizard.RootWizard</FullClassName>
+    <FullClassName>PanelAddinWizard.RootWizardVB</FullClassName>
   </WizardExtension>
 </VSTemplate>

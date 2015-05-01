@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using System.Windows.Forms;
 using System.Collections.Generic;
+using System.Drawing;
 using EnvDTE;
 using Microsoft.VisualStudio.TemplateWizard;
 using Microsoft.Win32;
@@ -10,9 +11,9 @@ using Microsoft.Win32;
 namespace PanelAddinWizard
 {
 	/// <summary>
-	/// Summary description for SampleWizard.
+	/// Summary description for WizardForm.
 	/// </summary>
-	public class RootWizard 
+	public abstract class RootWizard 
         : IWizard
 	{
         // Use to communicate $saferootprojectname$ to ChildWizard
@@ -20,6 +21,8 @@ namespace PanelAddinWizard
             new Dictionary<string, string>();
 
 	    private DTE _dte;
+
+	    protected abstract Image HeaderImage { get; }
 
         // Add global replacement parameters
         public void RunStarted(object automationObject,
@@ -48,7 +51,8 @@ namespace PanelAddinWizard
             var wizardForm = new WizardForm
             {
                 TaskPane = true, 
-                Ribbon = true
+                Ribbon = true,
+                HeaderImage = HeaderImage
             };
 
             if (wizardForm.ShowDialog() == DialogResult.Cancel)
@@ -74,6 +78,8 @@ namespace PanelAddinWizard
             GlobalDictionary["$taskpaneORui$"] = (wizardForm.TaskPane || (wizardForm.CommandBars || wizardForm.Ribbon)) ? "true" : "false";
 
             GlobalDictionary["$office$"] = GetOfficeVersion();
+
+            GlobalDictionary["$wixSetup$"] = wizardForm.GenerateWixSetup ? "true" : "false";
         }
 
         static void GetVisioPath(RegistryKey key, string version, ref string path)
