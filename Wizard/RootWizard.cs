@@ -5,6 +5,8 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Drawing;
 using EnvDTE;
+using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.TemplateWizard;
 using Microsoft.Win32;
 
@@ -48,7 +50,9 @@ namespace PanelAddinWizard
                 }
             }
 
-            var wizardForm = new WizardForm
+            var wixInstalled = IsWixInstalled();
+
+            var wizardForm = new WizardForm(wixInstalled)
             {
                 TaskPane = true, 
                 Ribbon = true,
@@ -79,10 +83,26 @@ namespace PanelAddinWizard
 
             GlobalDictionary["$office$"] = GetOfficeVersion();
 
-            GlobalDictionary["$wixSetup$"] = wizardForm.GenerateWixSetup ? "true" : "false";
+            GlobalDictionary["$wixSetup$"] = wizardForm.WixSetup ? "true" : "false";
         }
 
-        static void GetVisioPath(RegistryKey key, string version, ref string path)
+	    private bool IsWixInstalled()
+	    {
+	        IServiceProvider serviceProvider = new ServiceProvider(_dte as Microsoft.VisualStudio.OLE.Interop.IServiceProvider);
+
+	        var shell = (IVsShell) serviceProvider.GetService(typeof (SVsShell));
+	        if (shell == null)
+	            return true;
+
+            int wixInstalled;
+            var wixGuid = new Guid("E0EE8E7D-F498-459E-9E90-2B3D73124AD5");
+	        if (0 != shell.IsPackageInstalled(ref wixGuid, out wixInstalled))
+	            return true;
+
+	        return wixInstalled != 0;
+	    }
+
+	    static void GetVisioPath(RegistryKey key, string version, ref string path)
         {
             var subKey = key.OpenSubKey(string.Format(@"Software\Microsoft\Office\{0}\Visio\InstallRoot", version));
             if (subKey == null)

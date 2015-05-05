@@ -52,7 +52,6 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Addin\Addin.vb" />
-    <Content Include="Addin\IconVB.ico" />
     <Content Include="Addin\AddinCommandBars.vb" />
     <Content Include="Addin\AddinRibbon.vb" />
     <Content Include="Addin\PanelFrame.vb" />
@@ -73,6 +72,7 @@
     <Content Include="Addin\ThisAddIn.Designer.xml" />
     <Content Include="Addin\ThisAddIn.Designer.vb" />
     <Content Include="Addin\ThisAddIn.vb" />
+    <Content Include="IconVB.ico" />
     <Content Include="Setup\Product.wxs">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>

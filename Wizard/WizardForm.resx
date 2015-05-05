@@ -120,6 +120,9 @@
   <metadata name="addinWizard.DrawGrid" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>False</value>
   </metadata>
+  <data name="checkWixSetupDescription.Text" xml:space="preserve">
+    <value>Create a WiX installer project to install addin for all users. If you skip the MSI installer you can deploy your addin using ClickOnce publishing. Note that you should have WiX Toolset installed (http://wixtoolset.org)</value>
+  </data>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>56</value>
   </metadata>

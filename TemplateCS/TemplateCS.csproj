@@ -57,7 +57,6 @@
     <Content Include="Addin\TheForm.cs" />
     <Content Include="Addin\TheForm.Designer.cs" />
     <Content Include="Addin\TheForm.resx" />
-    <Content Include="Addin\IconCS.ico" />
     <Content Include="Addin\Resources\Command1.ico" />
     <Content Include="Addin\Resources\Command2.ico" />
     <Content Include="Addin\Resources\Ribbon.xml" />
@@ -70,6 +69,7 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Addin\Properties\Resources.Designer.cs" />
+    <Content Include="IconCS.ico" />
     <Content Include="Setup\Product.wxs">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
