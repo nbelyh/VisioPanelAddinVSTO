@@ -75,6 +75,7 @@
     <Content Include="IconVB.ico" />
     <Content Include="Setup\Product.wxs">
       <IncludeInVSIX>true</IncludeInVSIX>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Setup\Setup.vstemplate">
       <IncludeInVSIX>true</IncludeInVSIX>

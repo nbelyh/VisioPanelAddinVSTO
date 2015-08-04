@@ -14,15 +14,12 @@ namespace PanelAddinWizardTestApp
         {
             var wizardForm = new WizardForm(true)
             {
-                TaskPane = true,
-                Ribbon = true,
-                WixSetup = true,
             };
 
             wizardForm.ShowDialog();
 
-            var s = wizardForm.VisioStencils;
-            var t = wizardForm.VisioTemplates;
+            var s = wizardForm.StencilPaths;
+            var t = wizardForm.TemplatePaths;
         }
     }
 }

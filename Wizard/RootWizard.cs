@@ -54,8 +54,6 @@ namespace PanelAddinWizard
 
             var wizardForm = new WizardForm(wixInstalled)
             {
-                TaskPane = true, 
-                Ribbon = true,
                 HeaderImage = HeaderImage
             };
 
