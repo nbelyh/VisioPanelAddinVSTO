@@ -13,19 +13,21 @@ using Microsoft.Win32;
 
 namespace PanelAddinWizard
 {
-	/// <summary>
-	/// Summary description for WizardForm.
-	/// </summary>
-	public abstract class RootWizard 
+    /// <summary>
+    /// Summary description for WizardForm.
+    /// </summary>
+    public abstract class RootWizard
         : IWizard
-	{
+    {
         // Use to communicate $saferootprojectname$ to ChildWizard
         public static Dictionary<string, string> GlobalDictionary =
             new Dictionary<string, string>();
 
-	    private DTE _dte;
+        public static WixSetupOptions SetupOptions;
 
-	    protected abstract Image HeaderImage { get; }
+        private DTE _dte;
+
+        protected abstract Image HeaderImage { get; }
 
         // Add global replacement parameters
         public void RunStarted(object automationObject,
@@ -38,7 +40,7 @@ namespace PanelAddinWizard
             {
                 var vstoKey = string.Format(@"HKEY_LOCAL_MACHINE\{0}\Setup\VSTO", _dte.RegistryRoot);
                 var val = Registry.GetValue(vstoKey, "ProductDir", null);
-                
+
                 if (null == val)
                 {
                     MessageBox.Show(
@@ -81,49 +83,90 @@ namespace PanelAddinWizard
             GlobalDictionary["$taskpaneORui$"] = (wizardForm.TaskPane || (wizardForm.CommandBars || wizardForm.Ribbon)) ? "true" : "false";
 
             GlobalDictionary["$office$"] = GetOfficeVersion();
-            GlobalDictionary["$stencils$"] = GetFiles("PublishStencil", wizardForm.StencilPaths);
-            GlobalDictionary["$templates$"] = GetFiles("PublishTemplate", wizardForm.TemplatePaths);
-
             GlobalDictionary["$wixSetup$"] = wizardForm.WixSetup ? "true" : "false";
+
+            SetupOptions = wizardForm.GetSetupOptions();
+            GetFiles(SetupOptions);
+
+            GlobalDictionary["$defaultVisioFiles$"] = SetupOptions.Enabled && SetupOptions.CreateNew ? "true" : "false";
         }
 
-	    private string GetFiles(string visioElement, string[] files)
-	    {
+        void GetFiles(WixSetupOptions options)
+        {
             var doc = new XmlDocument();
-            doc.LoadXml("<Component/>");
 
-	        foreach (var file in files)
-	        {
-	            var fileNode = doc.CreateElement("File");
-	            fileNode.SetAttribute("Name", Path.GetFileName(file));
+            var nodeWxs = doc.CreateElement("wxs");
+            var nodeWixProj = doc.CreateElement("wixproj");
 
-	            var visioNode = doc.CreateElement(visioElement);
-                visioNode.SetAttribute("MenuPath")
-                doc.DocumentElement.AppendChild(fileNode);
-	        }
+            const string PublishTemplateItemName = "Publish6EACFB1ABA5A4581A2F0DFA55A8B3445";
+            const string PublishStencilItemName = "PublishE8358BB3898744BEA3D6E8B0DE0D80F4";
             
-            <File Name="Stencil_1_M.vss">
-              <visio:PublishStencil MenuPath="$projectname$\Stencil 1" />
-            </File>
-	    }
+            if (options.Enabled && !options.CreateNew && options.Paths != null)
+            {
+                foreach (var path in options.Paths)
+                {
+                    var nodeComponent = doc.CreateElement("Component");
+                    nodeWxs.AppendChild(nodeComponent);
 
-	    private bool IsWixInstalled()
-	    {
-	        IServiceProvider serviceProvider = new ServiceProvider(_dte as Microsoft.VisualStudio.OLE.Interop.IServiceProvider);
+                    var nodeContent = doc.CreateElement("Content");
+                    nodeContent.SetAttribute("Include", Path.GetFileName(path));
+                    nodeWixProj.AppendChild(nodeContent);
 
-	        var shell = (IVsShell) serviceProvider.GetService(typeof (SVsShell));
-	        if (shell == null)
-	            return true;
+                    var nodeFile = doc.CreateElement("File");
+                    nodeFile.SetAttribute("Name", Path.GetFileName(path));
+
+                    if (!options.Duplicate)
+                        nodeFile.SetAttribute("Source", path);
+
+                    nodeComponent.AppendChild(nodeFile);
+
+                    string ext = Path.GetExtension(path);
+
+                    string elementName = null;
+
+                    if (ext == ".vss" || ext == ".vssx" || ext == ".vssm" || ext == ".vsx")
+                        elementName = PublishStencilItemName;
+
+                    if (ext == ".vst" || ext == ".vstx" || ext == ".vstm" || ext == ".vtx")
+                        elementName = PublishTemplateItemName;
+
+                    if (elementName != null)
+                    {
+                        var nodePublish = doc.CreateElement(elementName);
+
+                        nodePublish.SetAttribute("MenuPath", string.Format("{0}\\{1}",
+                            GlobalDictionary["$csprojectname$"], Path.GetFileNameWithoutExtension(path)));
+
+                        nodeFile.AppendChild(nodePublish);
+                    }
+                }
+            }
+
+            GlobalDictionary["$visioFilesWxs$"] = nodeWxs
+                .InnerXml
+                .Replace(PublishTemplateItemName, "visio:PublishTemplate")
+                .Replace(PublishStencilItemName, "visio:PublishStencil");
+
+            GlobalDictionary["$visioFilesWixProj$"] = nodeWixProj.InnerXml;
+        }
+
+        private bool IsWixInstalled()
+        {
+            IServiceProvider serviceProvider = new ServiceProvider(_dte as Microsoft.VisualStudio.OLE.Interop.IServiceProvider);
+
+            var shell = (IVsShell)serviceProvider.GetService(typeof(SVsShell));
+            if (shell == null)
+                return true;
 
             int wixInstalled;
             var wixGuid = new Guid("E0EE8E7D-F498-459E-9E90-2B3D73124AD5");
-	        if (0 != shell.IsPackageInstalled(ref wixGuid, out wixInstalled))
-	            return true;
+            if (0 != shell.IsPackageInstalled(ref wixGuid, out wixInstalled))
+                return true;
 
-	        return wixInstalled != 0;
-	    }
+            return wixInstalled != 0;
+        }
 
-	    static void GetVisioPath(RegistryKey key, string version, ref string path)
+        static void GetVisioPath(RegistryKey key, string version, ref string path)
         {
             var subKey = key.OpenSubKey(string.Format(@"Software\Microsoft\Office\{0}\Visio\InstallRoot", version));
             if (subKey == null)
@@ -152,17 +195,17 @@ namespace PanelAddinWizard
 
             var key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64);
             string path = null;
-            foreach (var item in new [] {"14.0", "15.0", "16.0"})
+            foreach (var item in new[] { "14.0", "15.0", "16.0" })
                 GetVisioPath(key, item, ref path);
             return path;
         }
 
         // Don't return the latest version, even if it is installed, because it will cause problems by auto-upgrade
-	    static string GetOfficeVersion()
-	    {
+        static string GetOfficeVersion()
+        {
             return Registry.GetValue(@"HKEY_LOCAL_MACHINE\Software\Microsoft\Office\14.0\Visio\InstallRoot", "Path", null) != null
                 ? "14.0" : "12.0";
-	    }
+        }
 
         public void RunFinished()
         {

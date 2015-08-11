@@ -52,8 +52,11 @@
   <ItemGroup>
     <Content Include="build\VisioWixExtension.dll" />
     <Content Include="build\VisioWixExtension.xsd" />
-  </ItemGroup>
-    <Import Project="$(WixTargetsPath)" />
+    $visioFilesWixProj$
+    $if$ ($defaultVisioFiles$ == true)<Content Include="Stencil_1_M.vss" />
+    <Content Include="Template_1_M.vst" />
+  $endif$</ItemGroup>
+  <Import Project="$(WixTargetsPath)" />
   <!--
 	To modify your build process, add your task inside one of the targets below and uncomment it.
 	Other similar extension points exist, see Wix.targets.

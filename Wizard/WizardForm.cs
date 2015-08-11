@@ -40,8 +40,11 @@ namespace PanelAddinWizard
             InitializeComponent();
 
             checkWixSetup.Enabled = wixInstalled;
-            radioCreateNewStencil.Checked = true;
-            radioCreateNewTemplate.Checked = true;
+            checkWixSetup.Checked = wixInstalled;
+
+            checkAddVisioFiles.Checked = false;
+            radioCreateNewVisioFiles.Checked = true;
+            checkCopyVisioFiles.Checked = true;
 
             UpdateButtons(null, null);
         }
@@ -52,17 +55,28 @@ namespace PanelAddinWizard
 
         public bool WixSetup { get { return checkWixSetup.Checked; } }
 
-        public bool AddVisioTemplates { get { return checkAddVisioTemplates.Checked; } }
-        public bool CreateNewTemplate { get { return radioCreateNewTemplate.Checked; } }
-        public bool UseTemplate { get { return radioUseTemplate.Checked; } }
-        public string[] TemplatePaths { get; private set; }
+        private Label radioUseVisioFilesDescription;
+        private CheckBox checkAddVisioFiles;
+        private Label radioCreateNewVisioFilesDescription;
+        private TextBox textBoxVisioFilesPath;
+        private CheckBox checkCopyVisioFiles;
+        private Button buttonBrowseVisioFiles;
+        private RadioButton radioCreateNewVisioFiles;
+        private RadioButton radioUseVisioFiles;
+        string[] VisioFilePaths;
 
-        public bool AddVisioStencils { get { return checkAddVisioStencils.Checked; } }
-        public bool CreateNewStencil { get { return radioCreateNewStencil.Checked; } }
-        public bool UseStencil { get { return radioUseStencil.Checked; } }
-        public string[] StencilPaths { get; private set; }
+        public WixSetupOptions GetSetupOptions()
+        {
+            return new WixSetupOptions
+            {
+                Enabled = checkAddVisioFiles.Checked,
+                CreateNew = radioCreateNewVisioFiles.Checked,
+                Duplicate = checkCopyVisioFiles.Checked,
+                Paths = this.VisioFilePaths,
+            };
+        }
 
-	    public Image HeaderImage
+        public Image HeaderImage
 	    {
 	        get { return addinWizard.HeaderImage; }
             set { addinWizard.HeaderImage = value; }
@@ -70,28 +84,16 @@ namespace PanelAddinWizard
 
 		#region Designer generated code
 
-        private WizardPage pageOptions;
+        private WizardPage pageAddin;
         private Wizard addinWizard;
-        private WizardPage pageCheck;
+        private WizardPage pageSetup;
         private Label labelSupportTaskPane;
         private CheckBox checkSupportTaskPane;
         private Label labelSupportCommandBars;
         private Label labelSupportRibbon;
         private CheckBox checkSupportCommandBars;
         private CheckBox checkSupportRibbon;
-        private CheckBox checkAddVisioStencils;
-        private CheckBox checkAddVisioTemplates;
         private LinkLabel checkWixSetupDescription;
-        private TextBox textBoxStencilPath;
-        private RadioButton radioUseStencil;
-        private RadioButton radioCreateNewStencil;
-        private TextBox textBoxTemplatePath;
-        private RadioButton radioUseTemplate;
-        private RadioButton radioCreateNewTemplate;
-        private Button buttonBrowseStencil;
-        private Button buttonBrowseTemplate;
-        private Panel panelStencil;
-        private Panel panelTemplate;
         private CheckBox checkWixSetup;
 		
 		/// <summary>
@@ -102,66 +104,186 @@ namespace PanelAddinWizard
 		{
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WizardForm));
             this.addinWizard = new PanelAddinWizard.Wizard();
-            this.pageOptions = new PanelAddinWizard.WizardPage();
+            this.pageSetup = new PanelAddinWizard.WizardPage();
+            this.radioUseVisioFilesDescription = new System.Windows.Forms.Label();
+            this.checkAddVisioFiles = new System.Windows.Forms.CheckBox();
+            this.radioCreateNewVisioFilesDescription = new System.Windows.Forms.Label();
+            this.checkWixSetupDescription = new System.Windows.Forms.LinkLabel();
+            this.textBoxVisioFilesPath = new System.Windows.Forms.TextBox();
+            this.checkWixSetup = new System.Windows.Forms.CheckBox();
+            this.checkCopyVisioFiles = new System.Windows.Forms.CheckBox();
+            this.radioUseVisioFiles = new System.Windows.Forms.RadioButton();
+            this.buttonBrowseVisioFiles = new System.Windows.Forms.Button();
+            this.radioCreateNewVisioFiles = new System.Windows.Forms.RadioButton();
+            this.pageAddin = new PanelAddinWizard.WizardPage();
             this.labelSupportTaskPane = new System.Windows.Forms.Label();
             this.checkSupportTaskPane = new System.Windows.Forms.CheckBox();
             this.labelSupportCommandBars = new System.Windows.Forms.Label();
             this.labelSupportRibbon = new System.Windows.Forms.Label();
             this.checkSupportCommandBars = new System.Windows.Forms.CheckBox();
             this.checkSupportRibbon = new System.Windows.Forms.CheckBox();
-            this.pageCheck = new PanelAddinWizard.WizardPage();
-            this.panelStencil = new System.Windows.Forms.Panel();
-            this.checkAddVisioStencils = new System.Windows.Forms.CheckBox();
-            this.radioCreateNewStencil = new System.Windows.Forms.RadioButton();
-            this.buttonBrowseStencil = new System.Windows.Forms.Button();
-            this.radioUseStencil = new System.Windows.Forms.RadioButton();
-            this.textBoxStencilPath = new System.Windows.Forms.TextBox();
-            this.panelTemplate = new System.Windows.Forms.Panel();
-            this.radioCreateNewTemplate = new System.Windows.Forms.RadioButton();
-            this.radioUseTemplate = new System.Windows.Forms.RadioButton();
-            this.buttonBrowseTemplate = new System.Windows.Forms.Button();
-            this.textBoxTemplatePath = new System.Windows.Forms.TextBox();
-            this.checkAddVisioTemplates = new System.Windows.Forms.CheckBox();
-            this.checkWixSetupDescription = new System.Windows.Forms.LinkLabel();
-            this.checkWixSetup = new System.Windows.Forms.CheckBox();
             this.addinWizard.SuspendLayout();
-            this.pageOptions.SuspendLayout();
-            this.pageCheck.SuspendLayout();
-            this.panelStencil.SuspendLayout();
-            this.panelTemplate.SuspendLayout();
+            this.pageSetup.SuspendLayout();
+            this.pageAddin.SuspendLayout();
             this.SuspendLayout();
             // 
             // addinWizard
             // 
-            this.addinWizard.Controls.Add(this.pageCheck);
-            this.addinWizard.Controls.Add(this.pageOptions);
+            this.addinWizard.Controls.Add(this.pageSetup);
+            this.addinWizard.Controls.Add(this.pageAddin);
             this.addinWizard.HelpVisible = true;
             this.addinWizard.Location = new System.Drawing.Point(0, 0);
             this.addinWizard.Name = "addinWizard";
             this.addinWizard.Pages.AddRange(new PanelAddinWizard.WizardPage[] {
-            this.pageOptions,
-            this.pageCheck});
-            this.addinWizard.Size = new System.Drawing.Size(569, 462);
+            this.pageAddin,
+            this.pageSetup});
+            this.addinWizard.Size = new System.Drawing.Size(557, 447);
             this.addinWizard.TabIndex = 0;
             this.addinWizard.BeforeSwitchPages += new PanelAddinWizard.Wizard.BeforeSwitchPagesEventHandler(this.addinWizard_BeforeSwitchPages);
             this.addinWizard.AfterSwitchPages += new PanelAddinWizard.Wizard.AfterSwitchPagesEventHandler(this.addinWizard_AfterSwitchPages);
             this.addinWizard.Cancel += new System.ComponentModel.CancelEventHandler(this.addinWizard_Cancel);
             this.addinWizard.Help += new System.EventHandler(this.addinWizard_Help);
             // 
-            // pageOptions
+            // pageSetup
             // 
-            this.pageOptions.Controls.Add(this.labelSupportTaskPane);
-            this.pageOptions.Controls.Add(this.checkSupportTaskPane);
-            this.pageOptions.Controls.Add(this.labelSupportCommandBars);
-            this.pageOptions.Controls.Add(this.labelSupportRibbon);
-            this.pageOptions.Controls.Add(this.checkSupportCommandBars);
-            this.pageOptions.Controls.Add(this.checkSupportRibbon);
-            this.pageOptions.Description = "Please select add-in features";
-            this.pageOptions.Location = new System.Drawing.Point(0, 0);
-            this.pageOptions.Name = "pageOptions";
-            this.pageOptions.Size = new System.Drawing.Size(569, 414);
-            this.pageOptions.TabIndex = 11;
-            this.pageOptions.Title = "Add-in options";
+            this.pageSetup.Controls.Add(this.radioUseVisioFilesDescription);
+            this.pageSetup.Controls.Add(this.checkAddVisioFiles);
+            this.pageSetup.Controls.Add(this.radioCreateNewVisioFilesDescription);
+            this.pageSetup.Controls.Add(this.checkWixSetupDescription);
+            this.pageSetup.Controls.Add(this.textBoxVisioFilesPath);
+            this.pageSetup.Controls.Add(this.checkWixSetup);
+            this.pageSetup.Controls.Add(this.checkCopyVisioFiles);
+            this.pageSetup.Controls.Add(this.radioUseVisioFiles);
+            this.pageSetup.Controls.Add(this.buttonBrowseVisioFiles);
+            this.pageSetup.Controls.Add(this.radioCreateNewVisioFiles);
+            this.pageSetup.Description = "Please select deployment options";
+            this.pageSetup.Location = new System.Drawing.Point(0, 0);
+            this.pageSetup.Name = "pageSetup";
+            this.pageSetup.Size = new System.Drawing.Size(557, 399);
+            this.pageSetup.TabIndex = 0;
+            this.pageSetup.Title = "Setup project";
+            // 
+            // radioUseVisioFilesDescription
+            // 
+            this.radioUseVisioFilesDescription.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.radioUseVisioFilesDescription.Location = new System.Drawing.Point(54, 257);
+            this.radioUseVisioFilesDescription.Name = "radioUseVisioFilesDescription";
+            this.radioUseVisioFilesDescription.Size = new System.Drawing.Size(348, 38);
+            this.radioUseVisioFilesDescription.TabIndex = 6;
+            this.radioUseVisioFilesDescription.Text = "Choose this option if you already have Visio template or stencil file(s) and want" +
+    " to include it in the project.";
+            // 
+            // checkAddVisioFiles
+            // 
+            this.checkAddVisioFiles.AutoSize = true;
+            this.checkAddVisioFiles.Location = new System.Drawing.Point(16, 161);
+            this.checkAddVisioFiles.Name = "checkAddVisioFiles";
+            this.checkAddVisioFiles.Size = new System.Drawing.Size(177, 17);
+            this.checkAddVisioFiles.TabIndex = 2;
+            this.checkAddVisioFiles.Text = "Include custom Visio template(s)";
+            this.checkAddVisioFiles.UseVisualStyleBackColor = true;
+            this.checkAddVisioFiles.CheckedChanged += new System.EventHandler(this.UpdateButtons);
+            // 
+            // radioCreateNewVisioFilesDescription
+            // 
+            this.radioCreateNewVisioFilesDescription.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.radioCreateNewVisioFilesDescription.Location = new System.Drawing.Point(54, 202);
+            this.radioCreateNewVisioFilesDescription.Name = "radioCreateNewVisioFilesDescription";
+            this.radioCreateNewVisioFilesDescription.Size = new System.Drawing.Size(399, 28);
+            this.radioCreateNewVisioFilesDescription.TabIndex = 4;
+            this.radioCreateNewVisioFilesDescription.Text = "Creates a sample template and includes it in the project. You can use it as a sta" +
+    "rting point";
+            // 
+            // checkWixSetupDescription
+            // 
+            this.checkWixSetupDescription.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.checkWixSetupDescription.LinkArea = new System.Windows.Forms.LinkArea(196, 21);
+            this.checkWixSetupDescription.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            this.checkWixSetupDescription.Location = new System.Drawing.Point(32, 100);
+            this.checkWixSetupDescription.Name = "checkWixSetupDescription";
+            this.checkWixSetupDescription.Size = new System.Drawing.Size(513, 46);
+            this.checkWixSetupDescription.TabIndex = 1;
+            this.checkWixSetupDescription.TabStop = true;
+            this.checkWixSetupDescription.Text = resources.GetString("checkWixSetupDescription.Text");
+            this.checkWixSetupDescription.UseCompatibleTextRendering = true;
+            this.checkWixSetupDescription.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.checkWixSetupDescription_LinkClicked);
+            // 
+            // textBoxVisioFilesPath
+            // 
+            this.textBoxVisioFilesPath.Location = new System.Drawing.Point(57, 299);
+            this.textBoxVisioFilesPath.Name = "textBoxVisioFilesPath";
+            this.textBoxVisioFilesPath.ReadOnly = true;
+            this.textBoxVisioFilesPath.Size = new System.Drawing.Size(396, 20);
+            this.textBoxVisioFilesPath.TabIndex = 7;
+            // 
+            // checkWixSetup
+            // 
+            this.checkWixSetup.AutoSize = true;
+            this.checkWixSetup.Location = new System.Drawing.Point(16, 80);
+            this.checkWixSetup.Name = "checkWixSetup";
+            this.checkWixSetup.Size = new System.Drawing.Size(144, 17);
+            this.checkWixSetup.TabIndex = 0;
+            this.checkWixSetup.Text = "Create WiX setup project";
+            this.checkWixSetup.UseVisualStyleBackColor = true;
+            this.checkWixSetup.Click += new System.EventHandler(this.UpdateButtons);
+            // 
+            // checkCopyVisioFiles
+            // 
+            this.checkCopyVisioFiles.AutoSize = true;
+            this.checkCopyVisioFiles.Location = new System.Drawing.Point(57, 325);
+            this.checkCopyVisioFiles.Name = "checkCopyVisioFiles";
+            this.checkCopyVisioFiles.Size = new System.Drawing.Size(185, 17);
+            this.checkCopyVisioFiles.TabIndex = 9;
+            this.checkCopyVisioFiles.Text = "Copy file(s) to the project directory";
+            this.checkCopyVisioFiles.UseVisualStyleBackColor = true;
+            // 
+            // radioUseVisioFiles
+            // 
+            this.radioUseVisioFiles.AutoSize = true;
+            this.radioUseVisioFiles.Location = new System.Drawing.Point(32, 237);
+            this.radioUseVisioFiles.Name = "radioUseVisioFiles";
+            this.radioUseVisioFiles.Size = new System.Drawing.Size(224, 17);
+            this.radioUseVisioFiles.TabIndex = 5;
+            this.radioUseVisioFiles.TabStop = true;
+            this.radioUseVisioFiles.Text = "Use already existing template/stencil file(s)";
+            this.radioUseVisioFiles.UseVisualStyleBackColor = true;
+            // 
+            // buttonBrowseVisioFiles
+            // 
+            this.buttonBrowseVisioFiles.Location = new System.Drawing.Point(459, 297);
+            this.buttonBrowseVisioFiles.Name = "buttonBrowseVisioFiles";
+            this.buttonBrowseVisioFiles.Size = new System.Drawing.Size(75, 23);
+            this.buttonBrowseVisioFiles.TabIndex = 8;
+            this.buttonBrowseVisioFiles.Text = "Browse...";
+            this.buttonBrowseVisioFiles.UseVisualStyleBackColor = true;
+            this.buttonBrowseVisioFiles.Click += new System.EventHandler(this.buttonBrowse_Click);
+            // 
+            // radioCreateNewVisioFiles
+            // 
+            this.radioCreateNewVisioFiles.AutoSize = true;
+            this.radioCreateNewVisioFiles.Location = new System.Drawing.Point(32, 184);
+            this.radioCreateNewVisioFiles.Name = "radioCreateNewVisioFiles";
+            this.radioCreateNewVisioFiles.Size = new System.Drawing.Size(248, 17);
+            this.radioCreateNewVisioFiles.TabIndex = 3;
+            this.radioCreateNewVisioFiles.TabStop = true;
+            this.radioCreateNewVisioFiles.Text = "Create a new (sample) template and stencil files";
+            this.radioCreateNewVisioFiles.UseVisualStyleBackColor = true;
+            this.radioCreateNewVisioFiles.CheckedChanged += new System.EventHandler(this.UpdateButtons);
+            // 
+            // pageAddin
+            // 
+            this.pageAddin.Controls.Add(this.labelSupportTaskPane);
+            this.pageAddin.Controls.Add(this.checkSupportTaskPane);
+            this.pageAddin.Controls.Add(this.labelSupportCommandBars);
+            this.pageAddin.Controls.Add(this.labelSupportRibbon);
+            this.pageAddin.Controls.Add(this.checkSupportCommandBars);
+            this.pageAddin.Controls.Add(this.checkSupportRibbon);
+            this.pageAddin.Description = "Please select add-in features";
+            this.pageAddin.Location = new System.Drawing.Point(0, 0);
+            this.pageAddin.Name = "pageAddin";
+            this.pageAddin.Size = new System.Drawing.Size(557, 399);
+            this.pageAddin.TabIndex = 11;
+            this.pageAddin.Title = "Add-in options";
             // 
             // labelSupportTaskPane
             // 
@@ -224,180 +346,10 @@ namespace PanelAddinWizard
             this.checkSupportRibbon.Text = "Support Ribbon (Visio 2010 and above)";
             this.checkSupportRibbon.UseVisualStyleBackColor = true;
             // 
-            // pageCheck
-            // 
-            this.pageCheck.Controls.Add(this.panelStencil);
-            this.pageCheck.Controls.Add(this.panelTemplate);
-            this.pageCheck.Controls.Add(this.checkWixSetupDescription);
-            this.pageCheck.Controls.Add(this.checkWixSetup);
-            this.pageCheck.Description = "Please select deployment options";
-            this.pageCheck.Location = new System.Drawing.Point(0, 0);
-            this.pageCheck.Name = "pageCheck";
-            this.pageCheck.Size = new System.Drawing.Size(569, 414);
-            this.pageCheck.TabIndex = 0;
-            this.pageCheck.Title = "Setup project";
-            // 
-            // panelStencil
-            // 
-            this.panelStencil.Controls.Add(this.checkAddVisioStencils);
-            this.panelStencil.Controls.Add(this.radioCreateNewStencil);
-            this.panelStencil.Controls.Add(this.buttonBrowseStencil);
-            this.panelStencil.Controls.Add(this.radioUseStencil);
-            this.panelStencil.Controls.Add(this.textBoxStencilPath);
-            this.panelStencil.Location = new System.Drawing.Point(32, 276);
-            this.panelStencil.Name = "panelStencil";
-            this.panelStencil.Size = new System.Drawing.Size(513, 100);
-            this.panelStencil.TabIndex = 34;
-            // 
-            // checkAddVisioStencils
-            // 
-            this.checkAddVisioStencils.AutoSize = true;
-            this.checkAddVisioStencils.Location = new System.Drawing.Point(6, 3);
-            this.checkAddVisioStencils.Name = "checkAddVisioStencils";
-            this.checkAddVisioStencils.Size = new System.Drawing.Size(164, 17);
-            this.checkAddVisioStencils.TabIndex = 7;
-            this.checkAddVisioStencils.Text = "Include cusom Visio stencil(s)";
-            this.checkAddVisioStencils.UseVisualStyleBackColor = true;
-            this.checkAddVisioStencils.CheckedChanged += new System.EventHandler(this.UpdateButtons);
-            this.checkAddVisioStencils.Click += new System.EventHandler(this.UpdateButtons);
-            // 
-            // radioCreateNewStencil
-            // 
-            this.radioCreateNewStencil.AutoSize = true;
-            this.radioCreateNewStencil.Location = new System.Drawing.Point(30, 26);
-            this.radioCreateNewStencil.Name = "radioCreateNewStencil";
-            this.radioCreateNewStencil.Size = new System.Drawing.Size(163, 17);
-            this.radioCreateNewStencil.TabIndex = 8;
-            this.radioCreateNewStencil.TabStop = true;
-            this.radioCreateNewStencil.Text = "Create a new (sample) stencil";
-            this.radioCreateNewStencil.UseVisualStyleBackColor = true;
-            this.radioCreateNewStencil.CheckedChanged += new System.EventHandler(this.UpdateButtons);
-            // 
-            // buttonBrowseStencil
-            // 
-            this.buttonBrowseStencil.Location = new System.Drawing.Point(368, 70);
-            this.buttonBrowseStencil.Name = "buttonBrowseStencil";
-            this.buttonBrowseStencil.Size = new System.Drawing.Size(75, 23);
-            this.buttonBrowseStencil.TabIndex = 32;
-            this.buttonBrowseStencil.Text = "Browse...";
-            this.buttonBrowseStencil.UseVisualStyleBackColor = true;
-            this.buttonBrowseStencil.Click += new System.EventHandler(this.buttonBrowseStencil_Click);
-            // 
-            // radioUseStencil
-            // 
-            this.radioUseStencil.AutoSize = true;
-            this.radioUseStencil.Location = new System.Drawing.Point(30, 49);
-            this.radioUseStencil.Name = "radioUseStencil";
-            this.radioUseStencil.Size = new System.Drawing.Size(130, 17);
-            this.radioUseStencil.TabIndex = 9;
-            this.radioUseStencil.TabStop = true;
-            this.radioUseStencil.Text = "Use an existing stencil";
-            this.radioUseStencil.UseVisualStyleBackColor = true;
-            this.radioUseStencil.CheckedChanged += new System.EventHandler(this.UpdateButtons);
-            // 
-            // textBoxStencilPath
-            // 
-            this.textBoxStencilPath.Location = new System.Drawing.Point(30, 72);
-            this.textBoxStencilPath.Name = "textBoxStencilPath";
-            this.textBoxStencilPath.ReadOnly = true;
-            this.textBoxStencilPath.Size = new System.Drawing.Size(332, 20);
-            this.textBoxStencilPath.TabIndex = 10;
-            // 
-            // panelTemplate
-            // 
-            this.panelTemplate.Controls.Add(this.radioCreateNewTemplate);
-            this.panelTemplate.Controls.Add(this.radioUseTemplate);
-            this.panelTemplate.Controls.Add(this.buttonBrowseTemplate);
-            this.panelTemplate.Controls.Add(this.textBoxTemplatePath);
-            this.panelTemplate.Controls.Add(this.checkAddVisioTemplates);
-            this.panelTemplate.Location = new System.Drawing.Point(32, 161);
-            this.panelTemplate.Name = "panelTemplate";
-            this.panelTemplate.Size = new System.Drawing.Size(513, 104);
-            this.panelTemplate.TabIndex = 33;
-            // 
-            // radioCreateNewTemplate
-            // 
-            this.radioCreateNewTemplate.AutoSize = true;
-            this.radioCreateNewTemplate.Location = new System.Drawing.Point(30, 28);
-            this.radioCreateNewTemplate.Name = "radioCreateNewTemplate";
-            this.radioCreateNewTemplate.Size = new System.Drawing.Size(173, 17);
-            this.radioCreateNewTemplate.TabIndex = 3;
-            this.radioCreateNewTemplate.TabStop = true;
-            this.radioCreateNewTemplate.Text = "Create a new (sample) template";
-            this.radioCreateNewTemplate.UseVisualStyleBackColor = true;
-            this.radioCreateNewTemplate.CheckedChanged += new System.EventHandler(this.UpdateButtons);
-            // 
-            // radioUseTemplate
-            // 
-            this.radioUseTemplate.AutoSize = true;
-            this.radioUseTemplate.Location = new System.Drawing.Point(30, 51);
-            this.radioUseTemplate.Name = "radioUseTemplate";
-            this.radioUseTemplate.Size = new System.Drawing.Size(140, 17);
-            this.radioUseTemplate.TabIndex = 4;
-            this.radioUseTemplate.TabStop = true;
-            this.radioUseTemplate.Text = "Use an existing template";
-            this.radioUseTemplate.UseVisualStyleBackColor = true;
-            this.radioUseTemplate.CheckedChanged += new System.EventHandler(this.UpdateButtons);
-            // 
-            // buttonBrowseTemplate
-            // 
-            this.buttonBrowseTemplate.Location = new System.Drawing.Point(369, 72);
-            this.buttonBrowseTemplate.Name = "buttonBrowseTemplate";
-            this.buttonBrowseTemplate.Size = new System.Drawing.Size(75, 23);
-            this.buttonBrowseTemplate.TabIndex = 6;
-            this.buttonBrowseTemplate.Text = "Browse...";
-            this.buttonBrowseTemplate.UseVisualStyleBackColor = true;
-            this.buttonBrowseTemplate.Click += new System.EventHandler(this.buttonBrowseTemplate_Click);
-            // 
-            // textBoxTemplatePath
-            // 
-            this.textBoxTemplatePath.Location = new System.Drawing.Point(30, 74);
-            this.textBoxTemplatePath.Name = "textBoxTemplatePath";
-            this.textBoxTemplatePath.ReadOnly = true;
-            this.textBoxTemplatePath.Size = new System.Drawing.Size(333, 20);
-            this.textBoxTemplatePath.TabIndex = 5;
-            // 
-            // checkAddVisioTemplates
-            // 
-            this.checkAddVisioTemplates.AutoSize = true;
-            this.checkAddVisioTemplates.Location = new System.Drawing.Point(6, 5);
-            this.checkAddVisioTemplates.Name = "checkAddVisioTemplates";
-            this.checkAddVisioTemplates.Size = new System.Drawing.Size(177, 17);
-            this.checkAddVisioTemplates.TabIndex = 2;
-            this.checkAddVisioTemplates.Text = "Include custom Visio template(s)";
-            this.checkAddVisioTemplates.UseVisualStyleBackColor = true;
-            this.checkAddVisioTemplates.CheckedChanged += new System.EventHandler(this.UpdateButtons);
-            this.checkAddVisioTemplates.Click += new System.EventHandler(this.UpdateButtons);
-            // 
-            // checkWixSetupDescription
-            // 
-            this.checkWixSetupDescription.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.checkWixSetupDescription.LinkArea = new System.Windows.Forms.LinkArea(196, 21);
-            this.checkWixSetupDescription.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
-            this.checkWixSetupDescription.Location = new System.Drawing.Point(32, 104);
-            this.checkWixSetupDescription.Name = "checkWixSetupDescription";
-            this.checkWixSetupDescription.Size = new System.Drawing.Size(513, 40);
-            this.checkWixSetupDescription.TabIndex = 1;
-            this.checkWixSetupDescription.TabStop = true;
-            this.checkWixSetupDescription.Text = resources.GetString("checkWixSetupDescription.Text");
-            this.checkWixSetupDescription.UseCompatibleTextRendering = true;
-            this.checkWixSetupDescription.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.checkWixSetupDescription_LinkClicked);
-            // 
-            // checkWixSetup
-            // 
-            this.checkWixSetup.AutoSize = true;
-            this.checkWixSetup.Location = new System.Drawing.Point(16, 80);
-            this.checkWixSetup.Name = "checkWixSetup";
-            this.checkWixSetup.Size = new System.Drawing.Size(144, 17);
-            this.checkWixSetup.TabIndex = 0;
-            this.checkWixSetup.Text = "Create WiX setup project";
-            this.checkWixSetup.UseVisualStyleBackColor = true;
-            this.checkWixSetup.Click += new System.EventHandler(this.UpdateButtons);
-            // 
             // WizardForm
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-            this.ClientSize = new System.Drawing.Size(569, 462);
+            this.ClientSize = new System.Drawing.Size(557, 447);
             this.Controls.Add(this.addinWizard);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
@@ -406,14 +358,10 @@ namespace PanelAddinWizard
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Create New Visio Project";
             this.addinWizard.ResumeLayout(false);
-            this.pageOptions.ResumeLayout(false);
-            this.pageOptions.PerformLayout();
-            this.pageCheck.ResumeLayout(false);
-            this.pageCheck.PerformLayout();
-            this.panelStencil.ResumeLayout(false);
-            this.panelStencil.PerformLayout();
-            this.panelTemplate.ResumeLayout(false);
-            this.panelTemplate.PerformLayout();
+            this.pageSetup.ResumeLayout(false);
+            this.pageSetup.PerformLayout();
+            this.pageAddin.ResumeLayout(false);
+            this.pageAddin.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -438,30 +386,22 @@ namespace PanelAddinWizard
 
         private void UpdateButtons(object sender, EventArgs e)
         {
-            checkAddVisioStencils.Enabled = checkWixSetup.Checked;
-            checkAddVisioTemplates.Enabled = checkWixSetup.Checked;
+            checkAddVisioFiles.Enabled = checkWixSetup.Checked;
+            radioCreateNewVisioFiles.Enabled = checkWixSetup.Checked && checkAddVisioFiles.Checked;
+            radioCreateNewVisioFilesDescription.ForeColor = radioCreateNewVisioFiles.Enabled ? SystemColors.GrayText : SystemColors.ControlDark;
 
-            radioCreateNewStencil.Enabled = checkAddVisioStencils.Checked;
-            radioUseStencil.Enabled = checkAddVisioStencils.Checked;
-            textBoxStencilPath.Enabled = checkAddVisioStencils.Checked && radioUseStencil.Checked;
-            buttonBrowseStencil.Enabled = textBoxStencilPath.Enabled;
+            radioUseVisioFiles.Enabled = checkWixSetup.Checked && checkAddVisioFiles.Checked;
+            radioUseVisioFilesDescription.ForeColor = radioUseVisioFiles.Enabled ? SystemColors.GrayText : SystemColors.ControlDark;
 
-            radioCreateNewTemplate.Enabled = checkAddVisioTemplates.Checked;
-            radioUseTemplate.Enabled = checkAddVisioTemplates.Checked;
-            textBoxTemplatePath.Enabled = checkAddVisioTemplates.Checked && radioUseTemplate.Checked;
-            buttonBrowseTemplate.Enabled = textBoxTemplatePath.Enabled;
+            textBoxVisioFilesPath.Enabled = checkWixSetup.Checked && checkAddVisioFiles.Checked && radioUseVisioFiles.Checked;
 
-            textBoxStencilPath.Text = StencilPaths == null ? ""
-                : string.Join(" ", StencilPaths.Select(p => string.Format(@"""{0}""", System.IO.Path.GetFileName(p))));
+            buttonBrowseVisioFiles.Enabled = textBoxVisioFilesPath.Enabled;
+            checkCopyVisioFiles.Enabled = textBoxVisioFilesPath.Enabled;
 
-            textBoxTemplatePath.Text = TemplatePaths == null ? ""
-                : string.Join(" ", TemplatePaths.Select(p => string.Format(@"""{0}""", System.IO.Path.GetFileName(p))));
+            textBoxVisioFilesPath.Text = VisioFilePaths == null ? ""
+                : string.Join(" ", VisioFilePaths.Select(p => string.Format(@"""{0}""", System.IO.Path.GetFileName(p))));
 
-            addinWizard.NextEnabled = 
-                !(checkWixSetup.Checked && checkAddVisioStencils.Checked && radioUseStencil.Checked && textBoxStencilPath.Text.Length == 0)
-                && 
-                !(checkWixSetup.Checked && checkAddVisioTemplates.Checked && radioUseTemplate.Checked && textBoxTemplatePath.Text.Length == 0)
-                ;
+            addinWizard.NextEnabled = !(checkWixSetup.Checked && checkAddVisioFiles.Checked && radioUseVisioFiles.Checked && textBoxVisioFilesPath.Text.Length == 0);
         }
         
         private void checkWixSetupDescription_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -469,34 +409,23 @@ namespace PanelAddinWizard
             Process.Start(new ProcessStartInfo("http://wixtoolset.org/"));
         }
 
-        private void buttonBrowseTemplate_Click(object sender, EventArgs e)
+        private void buttonBrowse_Click(object sender, EventArgs e)
         {
             var dlg = new OpenFileDialog
             {
-                Filter = "Visio Template Files (*.vst, *.vtx, *.vst?)|*.vst;*.vtx;*.vst?", 
+                Filter =
+                    "Visio templates and stencils|*.vst;*.vtx;*.vst?;*.vss;*.vsx;*.vss?|" +
+                    "Visio templates|*.vst;*.vtx;*.vst?|" +
+                    "Visio stencils|*.vss;*.vsx;*.vss?|" +
+                    "All Files (*.*)|*.*",
                 Multiselect = true
             };
 
             if (dlg.ShowDialog() == DialogResult.OK)
             {
-                TemplatePaths = dlg.FileNames;
+                VisioFilePaths = dlg.FileNames;
                 UpdateButtons(null, null);
             }
         }
-
-        private void buttonBrowseStencil_Click(object sender, EventArgs e)
-        {
-            var dlg = new OpenFileDialog
-            {
-                Filter = "Visio Stencil Files (*.vst, *.vtx, *.vst?)|*.vss;*.vsx;*.vss?",
-                Multiselect = true
-            };
-
-            if (dlg.ShowDialog() == DialogResult.OK)
-            {
-                StencilPaths = dlg.FileNames;
-                UpdateButtons(null, null);
-            }
-        }
-	}
+    }
 }

@@ -16,6 +16,8 @@
       <ProjectItem ReplaceParameters="true" >Product.wxs</ProjectItem>
       <ProjectItem ReplaceParameters="false" >build/VisioWixExtension.xsd</ProjectItem>
       <ProjectItem ReplaceParameters="false" >build/VisioWixExtension.dll</ProjectItem>
+      <ProjectItem ReplaceParameters="false" >Stencil_1_M.vss</ProjectItem>
+      <ProjectItem ReplaceParameters="false" >Template_1_M.vst</ProjectItem>
     </Project>
   </TemplateContent>
   <WizardExtension>

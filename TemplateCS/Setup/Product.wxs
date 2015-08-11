@@ -16,8 +16,11 @@
 
     <!-- check taht .NET 4 (client profile at least) is installed -->
     <PropertyRef Id="NETFRAMEWORK40CLIENT" />
+    <PropertyRef Id="NETFRAMEWORK40FULL" />
+    <PropertyRef Id="NETFRAMEWORK45" />
+    
     <Condition Message="This application requires .NET Framework 4.0. Please install the .NET Framework then run this installer again.">
-      <![CDATA[Installed OR NETFRAMEWORK40CLIENT]]>
+      <![CDATA[Installed OR NETFRAMEWORK40CLIENT OR NETFRAMEWORK40 OR NETFRAMEWORK45]]>
     </Condition>
 
     <!-- allow major upgrades -->
@@ -32,11 +35,19 @@
       <ComponentGroupRef Id="VisioFiles"/>
     </Feature>
 
+    <!--
+      Use "Install Dir" user interface by default. 
+      Feel free to select other.
+    -->
     <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
     <UIRef Id="WixUI_InstallDir"/>
 
   </Product>
 
+  <!--
+    Define default directory structure
+  -->
+  
   <Fragment>
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="ProgramFilesFolder">
@@ -46,18 +57,53 @@
       </Directory>
     </Directory>
 
+    <!--
+      Visio files to be included in setup.
+    -->
     <ComponentGroup Id="VisioFiles" Directory="INSTALLFOLDER">
-      $stencils$
-      $templates$
+      $visioFilesWxs$
+      $if$ ($defaultVisioFiles$ == true)<!--
+        A sample template file. Feel free to modify parameters (check autocomplete)
+      -->
+      <Component>
+        <File Name="Stencil_1_M.vss">
+          <visio:PublishStencil MenuPath="$csprojectname$\Stencil 1" />
+        </File>
+      </Component>
+      <!--
+        A sample template file. Feel free to modify parameters (check autocomplete)
+      -->
+      <Component>
+        <File Name="Template_1_M.vst">
+          <visio:PublishTemplate MenuPath="$csprojectname$\Template 1" />
+        </File>
+      </Component>
+      $endif$
     </ComponentGroup>
 
+    <!--
+      Addin files to be included in setup
+    -->
     <ComponentGroup Id="AddinFiles" Directory="INSTALLFOLDER">
+      
+      <!--
+        Add the addin dll to the setup. Reference using project referencing.
+      -->
       <Component>
-        <File Id="Addin_dll" Source="$(var.$csprojectname$.TargetPath)" />
+        <File Source="$(var.$csprojectname$.TargetPath)" />
       </Component>
+      
+      <!--
+        Add the addin manifest file
+      -->
       <Component>
-        <File Id="Addin_dll_manifest" Source="$(var.$csprojectname$.TargetPath).manifest"></File>
+        <File Source="$(var.$csprojectname$.TargetPath).manifest"></File>
       </Component>
+      
+      <!-- 
+        The .vsto file is addin discovery file.
+        Set up registry to point to this file using |vstolocal
+      -->
       <Component>
         <File Id="Addin_vsto" Source="$(var.$csprojectname$.TargetDir)$(var.$csprojectname$.TargetName).vsto"></File>
         <RegistryKey Root="HKLM" Key="Software\Microsoft\Visio\Addins\$csprojectname$.Addin">
@@ -68,6 +114,10 @@
           <RegistryValue Name="LoadBehavior" Type="integer" Value="3" />
         </RegistryKey>
       </Component>
+      
+      <!--
+        Add the VSTO framework file
+      -->
       <Component>
         <File Source="$(var.$csprojectname$.TargetDir)Microsoft.Office.Tools.Common.v4.0.Utilities.dll"></File>
       </Component>

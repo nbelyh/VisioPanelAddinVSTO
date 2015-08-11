@@ -45,8 +45,10 @@ namespace PanelAddinWizard
             replacementsDictionary.Add("$taskpaneORui$", RootWizard.GlobalDictionary["$taskpaneORui$"]);
 
             replacementsDictionary.Add("$office$", RootWizard.GlobalDictionary["$office$"]);
-            replacementsDictionary.Add("$stencils$", RootWizard.GlobalDictionary["$stencils$"]);
-            replacementsDictionary.Add("$templates$", RootWizard.GlobalDictionary["$templates$"]);
+
+            replacementsDictionary.Add("$visioFilesWxs$", RootWizard.GlobalDictionary["$visioFilesWxs$"]);
+            replacementsDictionary.Add("$visioFilesWixProj$", RootWizard.GlobalDictionary["$visioFilesWixProj$"]);
+            replacementsDictionary.Add("$defaultVisioFiles$", RootWizard.GlobalDictionary["$defaultVisioFiles$"]);
         }
 
         public void RunFinished()
@@ -63,6 +65,25 @@ namespace PanelAddinWizard
             {
                 RootWizard.GlobalDictionary["$csprojectguid$"] = GetProjectGuid(project);
                 SetStartupAction(project);
+            }
+
+            if (Path.GetExtension(project.FileName) == ".wixproj")
+            {
+                var projectPath = Path.GetDirectoryName(project.FullName);
+
+                GenerateVisioFiles(projectPath, RootWizard.SetupOptions);
+            }
+        }
+
+        void GenerateVisioFiles(string projectPath, WixSetupOptions options)
+        {
+            if (!options.Enabled || options.CreateNew || options.Paths == null)
+                return;
+
+            foreach (var path in options.Paths)
+            {
+                if (options.Duplicate)
+                    File.Copy(path, Path.Combine(projectPath, Path.GetFileName(path)));
             }
         }
 

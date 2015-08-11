@@ -68,6 +68,7 @@
     <Compile Include="ChildWizard.cs" />
     <Compile Include="RootWizardCS.cs" />
     <Compile Include="RootWizardVB.cs" />
+    <Compile Include="WixSetupOptions.cs" />
     <Compile Include="WizardForm.cs">
       <SubType>Form</SubType>
     </Compile>
