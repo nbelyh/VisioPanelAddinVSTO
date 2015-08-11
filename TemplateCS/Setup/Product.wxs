@@ -31,8 +31,8 @@
     <MediaTemplate EmbedCab="yes" />
 
     <Feature Id="ProductFeature" Title="Setup" Level="1">
-      <ComponentGroupRef Id="AddinFiles"/>
-      <ComponentGroupRef Id="VisioFiles"/>
+      $if$ ($addinProject$ == true)<ComponentGroupRef Id="AddinFiles"/>
+      $endif$<ComponentGroupRef Id="VisioFiles"/>
     </Feature>
 
     <!--
@@ -80,7 +80,7 @@
       </Component>
       $endif$
     </ComponentGroup>
-
+    $if$ ($addinProject$ == true)
     <!--
       Addin files to be included in setup
     -->
@@ -123,6 +123,6 @@
       </Component>
 
     </ComponentGroup>
-
+    $endif$
   </Fragment>
 </Wix>

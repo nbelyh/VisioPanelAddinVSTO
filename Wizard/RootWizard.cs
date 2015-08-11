@@ -82,6 +82,7 @@ namespace PanelAddinWizard
             GlobalDictionary["$taskpaneANDui$"] = (wizardForm.TaskPane && (wizardForm.CommandBars || wizardForm.Ribbon)) ? "true" : "false";
             GlobalDictionary["$taskpaneORui$"] = (wizardForm.TaskPane || (wizardForm.CommandBars || wizardForm.Ribbon)) ? "true" : "false";
 
+            GlobalDictionary["$addinProject$"] = wizardForm.AddinEnabled ? "true" : "false";
             GlobalDictionary["$office$"] = GetOfficeVersion();
             GlobalDictionary["$wixSetup$"] = wizardForm.WixSetup ? "true" : "false";
 

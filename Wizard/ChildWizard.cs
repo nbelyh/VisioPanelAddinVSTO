@@ -23,6 +23,10 @@ namespace PanelAddinWizard
                 if (RootWizard.GlobalDictionary["$wixSetup$"] != "true")
                     throw new WizardBackoutException("Cancel generation of wix setup project");
             }
+            else if (RootWizard.GlobalDictionary["$addinProject$"] != "true")
+            {
+                throw new WizardBackoutException("Cancel generation of addin project");
+            }
 
             // Add custom parameters.
             replacementsDictionary.Add("$csprojectname$", RootWizard.GlobalDictionary["$csprojectname$"]);
@@ -49,6 +53,8 @@ namespace PanelAddinWizard
             replacementsDictionary.Add("$visioFilesWxs$", RootWizard.GlobalDictionary["$visioFilesWxs$"]);
             replacementsDictionary.Add("$visioFilesWixProj$", RootWizard.GlobalDictionary["$visioFilesWixProj$"]);
             replacementsDictionary.Add("$defaultVisioFiles$", RootWizard.GlobalDictionary["$defaultVisioFiles$"]);
+
+            replacementsDictionary.Add("$addinProject$", RootWizard.GlobalDictionary["$addinProject$"]);
         }
 
         public void RunFinished()

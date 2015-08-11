@@ -22,7 +22,7 @@
   <ItemGroup>
     <Compile Include="Product.wxs" />
   </ItemGroup>
-  <ItemGroup>
+  $if$ ($addinProject$ == true)<ItemGroup>
     <ProjectReference Include="..\$csprojectname$\$csprojectname$.vbproj">
       <Name>$csprojectname$</Name>
       <Project>$csprojectguid$</Project>
@@ -32,7 +32,7 @@
       <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
+  $endif$<ItemGroup>
     <WixExtension Include="WixNetFxExtension">
       <HintPath>$(WixExtDir)\WixNetFxExtension.dll</HintPath>
       <Name>WixNetFxExtension</Name>
