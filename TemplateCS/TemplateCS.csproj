@@ -70,6 +70,7 @@
     </Content>
     <Content Include="Addin\Properties\Resources.Designer.cs" />
     <Content Include="IconCS.ico" />
+    <Content Include="Setup\build\VisioWixExtension.dll" />
     <Content Include="Setup\Product.wxs">
       <IncludeInVSIX>true</IncludeInVSIX>
       <SubType>Designer</SubType>
@@ -80,6 +81,11 @@
     </Content>
     <Content Include="Setup\Setup.wixproj">
       <IncludeInVSIX>true</IncludeInVSIX>
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Setup\build\VisioWixExtension.xsd">
       <SubType>Designer</SubType>
     </Content>
   </ItemGroup>

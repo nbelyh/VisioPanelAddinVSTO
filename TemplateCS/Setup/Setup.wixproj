@@ -41,8 +41,19 @@
       <HintPath>$(WixExtDir)\WixUIExtension.dll</HintPath>
       <Name>WixUIExtension</Name>
     </WixExtension>
+    <WixExtension Include="VisioWixExtension">
+      <HintPath>build\VisioWixExtension.dll</HintPath>
+      <Name>VisioWixExtension</Name>
+    </WixExtension>
   </ItemGroup>
-    <Import Project="$(WixTargetsPath)" />
+  <ItemGroup>
+    <Folder Include="build\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="build\VisioWixExtension.dll" />
+    <Content Include="build\VisioWixExtension.xsd" />
+  </ItemGroup>
+  <Import Project="$(WixTargetsPath)" />
   <!--
 	To modify your build process, add your task inside one of the targets below and uncomment it.
 	Other similar extension points exist, see Wix.targets.

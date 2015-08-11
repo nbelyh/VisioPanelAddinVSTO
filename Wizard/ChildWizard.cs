@@ -45,6 +45,8 @@ namespace PanelAddinWizard
             replacementsDictionary.Add("$taskpaneORui$", RootWizard.GlobalDictionary["$taskpaneORui$"]);
 
             replacementsDictionary.Add("$office$", RootWizard.GlobalDictionary["$office$"]);
+            replacementsDictionary.Add("$stencils$", RootWizard.GlobalDictionary["$stencils$"]);
+            replacementsDictionary.Add("$templates$", RootWizard.GlobalDictionary["$templates$"]);
         }
 
         public void RunFinished()

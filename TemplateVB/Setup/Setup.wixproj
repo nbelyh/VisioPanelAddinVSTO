@@ -41,6 +41,17 @@
       <HintPath>$(WixExtDir)\WixUIExtension.dll</HintPath>
       <Name>WixUIExtension</Name>
     </WixExtension>
+    <WixExtension Include="VisioWixExtension">
+      <HintPath>build\VisioWixExtension.dll</HintPath>
+      <Name>VisioWixExtension</Name>
+    </WixExtension>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="build\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="build\VisioWixExtension.dll" />
+    <Content Include="build\VisioWixExtension.xsd" />
   </ItemGroup>
     <Import Project="$(WixTargetsPath)" />
   <!--

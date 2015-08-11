@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+
+<!-- 
+  Wix Project template to install Visio components
+-->
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+	xmlns:visio="http://schemas.microsoft.com/wix/Visio" >
 
   <?define Version="1.0.0.0"?>
   <?define ProductCode = "{$guid7$}" ?>
@@ -18,11 +24,12 @@
     <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
 
     <Property Id="MSIFASTINSTALL" Value="7" />
-    
+
     <MediaTemplate EmbedCab="yes" />
 
     <Feature Id="ProductFeature" Title="Setup" Level="1">
-      <ComponentGroupRef Id="Components"/>
+      <ComponentGroupRef Id="AddinFiles"/>
+      <ComponentGroupRef Id="VisioFiles"/>
     </Feature>
 
     <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
@@ -39,7 +46,12 @@
       </Directory>
     </Directory>
 
-    <ComponentGroup Id="Components" Directory="INSTALLFOLDER">
+    <ComponentGroup Id="VisioFiles" Directory="INSTALLFOLDER">
+      $stencils$
+      $templates$
+    </ComponentGroup>
+
+    <ComponentGroup Id="AddinFiles" Directory="INSTALLFOLDER">
       <Component>
         <File Id="Addin_dll" Source="$(var.$csprojectname$.TargetPath)" />
       </Component>

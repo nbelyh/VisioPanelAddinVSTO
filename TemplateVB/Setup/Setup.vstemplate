@@ -14,6 +14,8 @@
   <TemplateContent>
     <Project File="Setup.wixproj" ReplaceParameters="true">
       <ProjectItem ReplaceParameters="true" >Product.wxs</ProjectItem>
+      <ProjectItem ReplaceParameters="false" >build/VisioWixExtension.xsd</ProjectItem>
+      <ProjectItem ReplaceParameters="false" >build/VisioWixExtension.dll</ProjectItem>
     </Project>
   </TemplateContent>
   <WizardExtension>

@@ -73,6 +73,7 @@
     <Content Include="Addin\ThisAddIn.Designer.vb" />
     <Content Include="Addin\ThisAddIn.vb" />
     <Content Include="IconVB.ico" />
+    <Content Include="Setup\build\VisioWixExtension.dll" />
     <Content Include="Setup\Product.wxs">
       <IncludeInVSIX>true</IncludeInVSIX>
       <SubType>Designer</SubType>
@@ -82,6 +83,11 @@
     </Content>
     <Content Include="Setup\Setup.wixproj">
       <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Setup\build\VisioWixExtension.xsd">
+      <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />

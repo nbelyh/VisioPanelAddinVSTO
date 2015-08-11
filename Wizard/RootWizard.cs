@@ -4,6 +4,7 @@ using System.IO;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Xml;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
@@ -80,9 +81,31 @@ namespace PanelAddinWizard
             GlobalDictionary["$taskpaneORui$"] = (wizardForm.TaskPane || (wizardForm.CommandBars || wizardForm.Ribbon)) ? "true" : "false";
 
             GlobalDictionary["$office$"] = GetOfficeVersion();
+            GlobalDictionary["$stencils$"] = GetFiles("PublishStencil", wizardForm.StencilPaths);
+            GlobalDictionary["$templates$"] = GetFiles("PublishTemplate", wizardForm.TemplatePaths);
 
             GlobalDictionary["$wixSetup$"] = wizardForm.WixSetup ? "true" : "false";
         }
+
+	    private string GetFiles(string visioElement, string[] files)
+	    {
+            var doc = new XmlDocument();
+            doc.LoadXml("<Component/>");
+
+	        foreach (var file in files)
+	        {
+	            var fileNode = doc.CreateElement("File");
+	            fileNode.SetAttribute("Name", Path.GetFileName(file));
+
+	            var visioNode = doc.CreateElement(visioElement);
+                visioNode.SetAttribute("MenuPath")
+                doc.DocumentElement.AppendChild(fileNode);
+	        }
+            
+            <File Name="Stencil_1_M.vss">
+              <visio:PublishStencil MenuPath="$projectname$\Stencil 1" />
+            </File>
+	    }
 
 	    private bool IsWixInstalled()
 	    {
