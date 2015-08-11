@@ -173,9 +173,9 @@ namespace PanelAddinWizard
             // radioUseVisioFilesDescription
             // 
             this.radioUseVisioFilesDescription.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.radioUseVisioFilesDescription.Location = new System.Drawing.Point(48, 257);
+            this.radioUseVisioFilesDescription.Location = new System.Drawing.Point(73, 266);
             this.radioUseVisioFilesDescription.Name = "radioUseVisioFilesDescription";
-            this.radioUseVisioFilesDescription.Size = new System.Drawing.Size(405, 30);
+            this.radioUseVisioFilesDescription.Size = new System.Drawing.Size(380, 30);
             this.radioUseVisioFilesDescription.TabIndex = 6;
             this.radioUseVisioFilesDescription.Text = "Choose this option if you already have Visio template or stencil file(s) and want" +
     " to include it in the project.";
@@ -194,9 +194,9 @@ namespace PanelAddinWizard
             // radioCreateNewVisioFilesDescription
             // 
             this.radioCreateNewVisioFilesDescription.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.radioCreateNewVisioFilesDescription.Location = new System.Drawing.Point(48, 206);
+            this.radioCreateNewVisioFilesDescription.Location = new System.Drawing.Point(70, 212);
             this.radioCreateNewVisioFilesDescription.Name = "radioCreateNewVisioFilesDescription";
-            this.radioCreateNewVisioFilesDescription.Size = new System.Drawing.Size(405, 28);
+            this.radioCreateNewVisioFilesDescription.Size = new System.Drawing.Size(383, 28);
             this.radioCreateNewVisioFilesDescription.TabIndex = 4;
             this.radioCreateNewVisioFilesDescription.Text = "Creates a sample template and includes it in the project. You can use it as a sta" +
     "rting point for your Visio project.";
@@ -217,10 +217,10 @@ namespace PanelAddinWizard
             // 
             // textBoxVisioFilesPath
             // 
-            this.textBoxVisioFilesPath.Location = new System.Drawing.Point(51, 290);
+            this.textBoxVisioFilesPath.Location = new System.Drawing.Point(73, 299);
             this.textBoxVisioFilesPath.Name = "textBoxVisioFilesPath";
             this.textBoxVisioFilesPath.ReadOnly = true;
-            this.textBoxVisioFilesPath.Size = new System.Drawing.Size(402, 20);
+            this.textBoxVisioFilesPath.Size = new System.Drawing.Size(380, 20);
             this.textBoxVisioFilesPath.TabIndex = 7;
             // 
             // checkWixSetup
@@ -237,7 +237,7 @@ namespace PanelAddinWizard
             // checkCopyVisioFiles
             // 
             this.checkCopyVisioFiles.AutoSize = true;
-            this.checkCopyVisioFiles.Location = new System.Drawing.Point(51, 316);
+            this.checkCopyVisioFiles.Location = new System.Drawing.Point(73, 325);
             this.checkCopyVisioFiles.Name = "checkCopyVisioFiles";
             this.checkCopyVisioFiles.Size = new System.Drawing.Size(185, 17);
             this.checkCopyVisioFiles.TabIndex = 9;
@@ -247,7 +247,7 @@ namespace PanelAddinWizard
             // radioUseVisioFiles
             // 
             this.radioUseVisioFiles.AutoSize = true;
-            this.radioUseVisioFiles.Location = new System.Drawing.Point(51, 237);
+            this.radioUseVisioFiles.Location = new System.Drawing.Point(51, 246);
             this.radioUseVisioFiles.Name = "radioUseVisioFiles";
             this.radioUseVisioFiles.Size = new System.Drawing.Size(224, 17);
             this.radioUseVisioFiles.TabIndex = 5;
@@ -268,7 +268,7 @@ namespace PanelAddinWizard
             // radioCreateNewVisioFiles
             // 
             this.radioCreateNewVisioFiles.AutoSize = true;
-            this.radioCreateNewVisioFiles.Location = new System.Drawing.Point(51, 182);
+            this.radioCreateNewVisioFiles.Location = new System.Drawing.Point(51, 188);
             this.radioCreateNewVisioFiles.Name = "radioCreateNewVisioFiles";
             this.radioCreateNewVisioFiles.Size = new System.Drawing.Size(243, 17);
             this.radioCreateNewVisioFiles.TabIndex = 3;

@@ -10,6 +10,7 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.TemplateWizard;
 using Microsoft.Win32;
+using System.Text;
 
 namespace PanelAddinWizard
 {
@@ -92,28 +93,56 @@ namespace PanelAddinWizard
             GlobalDictionary["$defaultVisioFiles$"] = SetupOptions.Enabled && SetupOptions.CreateNew ? "true" : "false";
         }
 
+        private static string beautifyXml(XmlDocument doc)
+        {
+            var sb = new StringBuilder();
+            var settings =
+                new XmlWriterSettings
+                {
+                    Indent = true,
+                    IndentChars = @"    ",
+                    NewLineChars = Environment.NewLine,
+                    NewLineHandling = NewLineHandling.Replace,
+                    OmitXmlDeclaration = true
+                };
+
+            using (var writer = XmlWriter.Create(sb, settings))
+            {
+                if (doc.ChildNodes[0] is XmlProcessingInstruction)
+                {
+                    doc.RemoveChild(doc.ChildNodes[0]);
+                }
+
+                doc.Save(writer);
+                return sb.ToString();
+            }
+        }
+
         void GetFiles(WixSetupOptions options)
         {
-            var doc = new XmlDocument();
+            var docWxs = new XmlDocument();
+            var nodeWxs = docWxs.CreateElement("root");
+            docWxs.AppendChild(nodeWxs);
 
-            var nodeWxs = doc.CreateElement("wxs");
-            var nodeWixProj = doc.CreateElement("wixproj");
+            var docWixProj = new XmlDocument();
+            var nodeWixProj = docWixProj.CreateElement("root");
+            docWixProj.AppendChild(nodeWixProj);
 
             const string PublishTemplateItemName = "Publish6EACFB1ABA5A4581A2F0DFA55A8B3445";
             const string PublishStencilItemName = "PublishE8358BB3898744BEA3D6E8B0DE0D80F4";
-            
+
             if (options.Enabled && !options.CreateNew && options.Paths != null)
             {
                 foreach (var path in options.Paths)
                 {
-                    var nodeComponent = doc.CreateElement("Component");
+                    var nodeComponent = docWxs.CreateElement("Component");
                     nodeWxs.AppendChild(nodeComponent);
 
-                    var nodeContent = doc.CreateElement("Content");
+                    var nodeContent = docWixProj.CreateElement("Content");
                     nodeContent.SetAttribute("Include", Path.GetFileName(path));
                     nodeWixProj.AppendChild(nodeContent);
 
-                    var nodeFile = doc.CreateElement("File");
+                    var nodeFile = docWxs.CreateElement("File");
                     nodeFile.SetAttribute("Name", Path.GetFileName(path));
 
                     if (!options.Duplicate)
@@ -133,7 +162,7 @@ namespace PanelAddinWizard
 
                     if (elementName != null)
                     {
-                        var nodePublish = doc.CreateElement(elementName);
+                        var nodePublish = docWxs.CreateElement(elementName);
 
                         nodePublish.SetAttribute("MenuPath", string.Format("{0}\\{1}",
                             GlobalDictionary["$csprojectname$"], Path.GetFileNameWithoutExtension(path)));
@@ -143,12 +172,15 @@ namespace PanelAddinWizard
                 }
             }
 
-            GlobalDictionary["$visioFilesWxs$"] = nodeWxs
-                .InnerXml
+            var wxs = GlobalDictionary["$visioFilesWxs$"] = beautifyXml(docWxs)
                 .Replace(PublishTemplateItemName, "visio:PublishTemplate")
-                .Replace(PublishStencilItemName, "visio:PublishStencil");
+                .Replace(PublishStencilItemName, "visio:PublishStencil")
+                .Replace("<root>", "")
+                .Replace("</root>", "");
 
-            GlobalDictionary["$visioFilesWixProj$"] = nodeWixProj.InnerXml;
+            GlobalDictionary["$visioFilesWixProj$"] = beautifyXml(docWixProj)
+                .Replace("<root>", "")
+                .Replace("</root>", "");
         }
 
         private bool IsWixInstalled()
