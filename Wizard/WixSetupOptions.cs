@@ -7,10 +7,17 @@ namespace PanelAddinWizard
 {
     public class WixSetupOptions
     {
-        public bool Enabled { get; set; }
-        public bool CreateNew { get; set; }
-        public bool Duplicate { get; set; }
-        public string[] Paths { get; set; }
+        public bool EnableWixSetup { get; set; }
+        public bool CreateNewVisioFiles { get; set; }
+        public bool DuplicateExistingVisioFiles { get; set; }
+        public string[] VisioFilePaths { get; set; }
+
+        public bool EnableWixUI { get; set; }
+        public string WixUI { get; set; }
+        public bool EnableLicense { get; set; }
+        public string LicenseFilePath { get; set; }
+
+        public bool HaveVisioFiles { get { return EnableWixSetup && !CreateNewVisioFiles && VisioFilePaths != null && VisioFilePaths.Length > 0; } }
     }
 
 }

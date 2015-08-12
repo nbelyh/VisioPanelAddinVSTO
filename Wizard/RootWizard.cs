@@ -11,6 +11,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.TemplateWizard;
 using Microsoft.Win32;
 using System.Text;
+using EnvDTE80;
 
 namespace PanelAddinWizard
 {
@@ -26,7 +27,7 @@ namespace PanelAddinWizard
 
         public static WixSetupOptions SetupOptions;
 
-        private DTE _dte;
+        private DTE2 _dte;
 
         protected abstract Image HeaderImage { get; }
 
@@ -35,7 +36,7 @@ namespace PanelAddinWizard
             Dictionary<string, string> replacementsDictionary,
             WizardRunKind runKind, object[] customParams)
         {
-            _dte = automationObject as DTE;
+            _dte = automationObject as DTE2;
 
             if (_dte != null)
             {
@@ -90,7 +91,9 @@ namespace PanelAddinWizard
             SetupOptions = wizardForm.GetSetupOptions();
             GetFiles(SetupOptions);
 
-            GlobalDictionary["$defaultVisioFiles$"] = SetupOptions.Enabled && SetupOptions.CreateNew ? "true" : "false";
+            GlobalDictionary["$EnableWixUI$"] = SetupOptions.EnableWixUI ? "true" : "false";
+            GlobalDictionary["$WixUI$"] = SetupOptions.EnableWixUI ? SetupOptions.WixUI : "";
+            GlobalDictionary["$defaultVisioFiles$"] = SetupOptions.EnableWixSetup && SetupOptions.CreateNewVisioFiles ? "true" : "false";
         }
 
         private static string beautifyXml(XmlDocument doc)
@@ -131,9 +134,11 @@ namespace PanelAddinWizard
             const string PublishTemplateItemName = "Publish6EACFB1ABA5A4581A2F0DFA55A8B3445";
             const string PublishStencilItemName = "PublishE8358BB3898744BEA3D6E8B0DE0D80F4";
 
-            if (options.Enabled && !options.CreateNew && options.Paths != null)
+            var wxs = "";
+            var wixProj = "";
+            if (options.HaveVisioFiles)
             {
-                foreach (var path in options.Paths)
+                foreach (var path in options.VisioFilePaths)
                 {
                     var nodeComponent = docWxs.CreateElement("Component");
                     nodeWxs.AppendChild(nodeComponent);
@@ -145,7 +150,7 @@ namespace PanelAddinWizard
                     var nodeFile = docWxs.CreateElement("File");
                     nodeFile.SetAttribute("Name", Path.GetFileName(path));
 
-                    if (!options.Duplicate)
+                    if (!options.DuplicateExistingVisioFiles)
                         nodeFile.SetAttribute("Source", path);
 
                     nodeComponent.AppendChild(nodeFile);
@@ -170,17 +175,20 @@ namespace PanelAddinWizard
                         nodeFile.AppendChild(nodePublish);
                     }
                 }
-            }
 
-            var wxs = GlobalDictionary["$visioFilesWxs$"] = beautifyXml(docWxs)
+                wxs = beautifyXml(docWxs)
                 .Replace(PublishTemplateItemName, "visio:PublishTemplate")
                 .Replace(PublishStencilItemName, "visio:PublishStencil")
                 .Replace("<root>", "")
                 .Replace("</root>", "");
 
-            GlobalDictionary["$visioFilesWixProj$"] = beautifyXml(docWixProj)
+                wixProj = beautifyXml(docWixProj)
                 .Replace("<root>", "")
                 .Replace("</root>", "");
+            }
+
+            GlobalDictionary["$visioFilesWxs$"] = wxs;
+            GlobalDictionary["$visioFilesWixProj$"] = wixProj;
         }
 
         private bool IsWixInstalled()
@@ -240,8 +248,40 @@ namespace PanelAddinWizard
                 ? "14.0" : "12.0";
         }
 
+        void SetActiveConfiguration()
+        {
+            try
+            {
+                var x64 = GetVisioPath64() != null;
+
+                foreach (SolutionConfiguration2 config in _dte.Solution.SolutionBuild.SolutionConfigurations)
+                {
+                    if (config.Name != "Debug")
+                        continue;
+
+                    if (x64 && config.PlatformName == "x64")
+                    {
+                        config.Activate();
+                        break;
+                    }
+
+                    if (!x64 && config.PlatformName == "x86")
+                    {
+                        config.Activate();
+                        break;
+                    }
+                }
+            }
+            // this convenience feature; continue if failed, not a big deal
+            // ReSharper disable once EmptyGeneralCatchClause
+            catch (Exception)
+            {
+            }
+        }
+
         public void RunFinished()
         {
+            SetActiveConfiguration();
         }
 
         public void BeforeOpeningFile(ProjectItem projectItem)

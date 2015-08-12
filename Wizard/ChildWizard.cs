@@ -55,6 +55,8 @@ namespace PanelAddinWizard
             replacementsDictionary.Add("$defaultVisioFiles$", RootWizard.GlobalDictionary["$defaultVisioFiles$"]);
 
             replacementsDictionary.Add("$addinProject$", RootWizard.GlobalDictionary["$addinProject$"]);
+            replacementsDictionary.Add("$WixUI$", RootWizard.GlobalDictionary["$WixUI$"]);
+            replacementsDictionary.Add("$EnableWixUI$", RootWizard.GlobalDictionary["$EnableWixUI$"]);
         }
 
         public void RunFinished()
@@ -83,12 +85,12 @@ namespace PanelAddinWizard
 
         void GenerateVisioFiles(string projectPath, WixSetupOptions options)
         {
-            if (!options.Enabled || options.CreateNew || options.Paths == null)
+            if (!options.HaveVisioFiles)
                 return;
 
-            foreach (var path in options.Paths)
+            foreach (var path in options.VisioFilePaths)
             {
-                if (options.Duplicate)
+                if (options.DuplicateExistingVisioFiles)
                     File.Copy(path, Path.Combine(projectPath, Path.GetFileName(path)));
             }
         }

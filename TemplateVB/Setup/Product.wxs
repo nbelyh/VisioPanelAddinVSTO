@@ -35,13 +35,10 @@
       <ComponentGroupRef Id="VisioFiles"/>
     </Feature>
 
-    <!--
-      Use "Install Dir" user interface by default. 
-      Feel free to select other.
-    -->
-    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
-    <UIRef Id="WixUI_InstallDir"/>
-
+    $if$ ($EnableWixUI$ == true)<!-- UI settings -->
+    <UIRef Id="$WixUI$"/>
+    $endif$$if$ ($WixUI$ == WixUI_InstallDir)<Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />$endif$
+    
   </Product>
 
   <!--

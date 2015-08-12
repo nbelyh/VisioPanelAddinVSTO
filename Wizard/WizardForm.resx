@@ -117,11 +117,17 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="checkWixSetupDescription.Text" xml:space="preserve">
-    <value>Create a WiX installer project to install addin for all users. If you skip the MSI installer you can deploy your addin using ClickOnce publishing. Note that you should have WiX Toolset installed (http://wixtoolset.org)</value>
-  </data>
+  <metadata name="visioFileDialog.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
+  <metadata name="licenseFileDialog.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>147, 17</value>
+  </metadata>
   <data name="checkAddinProjectDescription.Text" xml:space="preserve">
     <value>Create a Visio Addin project. If you skip then you can create installer project to install Visio files. Note that you should have VSTO (Visual Studio Tools for Office) installed. You can download it for free from the Microsoft download website.</value>
+  </data>
+  <data name="checkWixSetupDescription.Text" xml:space="preserve">
+    <value>Create a WiX installer project to install addin for all users. If you skip the MSI installer you can deploy your addin using ClickOnce publishing. Note that you should have WiX Toolset installed (http://wixtoolset.org)</value>
   </data>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>56</value>
