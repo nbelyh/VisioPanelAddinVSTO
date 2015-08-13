@@ -248,40 +248,8 @@ namespace PanelAddinWizard
                 ? "14.0" : "12.0";
         }
 
-        void SetActiveConfiguration()
-        {
-            try
-            {
-                var x64 = GetVisioPath64() != null;
-
-                foreach (SolutionConfiguration2 config in _dte.Solution.SolutionBuild.SolutionConfigurations)
-                {
-                    if (config.Name != "Debug")
-                        continue;
-
-                    if (x64 && config.PlatformName == "x64")
-                    {
-                        config.Activate();
-                        break;
-                    }
-
-                    if (!x64 && config.PlatformName == "x86")
-                    {
-                        config.Activate();
-                        break;
-                    }
-                }
-            }
-            // this convenience feature; continue if failed, not a big deal
-            // ReSharper disable once EmptyGeneralCatchClause
-            catch (Exception)
-            {
-            }
-        }
-
         public void RunFinished()
         {
-            SetActiveConfiguration();
         }
 
         public void BeforeOpeningFile(ProjectItem projectItem)
