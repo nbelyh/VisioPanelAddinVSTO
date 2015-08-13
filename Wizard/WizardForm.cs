@@ -44,10 +44,11 @@ namespace PanelAddinWizard
             checkWixSetup.Enabled = wixInstalled;
             checkWixSetup.Checked = wixInstalled;
 
-            checkAddVisioFiles.Checked = false;
+            checkAddVisioFiles.Checked = true;
             radioCreateNewVisioFiles.Checked = true;
             checkCopyVisioFiles.Checked = true;
 
+            checkEnableSetupUI.Checked = true;
             comboSetupUI.SelectedIndex = 1;
 
             UpdateButtons(null, null);

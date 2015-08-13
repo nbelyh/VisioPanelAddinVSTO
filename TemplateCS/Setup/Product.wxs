@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- 
-  Wix Project template to install Visio components
--->
+<!-- Wix Project template to install Visio components -->
 
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
 	xmlns:visio="http://schemas.microsoft.com/wix/Visio" >
@@ -23,9 +21,13 @@
       <![CDATA[Installed OR NETFRAMEWORK40CLIENT OR NETFRAMEWORK40 OR NETFRAMEWORK45]]>
     </Condition>
 
+    $if$ ($EnableLicense$ == true)<!-- override default license -->
+    <WixVariable Id="WixUILicenseRtf" Value="$LicenseFileName$" />
+    $endif$
     <!-- allow major upgrades -->
     <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
 
+    <!-- allow fast installation -->
     <Property Id="MSIFASTINSTALL" Value="7" />
 
     <MediaTemplate EmbedCab="yes" />
@@ -41,9 +43,7 @@
     
   </Product>
 
-  <!--
-    Define default directory structure
-  -->
+  <!-- Define default directory structure -->
   
   <Fragment>
     <Directory Id="TARGETDIR" Name="SourceDir">
@@ -54,22 +54,16 @@
       </Directory>
     </Directory>
 
-    <!--
-      Visio files to be included in setup.
-    -->
+    <!-- Visio files to be included in setup -->
     <ComponentGroup Id="VisioFiles" Directory="INSTALLFOLDER">
       $visioFilesWxs$
-      $if$ ($defaultVisioFiles$ == true)<!--
-        A sample template file. Feel free to modify parameters (check autocomplete)
-      -->
+      $if$ ($defaultVisioFiles$ == true)<!-- Sample template file. Feel free to modify the optional parameters -->
       <Component>
         <File Name="Stencil_1_M.vss">
           <visio:PublishStencil MenuPath="$csprojectname$\Stencil 1" />
         </File>
       </Component>
-      <!--
-        A sample template file. Feel free to modify parameters (check autocomplete)
-      -->
+      <!-- Sample template file. Feel free to modify the optional parameters -->
       <Component>
         <File Name="Template_1_M.vst">
           <visio:PublishTemplate MenuPath="$csprojectname$\Template 1" />
@@ -78,29 +72,20 @@
       $endif$
     </ComponentGroup>
     $if$ ($addinProject$ == true)
-    <!--
-      Addin files to be included in setup
-    -->
+    <!-- Addin files to be included in setup -->
     <ComponentGroup Id="AddinFiles" Directory="INSTALLFOLDER">
       
-      <!--
-        Add the addin dll to the setup. Reference using project referencing.
-      -->
+      <!-- Add the addin dll to the setup. Reference using project referencing -->
       <Component>
         <File Source="$(var.$csprojectname$.TargetPath)" />
       </Component>
       
-      <!--
-        Add the addin manifest file
-      -->
+      <!-- Add the addin manifest file -->
       <Component>
         <File Source="$(var.$csprojectname$.TargetPath).manifest"></File>
       </Component>
       
-      <!-- 
-        The .vsto file is addin discovery file.
-        Set up registry to point to this file using |vstolocal
-      -->
+      <!--  The .vsto file is addin discovery file. Set up registry to point to this file using |vstolocal -->
       <Component>
         <File Id="Addin_vsto" Source="$(var.$csprojectname$.TargetDir)$(var.$csprojectname$.TargetName).vsto"></File>
         <RegistryKey Root="HKLM" Key="Software\Microsoft\Visio\Addins\$csprojectname$.Addin">
@@ -112,9 +97,7 @@
         </RegistryKey>
       </Component>
       
-      <!--
-        Add the VSTO framework file
-      -->
+      <!-- VSTO framework file -->
       <Component>
         <File Source="$(var.$csprojectname$.TargetDir)Microsoft.Office.Tools.Common.v4.0.Utilities.dll"></File>
       </Component>

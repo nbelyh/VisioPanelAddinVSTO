@@ -94,6 +94,9 @@ namespace PanelAddinWizard
             GlobalDictionary["$EnableWixUI$"] = SetupOptions.EnableWixUI ? "true" : "false";
             GlobalDictionary["$WixUI$"] = SetupOptions.EnableWixUI ? SetupOptions.WixUI : "";
             GlobalDictionary["$defaultVisioFiles$"] = SetupOptions.EnableWixSetup && SetupOptions.CreateNewVisioFiles ? "true" : "false";
+
+            GlobalDictionary["$EnableLicense$"] = SetupOptions.EnableLicense ? "true" : "false";
+            GlobalDictionary["$LicenseFileName$"] = Path.GetFileName(SetupOptions.LicenseFilePath);
         }
 
         private static string beautifyXml(XmlDocument doc)
@@ -136,6 +139,14 @@ namespace PanelAddinWizard
 
             var wxs = "";
             var wixProj = "";
+
+            if (options.EnableLicense)
+            {
+                var nodeLicense = docWixProj.CreateElement("Content");
+                nodeLicense.SetAttribute("Include", Path.GetFileName(options.LicenseFilePath));
+                nodeWixProj.AppendChild(nodeLicense);
+            }
+
             if (options.HaveVisioFiles)
             {
                 foreach (var path in options.VisioFilePaths)
@@ -175,17 +186,19 @@ namespace PanelAddinWizard
                         nodeFile.AppendChild(nodePublish);
                     }
                 }
+            }
 
-                wxs = beautifyXml(docWxs)
+            wxs = beautifyXml(docWxs)
                 .Replace(PublishTemplateItemName, "visio:PublishTemplate")
                 .Replace(PublishStencilItemName, "visio:PublishStencil")
                 .Replace("<root>", "")
+                .Replace("<root />", "")
                 .Replace("</root>", "");
 
-                wixProj = beautifyXml(docWixProj)
+            wixProj = beautifyXml(docWixProj)
                 .Replace("<root>", "")
+                .Replace("<root />", "")
                 .Replace("</root>", "");
-            }
 
             GlobalDictionary["$visioFilesWxs$"] = wxs;
             GlobalDictionary["$visioFilesWixProj$"] = wixProj;
