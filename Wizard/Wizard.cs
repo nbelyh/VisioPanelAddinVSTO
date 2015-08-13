@@ -551,7 +551,7 @@ namespace PanelAddinWizard
             // check if button is finish mode
 		    if (buttonNext.DialogResult == DialogResult.OK)
 		    {
-		        OnFinish(EventArgs.Empty);
+		        OnFinish(new CancelEventArgs());
 		        return;
 		    }
 
@@ -765,7 +765,7 @@ namespace PanelAddinWizard
 		/// Raises the Finish event.
 		/// </summary>
 		/// <param name="e">A EventArgs object that holds event data.</param>
-		protected virtual void OnFinish(EventArgs e)
+		protected virtual void OnFinish(CancelEventArgs e)
 		{
 			// check if there are subscribers
 			if (Finish != null)
@@ -774,8 +774,17 @@ namespace PanelAddinWizard
 				Finish(this, e);
 			}
 
-			// ensure parent form is closed (even when ShowDialog is not used)
-			ParentForm.Close();
+            // check if user canceled
+            if (e.Cancel)
+            {
+                // cancel closing (when ShowDialog is used)
+                ParentForm.DialogResult = DialogResult.None;
+            }
+            else
+            {
+                // ensure parent form is closed (even when ShowDialog is not used)
+                ParentForm.Close();
+            }
 		}
 
 		/// <summary>
@@ -896,7 +905,7 @@ namespace PanelAddinWizard
 		/// </summary>
 		[Category("Wizard")]
 		[Description("Occurs when wizard is finished, giving the user a chance to do extra stuff.")]
-		public event EventHandler Finish;
+		public event CancelEventHandler Finish;
 		/// <summary>
 		/// Occurs when the user clicks the help button.
 		/// </summary>

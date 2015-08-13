@@ -12,6 +12,7 @@ using Microsoft.VisualStudio.TemplateWizard;
 using Microsoft.Win32;
 using System.Text;
 using EnvDTE80;
+using System.Text.RegularExpressions;
 
 namespace PanelAddinWizard
 {
@@ -20,6 +21,7 @@ namespace PanelAddinWizard
     /// </summary>
     public abstract class RootWizard
         : IWizard
+        , IWizardFormHost
     {
         // Use to communicate $saferootprojectname$ to ChildWizard
         public static Dictionary<string, string> GlobalDictionary =
@@ -38,26 +40,7 @@ namespace PanelAddinWizard
         {
             _dte = automationObject as DTE2;
 
-            if (_dte != null)
-            {
-                var vstoKey = string.Format(@"HKEY_LOCAL_MACHINE\{0}\Setup\VSTO", _dte.RegistryRoot);
-                var val = Registry.GetValue(vstoKey, "ProductDir", null);
-
-                if (null == val)
-                {
-                    MessageBox.Show(
-                        "Visual Studio Tools for Office installation is not detected. " +
-                        "This project template is based on VSTO project, thus it is required. " +
-                        "Please install Tools for Office, or consder using COM Visio Addin project template.",
-                        "Visio VSTO Panel Addin: VSTO not found", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-
-                    throw new WizardBackoutException();
-                }
-            }
-
-            var wixInstalled = IsWixInstalled();
-
-            var wizardForm = new WizardForm(wixInstalled)
+            var wizardForm = new WizardForm(this)
             {
                 HeaderImage = HeaderImage
             };
@@ -204,7 +187,7 @@ namespace PanelAddinWizard
             GlobalDictionary["$visioFilesWixProj$"] = wixProj;
         }
 
-        private bool IsWixInstalled()
+        public bool IsWixInstalled()
         {
             IServiceProvider serviceProvider = new ServiceProvider(_dte as Microsoft.VisualStudio.OLE.Interop.IServiceProvider);
 
@@ -318,6 +301,49 @@ namespace PanelAddinWizard
 
         public void ProjectItemFinishedGenerating(ProjectItem projectItem)
         {
+        }
+
+        public bool IsVstoInstalled()
+        {
+            var vstoKey = string.Format(@"HKEY_LOCAL_MACHINE\{0}\Setup\VSTO", _dte.RegistryRoot);
+            return Registry.GetValue(vstoKey, "ProductDir", null) != null;
+        }
+
+        public void OpenExternalLink(ExternalLink link)
+        {
+            var url = GetExternalLinkUrl(link);
+
+            if (url != null)
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(url));
+        }
+
+        string GetExternalLinkUrl(ExternalLink link)
+        {
+            switch (link)
+            {
+                case ExternalLink.WixDocsUI:
+                    return "http://wixtoolset.org/documentation/manual/v3/wixui/wixui_dialog_library.html";
+
+                case ExternalLink.WixDownload:
+                    return "http://wixtoolset.org/";
+
+                case ExternalLink.VstoDownload:
+                {
+                    var match = Regex.Match(_dte.Version, @"\d+");
+                    if (match.Success)
+                    {
+                        if (match.Value == "11")
+                            return "http://aka.ms/OfficeDevToolsForVS2012";
+                        if (match.Value == "12")
+                            return "http://aka.ms/OfficeDevToolsForVS2013";
+                        if (match.Value == "14")
+                            return "http://aka.ms/OfficeDevToolsForVS2015";
+                    }
+                    return "http://dev.office.com/";
+                }
+            }
+
+            return null;
         }
     }
 }
