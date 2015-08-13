@@ -8,7 +8,7 @@ Imports System.Windows.Forms
 Imports Microsoft.Office.Core
 Imports stdole
 
-Partial Public Class Addin
+Partial Public Class AddinCommandBars
     Private _toolbarName As String
 
     Private ReadOnly _commands As New List(Of String)()
@@ -16,16 +16,16 @@ Partial Public Class Addin
     ''' 
     ''' Constructs the UI manager
     ''' 
-    Private Sub StartupCommandBars(toolbarName As String, commands As IEnumerable(Of String))
+    Public Sub StartupCommandBars(toolbarName As String, commands As IEnumerable(Of String))
         _toolbarName = toolbarName
         _commands.AddRange(commands)
 
-        AddHandler Application.VisioIsIdle, AddressOf ApplicationIdle
+        AddHandler Globals.ThisAddIn.Application.VisioIsIdle, AddressOf ApplicationIdle
         UpdateCommandBars()
     End Sub
 
-    Private Sub ShutdownCommandBars()
-        RemoveHandler Application.VisioIsIdle, AddressOf ApplicationIdle
+    Public Sub ShutdownCommandBars()
+        RemoveHandler Globals.ThisAddIn.Application.VisioIsIdle, AddressOf ApplicationIdle
     End Sub
 
     Private _updateRequest As Boolean
@@ -51,7 +51,7 @@ Partial Public Class Addin
     End Function
 
     Private Sub UpdateToolbar()
-        Dim cbs = DirectCast(Application.CommandBars, CommandBars)
+        Dim cbs = DirectCast(Globals.ThisAddIn.Application.CommandBars, CommandBars)
 
         Dim cb = If(FindCommandBar(cbs, _toolbarName), cbs.Add(_toolbarName))
         cb.Visible = True
@@ -74,13 +74,13 @@ Partial Public Class Addin
 
         Dim button = If(DirectCast(cb.FindControl(Tag:=id), CommandBarButton), DirectCast(cb.Controls.Add(MsoControlType.msoControlButton), CommandBarButton))
 
-        button.Enabled = IsCommandEnabled(id)
+        button.Enabled = Globals.ThisAddIn.IsCommandEnabled(id)
 
-        Dim checkState = IsCommandChecked(id)
+        Dim checkState = Globals.ThisAddIn.IsCommandChecked(id)
         button.State = If(checkState, MsoButtonState.msoButtonDown, MsoButtonState.msoButtonUp)
 
         button.Tag = id
-        button.Caption = GetCommandLabel(id)
+        button.Caption = Globals.ThisAddIn.GetCommandLabel(id)
         SetCommandBarButtonImage(button, id)
 
         AddHandler button.Click, AddressOf CommandBarButtonClicked
@@ -89,11 +89,11 @@ Partial Public Class Addin
     End Sub
 
     Private Sub CommandBarButtonClicked(ctrl As CommandBarButton, ByRef cancelDefault As Boolean)
-        OnCommand(ctrl.Tag)
+        Globals.ThisAddIn.OnCommand(ctrl.Tag)
     End Sub
 
     Private Sub SetCommandBarButtonImage(button As CommandBarButton, id As String)
-        Dim icon = GetCommandIcon(id)
+        Dim icon = Globals.ThisAddIn.GetCommandIcon(id)
         If icon Is Nothing Then
             Return
         End If

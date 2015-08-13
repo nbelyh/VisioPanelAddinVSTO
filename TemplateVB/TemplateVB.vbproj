@@ -51,7 +51,6 @@
     <Content Include="Addin\Addin.vbproj">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Addin\Addin.vb" />
     <Content Include="Addin\AddinCommandBars.vb" />
     <Content Include="Addin\AddinRibbon.vb" />
     <Content Include="Addin\PanelFrame.vb" />

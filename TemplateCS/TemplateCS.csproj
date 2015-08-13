@@ -46,7 +46,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Addin\Addin.csproj" />
-    <Content Include="Addin\Addin.cs" />
     <Content Include="Addin\AddinCommandBars.cs" />
     <Content Include="Addin\ThisAddIn.cs" />
     <Content Include="Addin\ThisAddIn.Designer.cs" />

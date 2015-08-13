@@ -10,7 +10,7 @@ namespace $csprojectname$
     /// </summary>
     /// 
     [ComVisible(true)]
-    public partial class Addin
+    public class AddinRibbon
         : Office.IRibbonExtensibility
     {
         private Office.IRibbonUI _ribbon;
@@ -28,27 +28,27 @@ namespace $csprojectname$
 
         public bool IsRibbonCommandEnabled(Office.IRibbonControl ctrl)
         {
-            return IsCommandEnabled(ctrl.Id);
+            return Globals.ThisAddIn.IsCommandEnabled(ctrl.Id);
         }
 
         public bool IsRibbonCommandChecked(Office.IRibbonControl ctrl)
         {
-            return IsCommandChecked(ctrl.Id);
+            return Globals.ThisAddIn.IsCommandChecked(ctrl.Id);
         }
 
         public void OnRibbonButtonCheckClick(Office.IRibbonControl control, bool pressed)
         {
-            OnCommand(control.Id);
+            Globals.ThisAddIn.OnCommand(control.Id);
         }
 
         public void OnRibbonButtonClick(Office.IRibbonControl control)
         {
-            OnCommand(control.Id);
+            Globals.ThisAddIn.OnCommand(control.Id);
         }
 
         public string OnGetRibbonLabel(Office.IRibbonControl control)
         {
-            return GetCommandLabel(control.Id);
+            return Globals.ThisAddIn.GetCommandLabel(control.Id);
         }
 
         public void OnRibbonLoad(Office.IRibbonUI ribbonUI)
@@ -58,7 +58,7 @@ namespace $csprojectname$
 
         public Bitmap GetRibbonImage(Office.IRibbonControl control)
         {
-            var icon = GetCommandIcon(control.Id);
+            var icon = Globals.ThisAddIn.GetCommandIcon(control.Id);
             return icon != null ? icon.ToBitmap() : null;
         }
 

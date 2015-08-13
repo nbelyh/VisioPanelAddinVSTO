@@ -7,24 +7,21 @@ Imports System.Collections.Generic
 ''' 
 Public Class PanelManager
     Implements IDisposable
-    Private ReadOnly _addin As Addin
 
-    Public Sub New(addin As Addin)
-        _addin = addin
-
-        AddHandler _addin.Application.DocumentCreated, AddressOf OnDocumentListChanged
-        AddHandler _addin.Application.DocumentOpened, AddressOf OnDocumentListChanged
-        AddHandler _addin.Application.BeforeDocumentClose, AddressOf OnDocumentListChanged
+    Public Sub New()
+        AddHandler Globals.ThisAddIn.Application.DocumentCreated, AddressOf OnDocumentListChanged
+        AddHandler Globals.ThisAddIn.Application.DocumentOpened, AddressOf OnDocumentListChanged
+        AddHandler Globals.ThisAddIn.Application.BeforeDocumentClose, AddressOf OnDocumentListChanged
     End Sub
 
     Public Sub Dispose() Implements IDisposable.Dispose
-        RemoveHandler _addin.Application.DocumentCreated, AddressOf OnDocumentListChanged
-        RemoveHandler _addin.Application.DocumentOpened, AddressOf OnDocumentListChanged
-        RemoveHandler _addin.Application.BeforeDocumentClose, AddressOf OnDocumentListChanged
+        RemoveHandler Globals.ThisAddIn.Application.DocumentCreated, AddressOf OnDocumentListChanged
+        RemoveHandler Globals.ThisAddIn.Application.DocumentOpened, AddressOf OnDocumentListChanged
+        RemoveHandler Globals.ThisAddIn.Application.BeforeDocumentClose, AddressOf OnDocumentListChanged
     End Sub
 
     Private Sub OnDocumentListChanged(doc As Microsoft.Office.Interop.Visio.Document)
-        _addin.UpdateUI()
+        Globals.ThisAddIn.UpdateUI()
     End Sub
 
     Private ReadOnly _panelFrames As New Dictionary(Of Integer, PanelFrame)()
@@ -57,13 +54,13 @@ Public Class PanelManager
             _panelFrames.Remove(window.ID)
         End If
 
-        _addin.UpdateUI()
+        Globals.ThisAddIn.UpdateUI()
     End Sub
 
     Private Sub OnPanelFrameClosed(window As Microsoft.Office.Interop.Visio.Window)
         _panelFrames.Remove(window.ID)
 
-        _addin.UpdateUI()
+        Globals.ThisAddIn.UpdateUI()
     End Sub
 
     ''' 

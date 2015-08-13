@@ -8,7 +8,7 @@ Imports Microsoft.Office.Core
 ''' Creates and controls ribbon UI
 ''' 
 <ComVisible(True)> _
-Partial Public Class Addin
+Public Class AddinRibbon
     Implements IRibbonExtensibility
     Private _ribbon As Microsoft.Office.Core.IRibbonUI
 
@@ -23,23 +23,23 @@ Partial Public Class Addin
 #Region "Ribbon Callbacks"
 
     Public Function IsRibbonCommandEnabled(ctrl As Microsoft.Office.Core.IRibbonControl) As Boolean
-        Return IsCommandEnabled(ctrl.Id)
+        Return Globals.ThisAddIn.IsCommandEnabled(ctrl.Id)
     End Function
 
     Public Function IsRibbonCommandChecked(ctrl As Microsoft.Office.Core.IRibbonControl) As Boolean
-        Return IsCommandChecked(ctrl.Id)
+        Return Globals.ThisAddIn.IsCommandChecked(ctrl.Id)
     End Function
 
     Public Sub OnRibbonButtonCheckClick(control As Microsoft.Office.Core.IRibbonControl, pressed As Boolean)
-        OnCommand(control.Id)
+        Globals.ThisAddIn.OnCommand(control.Id)
     End Sub
 
     Public Sub OnRibbonButtonClick(control As Microsoft.Office.Core.IRibbonControl)
-        OnCommand(control.Id)
+        Globals.ThisAddIn.OnCommand(control.Id)
     End Sub
 
     Public Function OnGetRibbonLabel(control As Microsoft.Office.Core.IRibbonControl) As String
-        Return GetCommandLabel(control.Id)
+        Return Globals.ThisAddIn.GetCommandLabel(control.Id)
     End Function
 
     Public Sub OnRibbonLoad(ribbonUI As Microsoft.Office.Core.IRibbonUI)
@@ -47,7 +47,7 @@ Partial Public Class Addin
     End Sub
 
     Public Function GetRibbonImage(control As Microsoft.Office.Core.IRibbonControl) As Bitmap
-        Dim icon = GetCommandIcon(control.Id)
+        Dim icon = Globals.ThisAddIn.GetCommandIcon(control.Id)
         Return If(icon IsNot Nothing, icon.ToBitmap(), Nothing)
     End Function
 

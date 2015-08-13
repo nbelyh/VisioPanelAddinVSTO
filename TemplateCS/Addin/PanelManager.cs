@@ -10,27 +10,23 @@ namespace $csprojectname$
     /// 
     public class PanelManager : IDisposable
     {
-        private readonly Addin _addin;
-
-        public PanelManager(Addin addin)
+        public PanelManager()
         {
-            _addin = addin;
-
-            _addin.Application.DocumentCreated += OnDocumentListChanged;
-            _addin.Application.DocumentOpened += OnDocumentListChanged;
-            _addin.Application.BeforeDocumentClose += OnDocumentListChanged;
+            Globals.ThisAddIn.Application.DocumentCreated += OnDocumentListChanged;
+            Globals.ThisAddIn.Application.DocumentOpened += OnDocumentListChanged;
+            Globals.ThisAddIn.Application.BeforeDocumentClose += OnDocumentListChanged;
         }
 
         public void Dispose()
         {
-            _addin.Application.DocumentCreated -= OnDocumentListChanged;
-            _addin.Application.DocumentOpened -= OnDocumentListChanged;
-            _addin.Application.BeforeDocumentClose -= OnDocumentListChanged;
+            Globals.ThisAddIn.Application.DocumentCreated -= OnDocumentListChanged;
+            Globals.ThisAddIn.Application.DocumentOpened -= OnDocumentListChanged;
+            Globals.ThisAddIn.Application.BeforeDocumentClose -= OnDocumentListChanged;
         }
 
         private void OnDocumentListChanged(Visio.Document doc)
         {
-            _addin.UpdateUI();
+            Globals.ThisAddIn.UpdateUI();
         }
 
         private readonly Dictionary<int, PanelFrame> _panelFrames =
@@ -68,14 +64,14 @@ namespace $csprojectname$
                 _panelFrames.Remove(window.ID);
             }
 
-            _addin.UpdateUI();
+            Globals.ThisAddIn.UpdateUI();
         }
 
         private void OnPanelFrameClosed(Visio.Window window)
         {
             _panelFrames.Remove(window.ID);
 
-            _addin.UpdateUI();
+            Globals.ThisAddIn.UpdateUI();
         }
 
         /// <summary>

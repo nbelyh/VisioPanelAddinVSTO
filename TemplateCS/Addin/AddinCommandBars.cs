@@ -15,7 +15,7 @@ namespace $csprojectname$
     /// Creates and controls a custom command bar with buttons
     /// </summary>
     /// 
-    public partial class Addin
+    public class AddinCommandBars
     {
         private string _toolbarName;
 
@@ -27,18 +27,18 @@ namespace $csprojectname$
         /// </summary>
         /// <param name="toolbarName">The name of the toolbar to install</param>
         /// <param name="commands">The list of buttons to add (list of button ids)</param>
-        void StartupCommandBars(string toolbarName, IEnumerable<string> commands)
+        public void StartupCommandBars(string toolbarName, IEnumerable<string> commands)
         {
             _toolbarName = toolbarName;
             _commands.AddRange(commands);
 
-            Application.VisioIsIdle += ApplicationIdle;
+            Globals.ThisAddIn.Application.VisioIsIdle += ApplicationIdle;
             UpdateCommandBars();
         }
 
-        void ShutdownCommandBars()
+        public void ShutdownCommandBars()
         {
-            Application.VisioIsIdle -= ApplicationIdle;
+            Globals.ThisAddIn.Application.VisioIsIdle -= ApplicationIdle;
         }
 
         private bool _updateRequest;
@@ -68,7 +68,7 @@ namespace $csprojectname$
 
         private void UpdateToolbar()
         {
-            var cbs = (CommandBars)Application.CommandBars;
+            var cbs = (CommandBars)Globals.ThisAddIn.Application.CommandBars;
 
             var cb = FindCommandBar(cbs, _toolbarName) ?? cbs.Add(_toolbarName);
             cb.Visible = true;
@@ -93,13 +93,13 @@ namespace $csprojectname$
             var button = (CommandBarButton)cb.FindControl(Tag: id) ??
                 (CommandBarButton)cb.Controls.Add(MsoControlType.msoControlButton);
 
-            button.Enabled = IsCommandEnabled(id);
+            button.Enabled = Globals.ThisAddIn.IsCommandEnabled(id);
 
-            var checkState = IsCommandChecked(id);
+            var checkState = Globals.ThisAddIn.IsCommandChecked(id);
             button.State = checkState ? MsoButtonState.msoButtonDown : MsoButtonState.msoButtonUp;
 
             button.Tag = id;
-            button.Caption = GetCommandLabel(id);
+            button.Caption = Globals.ThisAddIn.GetCommandLabel(id);
             SetCommandBarButtonImage(button, id);
 
             button.Click += CommandBarButtonClicked;
@@ -109,12 +109,12 @@ namespace $csprojectname$
 
         private void CommandBarButtonClicked(CommandBarButton ctrl, ref bool cancelDefault)
         {
-            OnCommand(ctrl.Tag);
+            Globals.ThisAddIn.OnCommand(ctrl.Tag);
         }
 
         private void SetCommandBarButtonImage(CommandBarButton button, string id)
         {
-            var icon = GetCommandIcon(id);
+            var icon = Globals.ThisAddIn.GetCommandIcon(id);
             if (icon == null)
                 return;
 

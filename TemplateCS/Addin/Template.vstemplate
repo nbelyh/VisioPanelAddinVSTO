@@ -25,10 +25,9 @@
         <ProjectItem ReplaceParameters="false">TogglePanel.ico</ProjectItem>
         <ProjectItem ReplaceParameters="true">Ribbon.xml</ProjectItem>
       </Folder>
-      <ProjectItem ReplaceParameters="true">ThisAddin.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" OpenInEditor="true">ThisAddin.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true">ThisAddin.Designer.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true">ThisAddin.Designer.xml</ProjectItem>
-      <ProjectItem ReplaceParameters="true" OpenInEditor="true">Addin.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true">AddinCommandBars.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true">AddinRibbon.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true">PanelFrame.cs</ProjectItem>
