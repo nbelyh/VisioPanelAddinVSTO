@@ -83,23 +83,19 @@ Public Class ThisAddIn
         Return DirectCast(My.Resources.ResourceManager.GetObject(command), Icon)
     End Function
 	$endif$$if$ ($taskpane$ == true)
-#Region "Panel"
-
-    Private Sub TogglePanel()
+    Public Sub TogglePanel()
         _panelManager.TogglePanel(Application.ActiveWindow)
     End Sub
 
-    Private Function IsPanelEnabled() As Boolean
+    Public Function IsPanelEnabled() As Boolean
         Return Application IsNot Nothing AndAlso Application.ActiveWindow IsNot Nothing
     End Function
 
-    Private Function IsPanelVisible() As Boolean
+    Public Function IsPanelVisible() As Boolean
         Return Application IsNot Nothing AndAlso _panelManager.IsPanelOpened(Application.ActiveWindow)
     End Function
 
     Private _panelManager As PanelManager
-
-#End Region
 	$endif$
 	$if$ ($taskpaneORui$ == true)
     Sub UpdateUI()
@@ -109,8 +105,7 @@ Public Class ThisAddIn
     End Sub
     $endif$
     Private Sub ThisAddIn_Startup() Handles Me.Startup
-    $if$ ($taskpane$ == true)
-        _panelManager = New PanelManager()
+        $if$ ($taskpane$ == true)_panelManager = New PanelManager()
 		$endif$$if$ ($ribbonANDcommandbars$ == true)Dim version = Integer.Parse(Application.Version, NumberStyles.AllowDecimalPoint)
         If (version < 14) Then
 			$endif$$if$ ($commandbars$ == true)_addinCommandBars.StartupCommandBars("$csprojectname$", New String() {"Command1", "Command2"$endif$$if$ ($commandbarsANDtaskpane$ == true), "TogglePanel"$endif$$if$ ($commandbars$ == true)})

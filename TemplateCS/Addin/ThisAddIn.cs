@@ -95,24 +95,22 @@ namespace $csprojectname$
             return (Icon)Resources.ResourceManager.GetObject(command);
         }
         $endif$$if$ ($taskpane$ == true)
-        #region Panel
-        private void TogglePanel()
+        public void TogglePanel()
         {
             _panelManager.TogglePanel(Application.ActiveWindow);
         }
 
-        private bool IsPanelEnabled()
+        public bool IsPanelEnabled()
         {
             return Application != null && Application.ActiveWindow != null;
         }
 
-        private bool IsPanelVisible()
+        public bool IsPanelVisible()
         {
             return Application != null && _panelManager.IsPanelOpened(Application.ActiveWindow);
         }
         
         private PanelManager _panelManager;
-        #endregion
         $endif$
         $if$ ($taskpaneORui$ == true)
         internal void UpdateUI()
@@ -123,8 +121,7 @@ namespace $csprojectname$
         $endif$
         private void ThisAddIn_Startup(object sender, EventArgs e)
         {
-            $if$ ($taskpane$ == true)
-            _panelManager = new PanelManager();
+            $if$ ($taskpane$ == true)_panelManager = new PanelManager();
             $endif$$if$ ($ribbonANDcommandbars$ == true)var version = int.Parse(Application.Version, NumberStyles.AllowDecimalPoint);
             if (version < 14)
                 $endif$$if$ ($commandbars$ == true)_addinCommandBars.StartupCommandBars("$csprojectname$", new[] { "Command1", "Command2" $endif$$if$ ($commandbarsANDtaskpane$ == true) , "TogglePanel"$endif$$if$ ($commandbars$ == true)});
