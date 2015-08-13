@@ -1,18 +1,18 @@
 ﻿Public Class ThisAddIn
 
-    Private ReadOnly _addin As Addin = New Addin()
-
+    $if$ ($taskpaneORui$ == true)Private ReadOnly _addin As Addin = New Addin()
+    $endif$
     $if$ ($ribbon$ == true)
     Protected Overrides Function CreateRibbonExtensibilityObject() As Office.IRibbonExtensibility
         Return _addin
     End Function
     $endif$
     Private Sub ThisAddIn_Startup() Handles Me.Startup
-        _addin.Startup(Application)
-    End Sub
+        $if$ ($taskpaneORui$ == true)_addin.Startup(Application)
+    $endif$End Sub
 
     Private Sub ThisAddIn_Shutdown() Handles Me.Shutdown
-        _addin.Shutdown()
-    End Sub
+        $if$ ($taskpaneORui$ == true)_addin.Shutdown()
+    $endif$End Sub
 
 End Class

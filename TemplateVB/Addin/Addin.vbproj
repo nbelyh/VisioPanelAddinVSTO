@@ -136,8 +136,8 @@
       <DependentUpon>Application.myapp</DependentUpon>
     </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
-    <Compile Include="Addin.vb" />
-  </ItemGroup>
+    $if$ ($taskpaneORui$ == true)<Compile Include="Addin.vb" />
+  $endif$</ItemGroup>
   $if$ ($taskpane$ == true)
   <ItemGroup>
     <Compile Include="TheForm.vb">

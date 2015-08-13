@@ -5,8 +5,8 @@ namespace $csprojectname$
 {
     public partial class ThisAddIn
     {
-        private readonly Addin _addin = new Addin();
-        $if$ ($ribbon$ == true)
+        $if$ ($taskpaneORui$ == true)private readonly Addin _addin = new Addin();
+        $endif$$if$ ($ribbon$ == true)
         protected override Office.IRibbonExtensibility CreateRibbonExtensibilityObject()
         {
             return _addin;
@@ -14,12 +14,12 @@ namespace $csprojectname$
         $endif$
         private void ThisAddIn_Startup(object sender, EventArgs e)
         {
-            _addin.Startup(Application);
+            $if$ ($taskpaneORui$ == true)_addin.Startup(Application);$endif$
         }
 
         private void ThisAddIn_Shutdown(object sender, EventArgs e)
         {
-            _addin.Shutdown();
+            $if$ ($taskpaneORui$ == true)_addin.Shutdown();$endif$
         }
         
         #region VSTO generated code
