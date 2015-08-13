@@ -123,6 +123,9 @@
   <metadata name="licenseFileDialog.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>147, 17</value>
   </metadata>
+  <data name="label1.Text" xml:space="preserve">
+    <value>XML option provides more flexibility for adnvacned user interface features (enabled/disabled ribbon items, hide/show items, localization, dynamic images, and so on) overcoming the limitations of the visual designer. But you'll have to define the ribbon with xml if you choose this option.</value>
+  </data>
   <data name="checkAddinProjectDescription.Text" xml:space="preserve">
     <value>Create a Visio Addin project. If you skip then you can create installer project to install Visio files. Note that you should have VSTO (Visual Studio Tools for Office) installed. You can download it for free from the Microsoft download website.</value>
   </data>
