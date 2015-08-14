@@ -62,10 +62,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
-    <Reference Include="wix, Version=3.0.0.0, Culture=neutral, PublicKeyToken=ce35f76fcda82bad, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files (x86)\WiX Toolset v3.6\bin\wix.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="wix">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\WiX Toolset v3.8\bin\wix.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -87,7 +85,9 @@
     <Exec Command="&quot;%WIX%\SDK\MsgGen.exe&quot; Data\Messages.xml Data\Messages.cs" />
   </Target>
   <Target Name="AfterBuild">
-    <Copy SourceFiles="$(SolutionDir)\$(Configuration)\VisioWixExtension.dll" DestinationFiles="$(SolutionDir)\Template\build\VisioWixExtension.dll" />
-    <Copy SourceFiles="Xsd\VisioWixExtension.xsd" DestinationFiles="$(SolutionDir)\Template\build\VisioWixExtension.xsd" />
+    <Copy SourceFiles="$(SolutionDir)\$(Configuration)\VisioWixExtension.dll" DestinationFiles="$(SolutionDir)\TemplateCS\Setup\build\VisioWixExtension.dll" />
+    <Copy SourceFiles="Xsd\VisioWixExtension.xsd" DestinationFiles="$(SolutionDir)\TemplateCS\Setup\build\VisioWixExtension.xsd" />
+    <Copy SourceFiles="$(SolutionDir)\$(Configuration)\VisioWixExtension.dll" DestinationFiles="$(SolutionDir)\TemplateVB\Setup\build\VisioWixExtension.dll" />
+    <Copy SourceFiles="Xsd\VisioWixExtension.xsd" DestinationFiles="$(SolutionDir)\TemplateVB\Setup\build\VisioWixExtension.xsd" />
   </Target>
 </Project>
