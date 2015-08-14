@@ -16,6 +16,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VisioCustomActions", "Visio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisioWixExtension", "VisioWixExtension\wixext\VisioWixExtension.csproj", "{814CBD03-4FFB-471A-AAF4-F5E04ADEE783}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WixExtension", "WixExtension", "{25387522-997C-4E2F-AB8A-90F1E1754FFF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -127,5 +129,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{814CBD03-4FFB-471A-AAF4-F5E04ADEE783} = {25387522-997C-4E2F-AB8A-90F1E1754FFF}
+		{554A8562-462B-4F2F-9947-CD9728F73F6B} = {25387522-997C-4E2F-AB8A-90F1E1754FFF}
+		{48663322-5C06-477B-9591-7A80E3F09EE2} = {25387522-997C-4E2F-AB8A-90F1E1754FFF}
 	EndGlobalSection
 EndGlobal
