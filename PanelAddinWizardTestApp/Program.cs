@@ -8,12 +8,12 @@ namespace PanelAddinWizardTestApp
     {
         public bool IsWixInstalled()
         {
-            return false;
+            return true;
         }
 
         public bool IsVstoInstalled()
         {
-            return false;
+            return true;
         }
 
         public void OpenExternalLink(ExternalLink link)
