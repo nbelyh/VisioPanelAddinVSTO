@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright (c) Microsoft Corporation.  All rights reserved.
+    
+    The use and distribution terms for this software are covered by the
+    Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
+    which can be found in the file CPL.TXT at the root of this distribution.
+    By using this software in any fashion, you are agreeing to be bound by
+    the terms of this license.
+    
+    You must not remove this notice, or any other, from this software.
+
+    The messages for the Windows Installer XML Toolset Visio Extension.
+-->
+<Messages Namespace="VisioWixExtension" Resources="Data.Messages" xmlns="http://schemas.microsoft.com/genmsgs/2004/07/messages">
+
+  <Class Name="VisioErrors" ContainerName="VisioErrorEventArgs" BaseContainerName="WixErrorEventArgs">
+
+    <Message Id="InvalidVisioEdition" Number="6501">
+      <Instance>
+        Invalid Visio edition specified: "{0}". The Visio Edition should be either "x86" or "x64"
+        If you want to publish for all platforms, then just omit this attribute.
+        <Parameter Type="System.String" Name="value" />
+      </Instance>
+    </Message>
+
+    <Message Id="InvalidLanguage" Number="6502">
+      <Instance>
+        Invalid language specifid: "{0}". 
+        The language should be either LCID, such as "1033" or language code, such as "en-us".
+        <Parameter Type="System.String" Name="value" />
+      </Instance>
+    </Message>
+
+    <Message Id="InvalidUint" Number="6503">
+      <Instance>
+        Invalid value for {0} specifid: "{1}". 
+        The value should be non-negative integer.
+        <Parameter Type="System.String" Name="attributeName" />
+        <Parameter Type="System.String" Name="value" />
+      </Instance>
+    </Message>
+
+    <Message Id="UsingPublish" Number="6508">
+      <Instance>
+        Please use typed element instead of &lt;Publis&lt;: &lt;PublishStencil&gt;, &lt;PublishTemplate&gt;, &lt;PublishAddon&gt;, &lt;PublishHelp&gt;
+      </Instance>
+    </Message>
+    
+  </Class>
+
+  <Class Name="VisioWarnings" ContainerName="VisioWarningEventArgs" BaseContainerName="WixWarningEventArgs">
+
+    <Message Id="InvalidFileExtension" Number="6507">
+      <Instance>
+        Possibly invalid parent Visio file extension: "{0}". 
+        The parent file is expected to be a {1} file.
+        <Parameter Type="System.String" Name="fileName" />
+        <Parameter Type="System.String" Name="expectedVisioContentType" />
+      </Instance>
+    </Message>
+
+  </Class>
+  
+</Messages>

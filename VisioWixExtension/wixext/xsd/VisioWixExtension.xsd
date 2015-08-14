@@ -1,0 +1,629 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:html="http://www.w3.org/1999/xhtml"
+            xmlns:wix="http://schemas.microsoft.com/wix/2006/wi"
+             xmlns:xs="http://www.w3.org/2001/XMLSchema"
+            xmlns:xse="http://schemas.microsoft.com/wix/2005/XmlSchemaExtension"
+      targetNamespace="http://schemas.microsoft.com/wix/Visio"
+                xmlns="http://schemas.microsoft.com/wix/Visio">
+  <xs:annotation>
+    <xs:documentation>
+      Copyright (c) 2013 Nikolay Bleykh nbelyh@gmail.com
+    </xs:documentation>
+  </xs:annotation>
+
+  <xs:import namespace="http://schemas.microsoft.com/wix/2006/wi" />
+
+  
+  <xs:element name="PublishStencil">
+    <xs:annotation>
+      <xs:appinfo>
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="File" />
+      </xs:appinfo>
+      <xs:documentation>
+        Registers a stencil file for Microsoft Visio.
+      </xs:documentation>
+    </xs:annotation>
+
+    <xs:complexType>
+      <xs:attribute name="Visio2003" type="wix:YesNoType" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+            Install for Visio 2003 and below. By default is "no".
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="Visio2007" type="wix:YesNoType" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+            Install for Visio 2007. By default is "yes" if file format is supported by Visio 2007.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="Visio2010" type="wix:YesNoType" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+            Install for Visio 2010. By default is "yes" if file format is supported by Visio 2010.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="Visio2013" type="wix:YesNoType" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+            Install for Visio 2013. By default is "yes" if file format is supported by Visio 2013.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="VisioEdition" type="VisioEditionType" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+            Specifies Visio Edition the item should be registered with (x32/x64)
+            If not specified, then then the stencil is registered for both Visio x32 and Visio x64
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="Language" type="xs:string" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+            Specifies language the stencil should be registered with. You can specify either LCID, such as "1033" or language code, such as "en-us".
+            If not specified, publishing will be done in all languages.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="MenuPath" type="xs:string" use="required">
+        <xs:annotation>
+          <xs:documentation>
+            The MenuPath specifies where the stencil is displayed in the stencils menu tree.
+            If this value is an empty string, the template or stencil is not displayed in the menus.
+            If an underscore character (_) comes before any name in the menu path, the template is not displayed in the menus.
+
+            The last portion of the menu path is also used in the file name in the Visio user interface. For 
+            For stencils, the file name is displayed in the title bar of the stencil.
+
+            Use backslash to separate levels, for example: "My Group\My Stencil".
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="AltNames" type="xs:string" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+            A semicolon-delimited list of alternate names for the file.
+            If this value is specified, the value overrides any alternate names that are stored in
+            the file by the AlternateNames property of the Document object
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="QuickShapeCount" type="xs:integer" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+            Specifies number of quick shapes. By default (if no specified) is 0.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+    </xs:complexType>
+  </xs:element>
+  
+  
+  <xs:element name="PublishTemplate">
+    <xs:annotation>
+      <xs:appinfo>
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="File" />
+      </xs:appinfo>
+      <xs:documentation>
+        Registers a template file for Microsoft Visio.
+      </xs:documentation>
+    </xs:annotation>
+
+    <xs:complexType>
+      <xs:attribute name="Visio2003" type="wix:YesNoType" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+            Install for Visio 2003 and below. By default is "no".
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="Visio2007" type="wix:YesNoType" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+            Install for Visio 2007. By default is "yes" if file format is supported by Visio 2007.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="Visio2010" type="wix:YesNoType" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+            Install for Visio 2010. By default is "yes" if file format is supported by Visio 2010.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="Visio2013" type="wix:YesNoType" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+            Install for Visio 2013. By default is "yes" if file format is supported by Visio 2013.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="VisioEdition" type="VisioEditionType" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+            Specifies Visio Edition the item should be registered with (x32/x64)
+            If not specified, then then the template is registered for both Visio x32 and Visio x64
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="Language" type="xs:string" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+            Specifies language the template should be registered with. You can specify either LCID, such as "1033" or language code, such as "en-us".
+            If not specified, publishing will be done in all languages.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="MenuPath" type="xs:string" use="required">
+        <xs:annotation>
+          <xs:documentation>
+            The MenuPath specifies where the template is displayed in the templates menu tree and in the Choose Drawing Type task pane.
+            If this value is an empty string, the template is not displayed in the menus.
+            If an underscore character (_) comes before any name in the menu path, the template is not displayed in the menus.
+
+            The last portion of the menu path is also used in the file name in the Visio user interface. 
+            For templates, the file name is displayed in the most-recently used templates list.
+            
+            Use backslash to separate between levels, for example: "My Group\My Template".
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="AltNames" type="xs:string" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+            A semicolon-delimited list of alternate names for the file. 
+            If this value is specified, the value overrides any alternate names that are stored in 
+            the file by the AlternateNames property of the Document object
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="FeaturedTemplate" type="wix:YesNoType" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+            For Visio 2003/2007, specifies if the template should be shown on the start page.
+            Does not have any effect for Visio 2010 and later (the template is always shown on the start page).
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+    </xs:complexType>
+  </xs:element>
+
+  
+  <xs:element name="PublishAddon">
+    <xs:annotation>
+      <xs:appinfo>
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="File" />
+      </xs:appinfo>
+      <xs:documentation>
+        Registers an addon EXE/VSL addon for Microsoft Visio.
+      </xs:documentation>
+    </xs:annotation>
+
+    <xs:complexType>
+      <xs:attribute name="Visio2003" type="wix:YesNoType" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+            Install for Visio 2003 and below. By default is "no".
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="Visio2007" type="wix:YesNoType" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+            Install for Visio 2007. By default is "yes" if file format is supported by Visio 2007.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="Visio2010" type="wix:YesNoType" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+            Install for Visio 2010. By default is "yes" if file format is supported by Visio 2010.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="Visio2013" type="wix:YesNoType" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+            Install for Visio 2013. By default is "yes" if file format is supported by Visio 2013.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="VisioEdition" type="VisioEditionType" use="required">
+        <xs:annotation>
+          <xs:documentation>
+            Specifies Visio Edition the item should be registered with (x32/x64)
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="Language" type="xs:string" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+            Specifies language the VSL should be registered with. You can specify either LCID, such as "1033" or language code, such as "en-us".
+            If not specified, publishing will be done in all languages.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="MenuPath" type="xs:string" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+            The Menu-Path describes where the add-on is displayed in the add-ons menu tree.
+
+            If this value is an empty string, the add-on is not displayed in the menus.
+            If an underscore (_) comes before any name in the menu path, the add-on is not displayed in the menus.
+            
+            Use backslash to separate between levels, for example: "My Group\My Addon".
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="Ordinal" type="xs:positiveInteger" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+            Specifies the ordinal position of an add-on that is implemented as a Visio solution library file (VSL). 
+            Determines the middle part (between the two backslashes) of the entry in the Qualifier column for the record in the MSI PublishComponent table for this add-on. 
+            Also corresponds to the value of VAO_ORDINAL in the file VAO.H. (For more information about VAO.H, see the comments in the file VAO.H in the Visio SDK.) Cannot be zero. 
+            This value is ignored for EXE add-ons.
+
+            The value that you specify must correlate with what the add-on itself publishes as its ordinal value. Visio uses this number to reference the add-on in its VSL file; 
+            if the number that you specify here does not match what is programmatically set in the code, the add-on will not be able to be run, or the wrong add-on might be run.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="LocalizedName" type="xs:string" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+            The localized name of the add-on.
+            This name is displayed in locations in the Visio interface that lists add-ons.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      
+      <xs:attribute name="UniversalName" type="xs:string" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+            The non-localized name of the add-on. 
+            This name is not displayed in the Visio interface but may appear in the ShapeSheet when 
+            used with the RUNADDON() and RUNADDONWARGS ShapeSheet functions. This name is used to call an add-on from code. 
+            Executable add-ons must be published to use this field because they cannot be queried at runtime.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="PerformsActions" type="wix:YesNoType" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+            Indicates whether the add-on does anything (performs any actions) when the Run method is called on it. Unlike COM add-ins, 
+            add-ons can perform actions when the Run method is called, and not only when they are loaded or unloaded. 
+            If you use the library files Vaddon.h and Vaddon.cpp when you create your add-on, 
+            this attribute determines whether the Run method is ever called (whether Visio sends the V2LMSG_RUN message, defined in Vaddon.h).
+            For most add-ons, this option should be selected. 
+            Executable (EXE) add-ons will not run unless it is selected. 
+            VSL add-ons can perform actions on load or unload and do not require that the Run method ever be called on them, 
+            but in that case, they provide no advantages in that regard over COM add-ins.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      
+      <xs:attribute name="HasAboutBox" type="wix:YesNoType" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+            Specifies that a message box or dialog box appears when the user clicks About in the Run Add-On dialog box. 
+            If this option is selected, Visio sends the V2LMSG_RUNABOUT message to the add-on and makes the About button available when the 
+            add-on is selected in the Select add-on list in the Run Add-on dialog box. If you use the library files Vaddon.h and Vaddon.cpp 
+            when you create your add-on, this attribute determines whether the About method is ever called.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="ProvidesHelp" type="wix:YesNoType" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+            Specifies that add-on specific Help appears when the user presses CTRL and clicks Help in the Run Add-On dialog box. 
+            If this option is selected, Visio sends the V2LMSG_RUNHELP message to the add-on. If you use the library files Vaddon.h and Vaddon.cpp 
+            when you create your add-on, this attribute determines whether the Help method is ever called.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      
+      <xs:attribute name="DisplayWaitCursor" type="wix:YesNoType" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+            Specifies whether Visio displays the "working in background" cursor whenever the add-on is called
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="HideInUI" type="wix:YesNoType" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+            Specifies whether add-on name appears on Visio menus, on the list of add-ons in the Run Add-On dialog box,
+            and in the Run macro list on the Double-Click tab of the Behavior dialog box (Developer tab).
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      
+      <xs:attribute name="InvokeOnStartup" type="wix:YesNoType" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+            Specifies whether the add-on starts when Visio starts. If not selected, the add-on starts only when the user runs it from the Visio UI.
+            Applies to both VSL and EXE add-ons.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="EnablingPolicy" type="EnablingPolicyType" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+            Options that specify when the Microsoft Visio 2013 commands that run the add-on are available to the user.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="StaticEnableConditions" type="StaticEnableConditionsType" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+            Enable conditions that Visio must check to determine whether to make commands that run the add-on available to the user. 
+            These options are available only if "Statically enabled" or "Statically then dynamically enabled" is selected for Add-on enabling policy.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+    </xs:complexType>
+  </xs:element>
+
+
+  <xs:element name="PublishHelpFile">
+    <xs:annotation>
+      <xs:appinfo>
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="File" />
+      </xs:appinfo>
+      <xs:documentation>
+        Specifies the information to be published to the Registry for Microsoft Visio Help files.
+      </xs:documentation>
+    </xs:annotation>
+
+    <xs:complexType>
+      <xs:attribute name="Visio2003" type="wix:YesNoType" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+            Install for Visio 2003 and below. By default is "no".
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="Visio2007" type="wix:YesNoType" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+            Install for Visio 2007. By default is "yes" if file format is supported by Visio 2007.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="Visio2010" type="wix:YesNoType" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+            Install for Visio 2010. By default is "yes" if file format is supported by Visio 2010.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="Visio2013" type="wix:YesNoType" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+            Install for Visio 2013. By default is "yes" if file format is supported by Visio 2013.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="VisioEdition" type="VisioEditionType" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+            Specifies Visio Edition the item should be registered with (x32/x64)
+            If not specified, then then the template is registered for both Visio x32 and Visio x64
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="Language" type="xs:string" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+            Specifies language the template should be registered with. You can specify either LCID, such as "1033" or language code, such as "en-us".
+            If not specified, publishing will be done in all languages.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+    </xs:complexType>
+  </xs:element>
+
+  
+  <xs:simpleType name="VisioEditionType">
+    <xs:annotation>
+      <xs:documentation>Values of this type could be "x32" or "x64"</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base='xs:NMTOKEN'>
+      <xs:enumeration value="x86"/>
+      <xs:enumeration value="x64"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="EnablingPolicyType">
+    <xs:restriction base='xs:NMTOKEN'>
+      
+      <xs:enumeration value="AlwaysEnabled">
+        <xs:annotation>
+          <xs:documentation>
+            Specifies that the commands that run the add-on are always enabled
+          </xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      
+      <xs:enumeration value="DynamicallyEnabled">
+        <xs:annotation>
+          <xs:documentation>
+            Specifies that before it enables the commands that run the add-on, 
+            Visio must query the add-on to determine whether the enable conditions set by the add-on are met
+          </xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+
+      <xs:enumeration value="StaticallyEnabled">
+        <xs:annotation>
+          <xs:documentation>
+            Specifies that before it enables the commands that run the add-on, 
+            Visio must validate that the selected static enable conditions for the add-on are met
+          </xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+
+      <xs:enumeration value="StaticallyThenDynamicallyEnabled">
+        <xs:annotation>
+          <xs:documentation>
+            Specifies that after first validating the selected static enable conditions, 
+            and before enabling commands that run the add-on, Visio must query the add-on to determine 
+            whether the additional enable conditions set by the add-on are met.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="StaticEnableConditionsType">
+    <xs:restriction base='xs:NMTOKEN'>
+
+      <xs:enumeration value="Document">
+        <xs:annotation>
+          <xs:documentation>
+            Specifies that a document must be open in a document window in Visio
+          </xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+
+      <xs:enumeration value="DocumentWindow">
+        <xs:annotation>
+          <xs:documentation>
+            Specifies that a document must be open in a drawing window in Visio
+          </xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+
+      <xs:enumeration value="DrawingWindow">
+        <xs:annotation>
+          <xs:documentation>
+            Specifies that a document must be open in a drawing window in Visio
+          </xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+
+      <xs:enumeration value="PageWindow">
+        <xs:annotation>
+          <xs:documentation>
+            Specifies that a document must be open in a drawing window in Visio, 
+            and that the window must contain a drawing page
+          </xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+
+      <xs:enumeration value="MasterWindow">
+        <xs:annotation>
+          <xs:documentation>
+            Specifies that a document must be open in a drawing window in Visio, 
+            and that the target of the window must be a master
+          </xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+
+      <xs:enumeration value="StencilWindow">
+        <xs:annotation>
+          <xs:documentation>
+            Specifies that a document must be open in a stencil window in Visio
+          </xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+
+      <xs:enumeration value="SheetWindow">
+        <xs:annotation>
+          <xs:documentation>
+            Specifies that a document must be open in a ShapeSheet window in Visio.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+
+      <xs:enumeration value="IconWindow">
+        <xs:annotation>
+          <xs:documentation>
+            Specifies that a document must be open in an icon window in Visio.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+
+      <xs:enumeration value="TargetContext">
+        <xs:annotation>
+          <xs:documentation>
+            Specifies that a document must be open in Visio, 
+            and that the document must have a page as its target.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+
+      <xs:enumeration value="TargetContextPage">
+        <xs:annotation>
+          <xs:documentation>
+            Specifies that a document must be open in Visio, 
+            and that the document must have a page as its target
+          </xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+
+      <xs:enumeration value="TargetContextMaster">
+        <xs:annotation>
+          <xs:documentation>
+            Specifies that a document must be open in Visio, 
+            and that the document must have a master as its target
+          </xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+
+      <xs:enumeration value="TargetContextSelection">
+        <xs:annotation>
+          <xs:documentation>
+            Specifies that a document must be open in Visio, 
+            and that the document must have a selection of shapes as its target
+          </xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+
+    </xs:restriction>
+  </xs:simpleType>
+  
+</xs:schema>
