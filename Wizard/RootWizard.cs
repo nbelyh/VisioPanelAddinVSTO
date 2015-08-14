@@ -325,7 +325,7 @@ namespace PanelAddinWizard
                     return "http://wixtoolset.org/documentation/manual/v3/wixui/wixui_dialog_library.html";
 
                 case ExternalLink.WixDownload:
-                    return "http://wixtoolset.org/";
+                    return "http://wixtoolset.org/releases/";
 
                 case ExternalLink.VstoDownload:
                 {
