@@ -110,13 +110,15 @@
     <Compile Include="PanelFrame.cs" />
     <Compile Include="PanelManager.cs" />
   </ItemGroup>
-  $endif$
-  $if$ ($taskpaneANDui$ == true)
+  $endif$$if$ ($taskpaneANDui$ == true)
   <ItemGroup>
-    <Content Include="Resources\TogglePanel.ico" />
+    <Content Include="Resources\TogglePanel.png" />
   </ItemGroup>
-  $endif$
-  $if$ ($ui$ == true)
+  $endif$ $if$ ($commandbarsANDtaskpane$ == true)
+  <ItemGroup>
+    <Content Include="Resources\TogglePanel_sm.png" />
+  </ItemGroup>
+  $endif$ $if$ ($ui$ == true)
   <ItemGroup>
     <Compile Include="Properties\Resources.Designer.cs">
       <DependentUpon>Resources.resx</DependentUpon>
@@ -127,11 +129,18 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Content Include="Resources\Command1.ico" />
-    <Content Include="Resources\Command2.ico" />
   </ItemGroup>
-  $endif$
-  $if$ ($ribbon$ == true)
+  $endif$ $if$ ($ribbon$ == true)
+  <ItemGroup>
+    <Content Include="Resources\Command1.png" />
+    <Content Include="Resources\Command2.png" />
+  </ItemGroup>
+  $endif$ $if$ ($commandbars$ == true)
+  <ItemGroup>
+    <Content Include="Resources\Command1_sm.png" />
+    <Content Include="Resources\Command2_sm.png" />
+  </ItemGroup>
+  $endif$$if$ ($ribbon$ == true)
   <ItemGroup>
     <Compile Include="AddinRibbon.cs" />
     <Content Include="Resources\Ribbon.xml" />

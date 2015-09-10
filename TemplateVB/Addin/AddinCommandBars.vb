@@ -93,16 +93,14 @@ Partial Public Class AddinCommandBars
     End Sub
 
     Private Sub SetCommandBarButtonImage(button As CommandBarButton, id As String)
-        Dim icon = Globals.ThisAddIn.GetCommandIcon(id)
-        If icon Is Nothing Then
+        Dim image = Globals.ThisAddIn.GetCommandBitmap(id & "_sm")
+        If image Is Nothing Then
             Return
         End If
 
-        Dim smallIcon = New Icon(icon, New Size(16, 16))
-
         Dim picture As Bitmap = Nothing
         Dim mask As Bitmap = Nothing
-        BitmapToPictureAndMask(smallIcon.ToBitmap(), picture, mask)
+        BitmapToPictureAndMask(image, picture, mask)
 
         button.Picture = PictureConvert.ImageToPictureDisp(picture)
         button.Mask = PictureConvert.ImageToPictureDisp(mask)

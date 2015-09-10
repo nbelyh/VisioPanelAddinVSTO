@@ -79,8 +79,8 @@ Public Class ThisAddIn
     ''' Returns a icon associated with given command.
     ''' We assume for simplicity that icon ids are named after command commandId.
     ''' 
-    Public Function GetCommandIcon(command As String) As Icon
-        Return DirectCast(My.Resources.ResourceManager.GetObject(command), Icon)
+    Public Function GetCommandBitmap(command As String) As Bitmap
+        Return DirectCast(My.Resources.ResourceManager.GetObject(command), Bitmap)
     End Function
 	$endif$$if$ ($taskpane$ == true)
     Public Sub TogglePanel()

@@ -87,12 +87,12 @@ namespace $csprojectname$
         }
 
         /// <summary>
-        /// Returns a icon associated with given command.
-        /// We assume for simplicity that icon ids are named after command commandId.
+        /// Returns a bitmap associated with given command.
+        /// We assume for simplicity that bitmap ids are named after command id.
         /// </summary>
-        public Icon GetCommandIcon(string command)
+        public Bitmap GetCommandBitmap(string id)
         {
-            return (Icon)Resources.ResourceManager.GetObject(command);
+            return (Bitmap)Resources.ResourceManager.GetObject(id);
         }
         $endif$$if$ ($taskpane$ == true)
         public void TogglePanel()

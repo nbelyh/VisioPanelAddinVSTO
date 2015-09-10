@@ -59,7 +59,7 @@ Namespace My.Resources
                 resourceCulture = value
             End Set
         End Property
-  $if$ ($ui$ == true)
+        $if$ ($ui$ == true)
         '''<summary>
         '''  Looks up a localized string similar to command 1.
         '''</summary>
@@ -77,35 +77,54 @@ Namespace My.Resources
                 Return ResourceManager.GetString("Command2_Label", resourceCulture)
             End Get
         End Property
-        
+        $endif$ $if$ ($ribbon$ == true)
         '''<summary>
-        '''  Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        '''  Looks up a localized resource of type System.Drawing.Bitmap similar to (Bitmap).
         '''</summary>
-        Friend ReadOnly Property Command1() As System.Drawing.Icon
+        Friend ReadOnly Property Command1() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("Command1", resourceCulture)
-                Return CType(obj,System.Drawing.Icon)
+                Return CType(obj, System.Drawing.Bitmap)
             End Get
         End Property
-        
+
         '''<summary>
-        '''  Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        '''  Looks up a localized resource of type System.Drawing.Bitmap similar to (Bitmap).
         '''</summary>
-        Friend ReadOnly Property Command2() As System.Drawing.Icon
+        Friend ReadOnly Property Command2() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("Command2", resourceCulture)
-                Return CType(obj,System.Drawing.Icon)
+                Return CType(obj, System.Drawing.Bitmap)
             End Get
         End Property
-  $endif$
-  $if$ ($taskpaneANDui$ == true)
+        $endif$ $if$ ($commandbars$ == true)
         '''<summary>
-        '''  Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        '''  Looks up a localized resource of type System.Drawing.Bitmap similar to (Bitmap).
         '''</summary>
-        Friend ReadOnly Property TogglePanel() As System.Drawing.Icon
+        Friend ReadOnly Property Command1_sm() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("Command1_sm", resourceCulture)
+                Return CType(obj, System.Drawing.Bitmap)
+            End Get
+        End Property
+
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap similar to (Bitmap).
+        '''</summary>
+        Friend ReadOnly Property Command2_sm() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("Command2_sm", resourceCulture)
+                Return CType(obj, System.Drawing.Bitmap)
+            End Get
+        End Property
+        $endif$ $if$ ($taskpaneANDui$ == true)
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap similar to (Bitmap).
+        '''</summary>
+        Friend ReadOnly Property TogglePanel() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("TogglePanel", resourceCulture)
-                Return CType(obj,System.Drawing.Icon)
+                Return CType(obj, System.Drawing.Bitmap)
             End Get
         End Property
 
@@ -117,8 +136,17 @@ Namespace My.Resources
                 Return ResourceManager.GetString("TogglePanel_Label", resourceCulture)
             End Get
         End Property
-  		$endif$
-        $if$ ($ribbon$ == true)
+        $endif$ $if$ ($commandbarsANDtaskpane$ == true)
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap similar to (Bitmap).
+        '''</summary>
+        Friend ReadOnly Property TogglePanel_sm() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("TogglePanel_sm", resourceCulture)
+                Return CType(obj, System.Drawing.Bitmap)
+            End Get
+        End Property
+  		$endif$ $if$ ($ribbon$ == true)
         '''<summary>
         '''  Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
         '''&lt;customUI xmlns=&quot;http://schemas.microsoft.com/office/2009/07/customui&quot; onLoad=&quot;OnRibbonLoad&quot;&gt;

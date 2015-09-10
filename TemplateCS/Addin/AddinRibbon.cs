@@ -58,8 +58,7 @@ namespace $csprojectname$
 
         public Bitmap GetRibbonImage(Office.IRibbonControl control)
         {
-            var icon = Globals.ThisAddIn.GetCommandIcon(control.Id);
-            return icon != null ? icon.ToBitmap() : null;
+            return Globals.ThisAddIn.GetCommandBitmap(control.Id);
         }
 
         #endregion

@@ -114,14 +114,12 @@ namespace $csprojectname$
 
         private void SetCommandBarButtonImage(CommandBarButton button, string id)
         {
-            var icon = Globals.ThisAddIn.GetCommandIcon(id);
-            if (icon == null)
+            var image= Globals.ThisAddIn.GetCommandBitmap(id + "_sm");
+            if (image == null)
                 return;
 
-            var smallIcon = new Icon(icon, new Size(16, 16));
-
             Bitmap picture, mask;
-            BitmapToPictureAndMask(smallIcon.ToBitmap(), out picture, out mask);
+            BitmapToPictureAndMask(image, out picture, out mask);
 
             button.Picture = PictureConvert.ImageToPictureDisp(picture);
             button.Mask = PictureConvert.ImageToPictureDisp(mask);

@@ -47,6 +47,12 @@
   <ItemGroup>
     <Content Include="Addin\Addin.csproj" />
     <Content Include="Addin\AddinCommandBars.cs" />
+    <Content Include="Addin\Resources\Command1.png" />
+    <Content Include="Addin\Resources\Command1_sm.png" />
+    <Content Include="Addin\Resources\Command2.png" />
+    <Content Include="Addin\Resources\Command2_sm.png" />
+    <Content Include="Addin\Resources\TogglePanel.png" />
+    <Content Include="Addin\Resources\TogglePanel_sm.png" />
     <Content Include="Addin\ThisAddIn.cs" />
     <Content Include="Addin\ThisAddIn.Designer.cs" />
     <Content Include="Addin\ThisAddIn.Designer.xml" />
@@ -55,11 +61,10 @@
     <Content Include="Addin\PanelManager.cs" />
     <Content Include="Addin\TheForm.cs" />
     <Content Include="Addin\TheForm.Designer.cs" />
-    <Content Include="Addin\TheForm.resx" />
-    <Content Include="Addin\Resources\Command1.ico" />
-    <Content Include="Addin\Resources\Command2.ico" />
+    <Content Include="Addin\TheForm.resx">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Addin\Resources\Ribbon.xml" />
-    <Content Include="Addin\Resources\TogglePanel.ico" />
     <Content Include="Addin\Template.vstemplate">
       <SubType>Designer</SubType>
     </Content>

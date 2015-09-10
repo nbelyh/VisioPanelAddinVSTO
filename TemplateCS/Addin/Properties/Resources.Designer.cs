@@ -59,33 +59,13 @@ namespace $csprojectname$.Properties {
                 resourceCulture = value;
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        internal static System.Drawing.Icon Command1 {
-            get {
-                object obj = ResourceManager.GetObject("Command1", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
+        $if$ ($ui$ == true)
         /// <summary>
         ///   Looks up a localized string similar to command 1.
         /// </summary>
         internal static string Command1_Label {
             get {
                 return ResourceManager.GetString("Command1_Label", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        internal static System.Drawing.Icon Command2 {
-            get {
-                object obj = ResourceManager.GetObject("Command2", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
             }
         }
         
@@ -97,8 +77,77 @@ namespace $csprojectname$.Properties {
                 return ResourceManager.GetString("Command2_Label", resourceCulture);
             }
         }
+        $endif$ $if$ ($ribbon$ == true)
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Command1 {
+            get {
+                object obj = ResourceManager.GetObject("Command1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
         
-        $if$ ($ribbon$ == true)
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Command2 {
+            get {
+                object obj = ResourceManager.GetObject("Command2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        $endif$ $if$ ($commandbars$ == true)
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Command1_sm {
+            get {
+                object obj = ResourceManager.GetObject("Command1_sm", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Command2_sm {
+            get {
+                object obj = ResourceManager.GetObject("Command2_sm", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        $endif$ $if$ ($taskpaneANDui$ == true)
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap TogglePanel {
+            get {
+                object obj = ResourceManager.GetObject("TogglePanel", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Toggle panel.
+        /// </summary>
+        internal static string TogglePanel_Label {
+            get {
+                return ResourceManager.GetString("TogglePanel_Label", resourceCulture);
+            }
+        }
+        $endif$ $if$ ($commandbarsANDtaskpane$ == true)
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap TogglePanel_sm {
+            get {
+                object obj = ResourceManager.GetObject("TogglePanel_sm", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        $endif$ $if$ ($ribbon$ == true)
         /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
         ///&lt;customUI xmlns=&quot;http://schemas.microsoft.com/office/2009/07/customui&quot; onLoad=&quot;OnRibbonLoad&quot;&gt;
@@ -115,26 +164,7 @@ namespace $csprojectname$.Properties {
                 return ResourceManager.GetString("Ribbon", resourceCulture);
             }
         }
-        $endif$
-        $if$ ($taskpaneANDui$ == true)
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        internal static System.Drawing.Icon TogglePanel {
-            get {
-                object obj = ResourceManager.GetObject("TogglePanel", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
 
-        /// <summary>
-        ///   Looks up a localized string similar to Toggle panel.
-        /// </summary>
-        internal static string TogglePanel_Label {
-            get {
-                return ResourceManager.GetString("TogglePanel_Label", resourceCulture);
-            }
-        }
         $endif$
     }
 }

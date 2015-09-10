@@ -154,10 +154,13 @@
   $endif$
   $if$ ($taskpaneANDui$ == true)
   <ItemGroup>
-    <Content Include="Resources\TogglePanel.ico" />
+    <Content Include="Resources\TogglePanel.png" />
   </ItemGroup>
-  $endif$
-  $if$ ($ui$ == true)
+  $endif$ $if$ ($commandbarsANDtaskpane$ == true)
+  <ItemGroup>
+    <Content Include="Resources\TogglePanel_sm.png" />
+  </ItemGroup>
+  $endif$ $if$ ($ui$ == true)
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
@@ -170,11 +173,18 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Content Include="Resources\Command1.ico" />
-    <Content Include="Resources\Command2.ico" />
   </ItemGroup>
-  $endif$
-  $if$ ($ribbon$ == true)
+  $endif$ $if$ ($ribbon$ == true)
+  <ItemGroup>
+    <Content Include="Resources\Command1.png" />
+    <Content Include="Resources\Command2.png" />
+  </ItemGroup>
+  $endif$ $if$ ($commandbars$ == true)
+  <ItemGroup>
+    <Content Include="Resources\Command1_sm.png" />
+    <Content Include="Resources\Command2_sm.png" />
+  </ItemGroup>
+  $endif$ $if$ ($ribbon$ == true)
   <ItemGroup>
     <Compile Include="AddinRibbon.vb" />
     <Content Include="Resources\Ribbon.xml" />

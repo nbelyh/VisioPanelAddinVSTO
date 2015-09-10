@@ -20,9 +20,12 @@
         <ProjectItem ReplaceParameters="true">AssemblyInfo.cs</ProjectItem>
       </Folder>
       <Folder Name="Resources" TargetFolderName="Resources">
-        <ProjectItem ReplaceParameters="false">Command1.ico</ProjectItem>
-        <ProjectItem ReplaceParameters="false">Command2.ico</ProjectItem>
-        <ProjectItem ReplaceParameters="false">TogglePanel.ico</ProjectItem>
+        <ProjectItem ReplaceParameters="false">Command1.png</ProjectItem>
+        <ProjectItem ReplaceParameters="false">Command2.png</ProjectItem>
+        <ProjectItem ReplaceParameters="false">Command1_sm.png</ProjectItem>
+        <ProjectItem ReplaceParameters="false">Command2_sm.png</ProjectItem>
+        <ProjectItem ReplaceParameters="false">TogglePanel.png</ProjectItem>
+        <ProjectItem ReplaceParameters="false">TogglePanel_sm.png</ProjectItem>
         <ProjectItem ReplaceParameters="true">Ribbon.xml</ProjectItem>
       </Folder>
       <ProjectItem ReplaceParameters="true" OpenInEditor="true">ThisAddin.cs</ProjectItem>
