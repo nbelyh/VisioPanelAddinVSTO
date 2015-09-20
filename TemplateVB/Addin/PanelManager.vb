@@ -9,21 +9,21 @@ Public Class PanelManager
     Implements IDisposable
 
     Public Sub New()
-        AddHandler Globals.ThisAddIn.Application.DocumentCreated, AddressOf OnDocumentListChanged
+        $if$ ($uiCallbacks$ == true)AddHandler Globals.ThisAddIn.Application.DocumentCreated, AddressOf OnDocumentListChanged
         AddHandler Globals.ThisAddIn.Application.DocumentOpened, AddressOf OnDocumentListChanged
         AddHandler Globals.ThisAddIn.Application.BeforeDocumentClose, AddressOf OnDocumentListChanged
-    End Sub
+    $endif$End Sub
 
     Public Sub Dispose() Implements IDisposable.Dispose
-        RemoveHandler Globals.ThisAddIn.Application.DocumentCreated, AddressOf OnDocumentListChanged
+        $if$ ($uiCallbacks$ == true)RemoveHandler Globals.ThisAddIn.Application.DocumentCreated, AddressOf OnDocumentListChanged
         RemoveHandler Globals.ThisAddIn.Application.DocumentOpened, AddressOf OnDocumentListChanged
         RemoveHandler Globals.ThisAddIn.Application.BeforeDocumentClose, AddressOf OnDocumentListChanged
-    End Sub
-
+    $endif$End Sub
+    $if$ ($uiCallbacks$ == true)
     Private Sub OnDocumentListChanged(doc As Microsoft.Office.Interop.Visio.Document)
         Globals.ThisAddIn.UpdateUI()
     End Sub
-
+    $endif$
     Private ReadOnly _panelFrames As New Dictionary(Of Integer, PanelFrame)()
 
     Private Function FindWindowPanelFrame(window As Microsoft.Office.Interop.Visio.Window) As PanelFrame
@@ -53,19 +53,19 @@ Public Class PanelManager
             panelFrame.DestroyWindow()
             _panelFrames.Remove(window.ID)
         End If
-
+        $if$ ($uiCallbacks$ == true)
         Globals.ThisAddIn.UpdateUI()
-    End Sub
+    $endif$End Sub
 
     Private Sub OnPanelFrameClosed(window As Microsoft.Office.Interop.Visio.Window)
         _panelFrames.Remove(window.ID)
-
+        $if$ ($uiCallbacks$ == true)
         Globals.ThisAddIn.UpdateUI()
-    End Sub
+    $endif$End Sub
 
-    ''' 
-    ''' Returns true if panel is opened in the given Visio diagram window.
-    ''' 
+        ''' 
+        ''' Returns true if panel is opened in the given Visio diagram window.
+        ''' 
     Public Function IsPanelOpened(window As Microsoft.Office.Interop.Visio.Window) As Boolean
         Return FindWindowPanelFrame(window) IsNot Nothing
     End Function

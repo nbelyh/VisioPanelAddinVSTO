@@ -56,16 +56,26 @@ namespace PanelAddinWizard
 
             GlobalDictionary["$mergeguid$"] = replacementsDictionary["$guid4$"];
 
-            GlobalDictionary["$ribbon$"] = wizardForm.Ribbon ? "true" : "false";
+            var ribbon = wizardForm.RibbonXml || wizardForm.RibbonComponent;
+
+            GlobalDictionary["$ribbon$"] = ribbon ? "true" : "false";
+            GlobalDictionary["$ribbonXml$"] = wizardForm.RibbonXml ? "true" : "false";
+            GlobalDictionary["$ribbonComponent$"] = wizardForm.RibbonComponent ? "true" : "false";
+
             GlobalDictionary["$commandbars$"] = wizardForm.CommandBars ? "true" : "false";
 
-            GlobalDictionary["$ribbonORcommandbars$"] = wizardForm.Ribbon || wizardForm.CommandBars ? "true" : "false";
-            GlobalDictionary["$ribbonANDcommandbars$"] = wizardForm.Ribbon && wizardForm.CommandBars ? "true" : "false";
+            GlobalDictionary["$ribbonANDcommandbars$"] = ribbon  && wizardForm.CommandBars ? "true" : "false";
             GlobalDictionary["$commandbarsANDtaskpane$"] = wizardForm.CommandBars && wizardForm.TaskPane ? "true" : "false";
             GlobalDictionary["$taskpane$"] = wizardForm.TaskPane ? "true" : "false";
-            GlobalDictionary["$ui$"] = (wizardForm.CommandBars || wizardForm.Ribbon) ? "true" : "false";
-            GlobalDictionary["$taskpaneANDui$"] = (wizardForm.TaskPane && (wizardForm.CommandBars || wizardForm.Ribbon)) ? "true" : "false";
-            GlobalDictionary["$taskpaneORui$"] = (wizardForm.TaskPane || (wizardForm.CommandBars || wizardForm.Ribbon)) ? "true" : "false";
+
+            var ui = (wizardForm.CommandBars || ribbon);
+            GlobalDictionary["$ui$"] = ui ? "true" : "false";
+            GlobalDictionary["$taskpaneANDui$"] = (wizardForm.TaskPane && ui) ? "true" : "false";
+            GlobalDictionary["$taskpaneORui$"] = (wizardForm.TaskPane || ui) ? "true" : "false";
+
+            var uiCallbacks = (wizardForm.CommandBars || wizardForm.RibbonXml);
+            GlobalDictionary["$uiCallbacks$"] = uiCallbacks ? "true" : "false";
+            GlobalDictionary["$taskpaneANDuiCallbacks$"] = (wizardForm.TaskPane && uiCallbacks) ? "true" : "false";
 
             GlobalDictionary["$addinProject$"] = wizardForm.AddinEnabled ? "true" : "false";
             GlobalDictionary["$office$"] = GetOfficeVersion();

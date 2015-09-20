@@ -38,6 +38,9 @@
       <ProjectItem ReplaceParameters="true">TheForm.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true">TheForm.resx</ProjectItem>
       <ProjectItem ReplaceParameters="true">TheForm.Designer.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true">AddinRibbonComponent.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true">AddinRibbonComponent.Designer.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true">AddinRibbonComponent.resx</ProjectItem>
     </Project>
   </TemplateContent>
   <WizardExtension>

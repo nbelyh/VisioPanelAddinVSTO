@@ -1,35 +1,44 @@
-﻿$if$ ($ui$ == true)Imports System.Drawing
+﻿$if$ ($uiCallbacks$ == true)Imports System.Drawing
 $endif$$if$ ($ribbonANDcommandbars$ == true)Imports System.Globalization
 $endif$$if$ ($ui$ == true)Imports System.Windows.Forms
 $endif$
 Public Class ThisAddIn
 
     $if$ ($commandbars$ == true)Private ReadOnly _addinCommandBars As AddinCommandBars = New AddinCommandBars()
-    $endif$$if$ ($ribbon$ == true)Private ReadOnly _addinRibbon As AddinRibbon = New AddinRibbon()
+    $endif$$if$ ($ribbonXml$ == true)Private ReadOnly _addinRibbon As AddinRibbon = New AddinRibbon()
     Protected Overrides Function CreateRibbonExtensibilityObject() As Office.IRibbonExtensibility
         Return _addinRibbon
     End Function
     $endif$$if$ ($ui$ == true)
+    Public Sub Command1()
+        MessageBox.Show("Hello from command 1")
+    End Sub
+    $endif$$if$ ($uiCallbacks$ == true)
+    Public Sub Command2()
+        MessageBox.Show("Hello from (conditional) command 2")
+    End Sub
+    $endif$$if$ ($uiCallbacks$ == true)
     ''' 
     ''' Callback called by the UI manager when user clicks a button
     ''' Should do something meaninful wehn corresponding action is called.
     ''' 
     Public Sub OnCommand(commandId As String)
-        Select commandId
+        Select Case commandId
             Case "Command1"
                 MessageBox.Show(commandId)
                 Return
-
+            $endif$$if$ ($uiCallbacks$ == true)
             Case "Command2"
                 MessageBox.Show(commandId)
                 Return
-			$endif$$if$ ($taskpaneANDui$ == true)
+			$endif$$if$ ($taskpaneANDuiCallbacks$ == true)
             Case "TogglePanel"
                 TogglePanel()
                 Return
-        $endif$$if$ ($ui$ == true)End Select
+        $endif$$if$ ($uiCallbacks$ == true)
+        End Select
     End Sub
-
+    $endif$$if$ ($uiCallbacks$ == true)
     ''' 
     ''' Callback called by UI manager.
     ''' Should return if corresponding command shoudl be enabled in the user interface.
@@ -44,11 +53,11 @@ Public Class ThisAddIn
             Case "Command2"
                 ' make command2 enabled only if a window is opened
                 Return Application IsNot Nothing AndAlso Application.ActiveWindow IsNot Nothing
-			$endif$$if$ ($taskpaneANDui$ == true)
+			$endif$$if$ ($taskpaneANDuiCallbacks$ == true)
             Case "TogglePanel"
                 ' make panel enabled only if we have an open drawing.
                 Return IsPanelEnabled()
-            $endif$$if$ ($ui$ == true)Case Else
+            $endif$$if$ ($uiCallbacks$ == true)Case Else
                 Return True
         End Select
     End Function
@@ -58,12 +67,12 @@ Public Class ThisAddIn
     ''' Should return if corresponding command (button) is pressed or not (makes sense for toggle buttons)
     ''' 
     Public Function IsCommandChecked(command As String) As Boolean
-		$endif$$if$ ($taskpaneANDui$ == true)
+		$endif$$if$ ($taskpaneANDuiCallbacks$ == true)
         If command = "TogglePanel" Then
             Return IsPanelVisible()
         End If
 
-        $endif$$if$($ui$ == true)Return False
+        $endif$$if$($uiCallbacks$ == true)Return False
     End Function
 
     ''' 
@@ -86,7 +95,7 @@ Public Class ThisAddIn
     Public Sub TogglePanel()
         _panelManager.TogglePanel(Application.ActiveWindow)
     End Sub
-
+    $endif$$if$ ($taskpaneANDuiCallbacks$ == true)
     Public Function IsPanelEnabled() As Boolean
         Return Application IsNot Nothing AndAlso Application.ActiveWindow IsNot Nothing
     End Function
@@ -94,14 +103,14 @@ Public Class ThisAddIn
     Public Function IsPanelVisible() As Boolean
         Return Application IsNot Nothing AndAlso _panelManager.IsPanelOpened(Application.ActiveWindow)
     End Function
-
+    $endif$$if$ ($taskpane$ == true)
     Private _panelManager As PanelManager
 	$endif$
-	$if$ ($taskpaneORui$ == true)
+	$if$ ($uiCallbacks$ == true)
     Sub UpdateUI()
         $endif$$if$ ($commandbars$ == true)_addinCommandBars.UpdateCommandBars()
-        $endif$$if$ ($ribbon$ == true)_addinRibbon.UpdateRibbon()
-    $endif$$if$ ($taskpaneORui$ == true)
+        $endif$$if$ ($ribbonXml$ == true)_addinRibbon.UpdateRibbon()
+    $endif$$if$ ($uiCallbacks$ == true)
     End Sub
     $endif$
     Private Sub ThisAddIn_Startup() Handles Me.Startup
@@ -114,7 +123,7 @@ Public Class ThisAddIn
     End Sub
 
     Private Sub ThisAddIn_Shutdown() Handles Me.Shutdown
-    $if$ ($commandbars$ == true)_addinCommandBars.ShutdownCommandBars()
+        $if$ ($commandbars$ == true)_addinCommandBars.ShutdownCommandBars()
         $endif$$if$ ($taskpane$ == true)_panelManager.Dispose()
     $endif$
     End Sub

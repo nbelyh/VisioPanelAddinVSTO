@@ -47,8 +47,7 @@ Public Class AddinRibbon
     End Sub
 
     Public Function GetRibbonImage(control As Microsoft.Office.Core.IRibbonControl) As Bitmap
-        Dim icon = Globals.ThisAddIn.GetCommandIcon(control.Id)
-        Return If(icon IsNot Nothing, icon.ToBitmap(), Nothing)
+        Return Globals.ThisAddIn.GetCommandBitmap(control.Id)
     End Function
 
 #End Region

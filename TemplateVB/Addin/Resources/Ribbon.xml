@@ -7,7 +7,7 @@
 
           <button id="Command1" size="large" getLabel="OnGetRibbonLabel" onAction="OnRibbonButtonClick" getEnabled="IsRibbonCommandEnabled" getImage="GetRibbonImage" />
           <button id="Command2" size="large" getLabel="OnGetRibbonLabel" onAction="OnRibbonButtonClick" getEnabled="IsRibbonCommandEnabled" getImage="GetRibbonImage" />
-          $if$ ($taskpaneANDui$ == true)
+          $if$ ($taskpane$ == true)
           <separator id="sep1" />
           <toggleButton id="TogglePanel" getLabel="OnGetRibbonLabel" size="large" 
                         onAction="OnRibbonButtonCheckClick" getEnabled="IsRibbonCommandEnabled" getImage="GetRibbonImage" getPressed="IsRibbonCommandChecked" />

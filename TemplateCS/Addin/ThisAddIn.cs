@@ -1,9 +1,9 @@
 ﻿using System;
 using Office = Microsoft.Office.Core;
-$if$ ($ui$ == true)using System.Drawing;
+$if$ ($uiCallbacks$ == true)using System.Drawing;
 $endif$$if$ ($ribbonANDcommandbars$ == true)using System.Globalization;
 $endif$$if$ ($ui$ == true)using System.Windows.Forms;
-$endif$$if$ ($ui$ == true)using $csprojectname$.Properties;
+$endif$$if$ ($uiCallbacks$ == true)using $csprojectname$.Properties;
 $endif$using Visio = Microsoft.Office.Interop.Visio;
 
 namespace $csprojectname$
@@ -12,38 +12,48 @@ namespace $csprojectname$
     {
         $if$ ($commandbars$ == true)
         private readonly AddinCommandBars _addinCommandBars = new AddinCommandBars();
-        $endif$$if$ ($ribbon$ == true)
+        $endif$$if$ ($ribbonXml$ == true)
         private readonly AddinRibbon _addinRibbon = new AddinRibbon();
         protected override Office.IRibbonExtensibility CreateRibbonExtensibilityObject()
         {
             return _addinRibbon;
         }
         $endif$$if$ ($ui$ == true)
+        public void Command1()
+        {
+            MessageBox.Show("Hello from command 1");
+        }
+        $endif$$if$ ($uiCallbacks$ == true)
+        public void Command2()
+        {
+            MessageBox.Show("Hello from (conditional) command 2");
+        }
+        $endif$$if$ ($uiCallbacks$ == true)
         /// <summary>
         /// Callback called by the UI manager when user clicks a button
-        /// Should do something meaninful wehn corresponding action is called.
+        /// Should do something meaningful when corresponding action is called.
         /// </summary>
         public void OnCommand(string commandId)
         {
             switch (commandId)
             {
                 case "Command1":
-                    MessageBox.Show(commandId);
+                    Command1();
                     return;
-
+                $endif$$if$ ($uiCallbacks$ == true)
                 case "Command2":
-                    MessageBox.Show(commandId);
+                    Command2();
                     return;
-                $endif$$if$ ($taskpaneANDui$ == true)
+                $endif$$if$ ($taskpaneANDuiCallbacks$ == true)
                 case "TogglePanel":
                     TogglePanel();
                     return;
-            $endif$$if$ ($ui$ == true)}
+            $endif$$if$ ($uiCallbacks$ == true)}
         }
-
+        $endif$$if$ ($uiCallbacks$ == true)
         /// <summary>
         /// Callback called by UI manager.
-        /// Should return if corresponding command shoudl be enabled in the user interface.
+        /// Should return if corresponding command should be enabled in the user interface.
         /// By default, all commands are enabled.
         /// </summary>
         public bool IsCommandEnabled(string commandId)
@@ -55,11 +65,11 @@ namespace $csprojectname$
 
                 case "Command2":    // make command2 enabled only if a drawing is opened
                     return Application != null && Application.ActiveWindow != null;
-                $endif$$if$ ($taskpaneANDui$ == true)
+                $endif$$if$ ($taskpaneANDuiCallbacks$ == true)
                 case "TogglePanel": // make panel enabled only if we have an open drawing.
                     return IsPanelEnabled();
 
-                $endif$$if$ ($ui$ == true) default:
+                $endif$$if$ ($uiCallbacks$ == true) default:
                     return true;
             }
         }
@@ -70,11 +80,11 @@ namespace $csprojectname$
         /// </summary>
         public bool IsCommandChecked(string command)
         {
-            $endif$$if$ ($taskpaneANDui$ == true)
+            $endif$$if$ ($taskpaneANDuiCallbacks$ == true)
             if (command == "TogglePanel")
                 return IsPanelVisible();
             
-            $endif$$if$($ui$ == true)return false;
+            $endif$$if$($uiCallbacks$ == true)return false;
         }
         /// <summary>
         /// Callback called by UI manager.
@@ -99,7 +109,7 @@ namespace $csprojectname$
         {
             _panelManager.TogglePanel(Application.ActiveWindow);
         }
-
+        $endif$$if$ ($taskpaneANDuiCallbacks$ == true)
         public bool IsPanelEnabled()
         {
             return Application != null && Application.ActiveWindow != null;
@@ -109,15 +119,14 @@ namespace $csprojectname$
         {
             return Application != null && _panelManager.IsPanelOpened(Application.ActiveWindow);
         }
-        
+        $endif$$if$ ($taskpane$ == true)
         private PanelManager _panelManager;
-        $endif$
-        $if$ ($taskpaneORui$ == true)
+        $endif$$if$ ($uiCallbacks$ == true)
         internal void UpdateUI()
         {
             $endif$$if$ ($commandbars$ == true) _addinCommandBars.UpdateCommandBars();
-            $endif$$if$ ($ribbon$ == true)_addinRibbon.UpdateRibbon();
-        $endif$$if$ ($taskpaneORui$ == true)}
+            $endif$$if$ ($ribbonXml$ == true)_addinRibbon.UpdateRibbon();
+        $endif$$if$ ($uiCallbacks$ == true)}
         $endif$
         private void ThisAddIn_Startup(object sender, EventArgs e)
         {

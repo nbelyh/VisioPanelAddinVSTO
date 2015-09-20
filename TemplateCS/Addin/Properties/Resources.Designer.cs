@@ -59,7 +59,7 @@ namespace $csprojectname$.Properties {
                 resourceCulture = value;
             }
         }
-        $if$ ($ui$ == true)
+        $if$ ($uiCallbacks$ == true)
         /// <summary>
         ///   Looks up a localized string similar to command 1.
         /// </summary>
@@ -87,7 +87,7 @@ namespace $csprojectname$.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-        
+        $endif$ $if$ ($ribbonXml$ == true)
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
@@ -128,7 +128,7 @@ namespace $csprojectname$.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-
+        $endif$ $if$ ($taskpaneANDuiCallbacks$ == true)
         /// <summary>
         ///   Looks up a localized string similar to Toggle panel.
         /// </summary>
@@ -147,7 +147,7 @@ namespace $csprojectname$.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-        $endif$ $if$ ($ribbon$ == true)
+        $endif$ $if$ ($ribbonXml$ == true)
         /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
         ///&lt;customUI xmlns=&quot;http://schemas.microsoft.com/office/2009/07/customui&quot; onLoad=&quot;OnRibbonLoad&quot;&gt;

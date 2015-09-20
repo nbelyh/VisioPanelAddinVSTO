@@ -100,6 +100,18 @@
     <None Include="Setup\Stencil_1_M.vss" />
     <None Include="Setup\Template_1_M.vst" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Addin\AddinRibbonComponent.Designer.vb">
+      <DependentUpon>AddinRibbonComponent.vb</DependentUpon>
+    </Content>
+    <Content Include="Addin\AddinRibbonComponent.vb" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Addin\AddinRibbonComponent.resx">
+      <DependentUpon>AddinRibbonComponent.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v10.0\VSSDK\Microsoft.VsSDK.targets" />
 </Project>

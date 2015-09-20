@@ -40,13 +40,19 @@ namespace PanelAddinWizard
             replacementsDictionary.Add("$ribbon$", RootWizard.GlobalDictionary["$ribbon$"]);
             replacementsDictionary.Add("$commandbars$", RootWizard.GlobalDictionary["$commandbars$"]);
 
-            replacementsDictionary.Add("$ribbonORcommandbars$", RootWizard.GlobalDictionary["$ribbonORcommandbars$"]);
             replacementsDictionary.Add("$ribbonANDcommandbars$", RootWizard.GlobalDictionary["$ribbonANDcommandbars$"]);
             replacementsDictionary.Add("$commandbarsANDtaskpane$", RootWizard.GlobalDictionary["$commandbarsANDtaskpane$"]);
             replacementsDictionary.Add("$taskpane$", RootWizard.GlobalDictionary["$taskpane$"]);
+
             replacementsDictionary.Add("$ui$", RootWizard.GlobalDictionary["$ui$"]);
             replacementsDictionary.Add("$taskpaneANDui$", RootWizard.GlobalDictionary["$taskpaneANDui$"]);
             replacementsDictionary.Add("$taskpaneORui$", RootWizard.GlobalDictionary["$taskpaneORui$"]);
+
+            replacementsDictionary.Add("$uiCallbacks$", RootWizard.GlobalDictionary["$uiCallbacks$"]);
+            replacementsDictionary.Add("$taskpaneANDuiCallbacks$", RootWizard.GlobalDictionary["$taskpaneANDuiCallbacks$"]);
+
+            replacementsDictionary.Add("$ribbonComponent$", RootWizard.GlobalDictionary["$ribbonComponent$"]);
+            replacementsDictionary.Add("$ribbonXml$", RootWizard.GlobalDictionary["$ribbonXml$"]);
 
             replacementsDictionary.Add("$office$", RootWizard.GlobalDictionary["$office$"]);
 

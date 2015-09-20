@@ -117,7 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  $if$ ($ui$ == true)
+  $if$ ($uiCallbacks$ == true)
   <data name="Command1_Label" xml:space="preserve">
     <value>command 1</value>
   </data>
@@ -129,6 +129,7 @@
   <data name="Command1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Command1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  $endif$ $if$ ($ribbonXml$ == true)
   <data name="Command2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Command2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -139,10 +140,11 @@
   <data name="Command2_sm" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Command2_sm.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  $endif$ $if$ ($taskpaneANDui$ == true)
+  $endif$ $if$ ($taskpaneANDuiCallbacks$ == true)
   <data name="TogglePanel_Label" xml:space="preserve">
     <value>Toggle panel</value>
   </data>
+  $endif$ $if$ ($taskpaneANDui$ == true)
   <data name="TogglePanel" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\TogglePanel.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -150,7 +152,7 @@
   <data name="TogglePanel_sm" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\TogglePanel_sm.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  $endif$ $if$ ($ribbon$ == true)
+  $endif$ $if$ ($ribbonXml$ == true)
   <data name="Ribbon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Ribbon.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>

@@ -177,6 +177,9 @@
   $endif$ $if$ ($ribbon$ == true)
   <ItemGroup>
     <Content Include="Resources\Command1.png" />
+  </ItemGroup>
+  $endif$ $if$ ($ribbonXml$ == true)
+  <ItemGroup>
     <Content Include="Resources\Command2.png" />
   </ItemGroup>
   $endif$ $if$ ($commandbars$ == true)
@@ -184,10 +187,25 @@
     <Content Include="Resources\Command1_sm.png" />
     <Content Include="Resources\Command2_sm.png" />
   </ItemGroup>
-  $endif$ $if$ ($ribbon$ == true)
+  $endif$ $if$ ($ribbonXml$ == true)
   <ItemGroup>
     <Compile Include="AddinRibbon.vb" />
     <Content Include="Resources\Ribbon.xml" />
+  </ItemGroup>
+  $endif$$if$ ($ribbonComponent$ == true)
+  <ItemGroup>
+    <Compile Include="AddinRibbonComponent.vb">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="AddinRibbonComponent.Designer.vb">
+      <DependentUpon>AddinRibbonComponent.vb</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="AddinRibbonComponent.resx">
+      <DependentUpon>AddinRibbonComponent.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   $endif$
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />

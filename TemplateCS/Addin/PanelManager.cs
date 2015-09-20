@@ -12,23 +12,23 @@ namespace $csprojectname$
     {
         public PanelManager()
         {
-            Globals.ThisAddIn.Application.DocumentCreated += OnDocumentListChanged;
+            $if$ ($uiCallbacks$ == true)Globals.ThisAddIn.Application.DocumentCreated += OnDocumentListChanged;
             Globals.ThisAddIn.Application.DocumentOpened += OnDocumentListChanged;
             Globals.ThisAddIn.Application.BeforeDocumentClose += OnDocumentListChanged;
-        }
+        $endif$}
 
         public void Dispose()
         {
-            Globals.ThisAddIn.Application.DocumentCreated -= OnDocumentListChanged;
+            $if$ ($uiCallbacks$ == true)Globals.ThisAddIn.Application.DocumentCreated -= OnDocumentListChanged;
             Globals.ThisAddIn.Application.DocumentOpened -= OnDocumentListChanged;
             Globals.ThisAddIn.Application.BeforeDocumentClose -= OnDocumentListChanged;
-        }
-
+        $endif$}
+        $if$ ($uiCallbacks$ == true)
         private void OnDocumentListChanged(Visio.Document doc)
         {
             Globals.ThisAddIn.UpdateUI();
         }
-
+        $endif$
         private readonly Dictionary<int, PanelFrame> _panelFrames =
             new Dictionary<int, PanelFrame>();
 
@@ -63,16 +63,16 @@ namespace $csprojectname$
                 panelFrame.DestroyWindow();
                 _panelFrames.Remove(window.ID);
             }
-
+            $if$ ($uiCallbacks$ == true)
             Globals.ThisAddIn.UpdateUI();
-        }
+        $endif$}
 
         private void OnPanelFrameClosed(Visio.Window window)
         {
             _panelFrames.Remove(window.ID);
-
+            $if$ ($uiCallbacks$ == true)
             Globals.ThisAddIn.UpdateUI();
-        }
+        $endif$}
 
         /// <summary>
         /// Returns true if panel is opened in the given Visio diagram window.

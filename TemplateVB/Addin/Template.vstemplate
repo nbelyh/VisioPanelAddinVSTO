@@ -40,6 +40,9 @@
       <ProjectItem ReplaceParameters="true">TheForm.vb</ProjectItem>
       <ProjectItem ReplaceParameters="true">TheForm.resx</ProjectItem>
       <ProjectItem ReplaceParameters="true">TheForm.Designer.vb</ProjectItem>
+      <ProjectItem ReplaceParameters="true">AddinRibbonComponent.vb</ProjectItem>
+      <ProjectItem ReplaceParameters="true">AddinRibbonComponent.Designer.vb</ProjectItem>
+      <ProjectItem ReplaceParameters="true">AddinRibbonComponent.resx</ProjectItem>
     </Project>
   </TemplateContent>
   <WizardExtension>
