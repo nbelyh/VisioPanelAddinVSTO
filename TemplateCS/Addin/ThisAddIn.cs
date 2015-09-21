@@ -19,14 +19,24 @@ namespace $csprojectname$
             return _addinRibbon;
         }
         $endif$$if$ ($ui$ == true)
+        /// <summary>
+        /// A simple command
+        /// </summary>
         public void Command1()
         {
-            MessageBox.Show("Hello from command 1");
+            MessageBox.Show("Hello from command 1!");
         }
         $endif$$if$ ($uiCallbacks$ == true)
+        /// <summary>
+        /// A command to demonstrate conditionally enabling/disabling.
+        /// The command gets enabled only when a shape is selected
+        /// </summary>
         public void Command2()
         {
-            MessageBox.Show("Hello from (conditional) command 2");
+            if (Application == null || Application.ActiveWindow == null || Application.ActiveWindow.Selection == null)
+                return;
+
+            MessageBox.Show(string.Format("Hello from (conditional) command 2! You have {0} shapes selected.", Application.ActiveWindow.Selection.Count));
         }
         $endif$$if$ ($uiCallbacks$ == true)
         /// <summary>
@@ -64,9 +74,11 @@ namespace $csprojectname$
                     return true;
 
                 case "Command2":    // make command2 enabled only if a drawing is opened
-                    return Application != null && Application.ActiveWindow != null;
+                    return Application != null 
+                        && Application.ActiveWindow != null
+                        && Application.ActiveWindow.Selection.Count > 0;
                 $endif$$if$ ($taskpaneANDuiCallbacks$ == true)
-                case "TogglePanel": // make panel enabled only if we have an open drawing.
+                case "TogglePanel": // make panel enabled only if we have selected shape(s).
                     return IsPanelEnabled();
 
                 $endif$$if$ ($uiCallbacks$ == true) default:
@@ -117,7 +129,9 @@ namespace $csprojectname$
 
         public bool IsPanelVisible()
         {
-            return Application != null && _panelManager.IsPanelOpened(Application.ActiveWindow);
+            return Application != null 
+                && _panelManager != null 
+                && _panelManager.IsPanelOpened(Application.ActiveWindow);
         }
         $endif$$if$ ($taskpane$ == true)
         private PanelManager _panelManager;
@@ -127,6 +141,11 @@ namespace $csprojectname$
             $endif$$if$ ($commandbars$ == true) _addinCommandBars.UpdateCommandBars();
             $endif$$if$ ($ribbonXml$ == true)_addinRibbon.UpdateRibbon();
         $endif$$if$ ($uiCallbacks$ == true)}
+        $endif$$if$ ($uiCallbacks$ == true)
+        private void Application_SelectionChanged(Visio.Window)
+        {
+            UpdateUI();
+        }
         $endif$
         private void ThisAddIn_Startup(object sender, EventArgs e)
         {
@@ -134,13 +153,17 @@ namespace $csprojectname$
             $endif$$if$ ($ribbonANDcommandbars$ == true)var version = int.Parse(Application.Version, NumberStyles.AllowDecimalPoint);
             if (version < 14)
                 $endif$$if$ ($commandbars$ == true)_addinCommandBars.StartupCommandBars("$csprojectname$", new[] { "Command1", "Command2" $endif$$if$ ($commandbarsANDtaskpane$ == true) , "TogglePanel"$endif$$if$ ($commandbars$ == true)});
-        $endif$}
+            $endif$$if$ ($uiCallbacks$ == true)Application.SelectionChanged += Application_SelectionChanged;
+            $endif$
+        }
 
         private void ThisAddIn_Shutdown(object sender, EventArgs e)
         {
-        $if$ ($commandbars$ == true)_addinCommandBars.ShutdownCommandBars();
+            $if$ ($commandbars$ == true)_addinCommandBars.ShutdownCommandBars();
             $endif$$if$ ($taskpane$ == true)_panelManager.Dispose();
-        $endif$}
+            $endif$$if$ ($uiCallbacks$ == true)Application.SelectionChanged -= Application_SelectionChanged;
+            $endif$
+        }
         
         #region VSTO generated code
 

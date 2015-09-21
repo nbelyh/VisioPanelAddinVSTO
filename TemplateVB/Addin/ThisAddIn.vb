@@ -1,6 +1,7 @@
 ﻿$if$ ($uiCallbacks$ == true)Imports System.Drawing
 $endif$$if$ ($ribbonANDcommandbars$ == true)Imports System.Globalization
 $endif$$if$ ($ui$ == true)Imports System.Windows.Forms
+$endif$$if$ ($ui$ == true)Imports Visio = Microsoft.Office.Interop.Visio
 $endif$
 Public Class ThisAddIn
 
@@ -10,12 +11,21 @@ Public Class ThisAddIn
         Return _addinRibbon
     End Function
     $endif$$if$ ($ui$ == true)
+    ''' 
+    ''' A simple command
+    ''' 
     Public Sub Command1()
-        MessageBox.Show("Hello from command 1")
+        MessageBox.Show("Hello from command 1!")
     End Sub
     $endif$$if$ ($uiCallbacks$ == true)
+    ''' 
+    ''' A command to demonstrate conditionally enabling/disabling.
+    ''' The command gets enabled only when a shape is selected
+    ''' 
     Public Sub Command2()
-        MessageBox.Show("Hello from (conditional) command 2")
+        If Application Is Nothing OrElse Application.ActiveWindow Is Nothing OrElse Application.ActiveWindow.Selection Is Nothing Then Exit Sub
+
+        MessageBox.Show(String.Format("Hello from (conditional) command 2! You have {0} shapes selected.", Application.ActiveWindow.Selection.Count))
     End Sub
     $endif$$if$ ($uiCallbacks$ == true)
     ''' 
@@ -25,11 +35,11 @@ Public Class ThisAddIn
     Public Sub OnCommand(commandId As String)
         Select Case commandId
             Case "Command1"
-                MessageBox.Show(commandId)
+                Command1()
                 Return
             $endif$$if$ ($uiCallbacks$ == true)
             Case "Command2"
-                MessageBox.Show(commandId)
+                Command2()
                 Return
 			$endif$$if$ ($taskpaneANDuiCallbacks$ == true)
             Case "TogglePanel"
@@ -52,10 +62,10 @@ Public Class ThisAddIn
 
             Case "Command2"
                 ' make command2 enabled only if a window is opened
-                Return Application IsNot Nothing AndAlso Application.ActiveWindow IsNot Nothing
+                Return Application IsNot Nothing AndAlso Application.ActiveWindow IsNot Nothing AndAlso Application.ActiveWindow.Selection.Count > 0
 			$endif$$if$ ($taskpaneANDuiCallbacks$ == true)
             Case "TogglePanel"
-                ' make panel enabled only if we have an open drawing.
+                ' make panel enabled only if we have selected shape(s).
                 Return IsPanelEnabled()
             $endif$$if$ ($uiCallbacks$ == true)Case Else
                 Return True
@@ -112,6 +122,10 @@ Public Class ThisAddIn
         $endif$$if$ ($ribbonXml$ == true)_addinRibbon.UpdateRibbon()
     $endif$$if$ ($uiCallbacks$ == true)
     End Sub
+    $endif$$if$ ($uiCallbacks$ == true)
+    Public Sub Application_SelectionChanged(Window As Visio.Window)
+        UpdateUI()
+    End Sub
     $endif$
     Private Sub ThisAddIn_Startup() Handles Me.Startup
         $if$ ($taskpane$ == true)_panelManager = New PanelManager()
@@ -119,13 +133,15 @@ Public Class ThisAddIn
         If (version < 14) Then
 			$endif$$if$ ($commandbars$ == true)_addinCommandBars.StartupCommandBars("$csprojectname$", New String() {"Command1", "Command2"$endif$$if$ ($commandbarsANDtaskpane$ == true), "TogglePanel"$endif$$if$ ($commandbars$ == true)})
         $endif$$if$ ($ribbonANDcommandbars$ == true)End If
-    $endif$
+        $endif$$if$ ($uiCallbacks$ == true)AddHandler Application.SelectionChanged, AddressOf Application_SelectionChanged
+        $endif$
     End Sub
 
     Private Sub ThisAddIn_Shutdown() Handles Me.Shutdown
         $if$ ($commandbars$ == true)_addinCommandBars.ShutdownCommandBars()
         $endif$$if$ ($taskpane$ == true)_panelManager.Dispose()
-    $endif$
+        $endif$$if$ ($uiCallbacks$ == true)RemoveHandler Application.SelectionChanged, AddressOf Application_SelectionChanged
+        $endif$
     End Sub
 
 End Class
