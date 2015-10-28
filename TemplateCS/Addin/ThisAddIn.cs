@@ -142,7 +142,7 @@ namespace $csprojectname$
             $endif$$if$ ($ribbonXml$ == true)_addinRibbon.UpdateRibbon();
         $endif$$if$ ($uiCallbacks$ == true)}
         $endif$$if$ ($uiCallbacks$ == true)
-        private void Application_SelectionChanged(Visio.Window)
+        private void Application_SelectionChanged(Visio.Window window)
         {
             UpdateUI();
         }
