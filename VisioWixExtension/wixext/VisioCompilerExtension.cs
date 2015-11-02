@@ -128,6 +128,10 @@ namespace VisioWixExtension
                         ParseVisioVersionAttribute(sourceLineNumbers, attrib, publishInfo, VisioVersion.Visio2013);
                         break;
 
+                    case "Visio2016":
+                        ParseVisioVersionAttribute(sourceLineNumbers, attrib, publishInfo, VisioVersion.Visio2016);
+                        break;
+
                     case "VisioEdition":
                         publishInfo.VisioEdition = ParseVisioEditionAttributeValue(sourceLineNumbers, attrib);
                         break;

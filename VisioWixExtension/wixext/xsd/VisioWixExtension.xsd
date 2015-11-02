@@ -7,7 +7,7 @@
                 xmlns="http://schemas.microsoft.com/wix/Visio">
   <xs:annotation>
     <xs:documentation>
-      Copyright (c) 2013 Nikolay Bleykh nbelyh@gmail.com
+      Copyright (c) 2015 Nikolay Bleykh nbelyh@gmail.com
     </xs:documentation>
   </xs:annotation>
 
@@ -53,6 +53,14 @@
         <xs:annotation>
           <xs:documentation>
             Install for Visio 2013. By default is "yes" if file format is supported by Visio 2013.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="Visio2016" type="wix:YesNoType" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+            Install for Visio 2016. By default is "yes" if file format is supported by Visio 2016.
           </xs:documentation>
         </xs:annotation>
       </xs:attribute>
@@ -155,6 +163,14 @@
         </xs:annotation>
       </xs:attribute>
 
+      <xs:attribute name="Visio2016" type="wix:YesNoType" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+            Install for Visio 2016. By default is "yes" if file format is supported by Visio 2016.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
       <xs:attribute name="VisioEdition" type="VisioEditionType" use="optional">
         <xs:annotation>
           <xs:documentation>
@@ -250,6 +266,14 @@
         <xs:annotation>
           <xs:documentation>
             Install for Visio 2013. By default is "yes" if file format is supported by Visio 2013.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="Visio2016" type="wix:YesNoType" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+            Install for Visio 2016. By default is "yes" if file format is supported by Visio 2016.
           </xs:documentation>
         </xs:annotation>
       </xs:attribute>
@@ -383,7 +407,7 @@
       <xs:attribute name="EnablingPolicy" type="EnablingPolicyType" use="optional">
         <xs:annotation>
           <xs:documentation>
-            Options that specify when the Microsoft Visio 2013 commands that run the add-on are available to the user.
+            Options that specify when the Microsoft Visio commands that run the add-on are available to the user.
           </xs:documentation>
         </xs:annotation>
       </xs:attribute>
@@ -444,6 +468,14 @@
         </xs:annotation>
       </xs:attribute>
 
+      <xs:attribute name="Visio2016" type="wix:YesNoType" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+            Install for Visio 2016. By default is "yes" if file format is supported by Visio 2016.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
       <xs:attribute name="VisioEdition" type="VisioEditionType" use="optional">
         <xs:annotation>
           <xs:documentation>
@@ -465,7 +497,6 @@
     </xs:complexType>
   </xs:element>
 
-  
   <xs:simpleType name="VisioEditionType">
     <xs:annotation>
       <xs:documentation>Values of this type could be "x32" or "x64"</xs:documentation>

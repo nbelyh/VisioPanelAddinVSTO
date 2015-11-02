@@ -28,6 +28,7 @@ namespace VisioWixExtension
         Visio2007 = 2,
         Visio2010 = 4,
         Visio2013 = 8,
+        Visio2016 = 16,
 
         Default = 0
     };
@@ -140,8 +141,8 @@ namespace VisioWixExtension
         public bool InvokeOnStartup;
 
         /// <summary>
-        /// Returns default set of Visio versions to install. By Default, it is 2007/2010/2013.
-        /// For new file types (2013) the default is to publish for Visio 2013 only.
+        /// Returns default set of Visio versions to install. By Default, it is 2007/2010/2013/2016.
+        /// For new file types (2013 and above) the default is to publish for Visio 2013 and above only.
         /// </summary>
         /// <param name="fileName">File name to analyze</param>
         /// <returns>Set of Visio version to publish for by default</returns>
@@ -152,10 +153,10 @@ namespace VisioWixExtension
                 case ".vssx":
                 case ".vstx":
                 case ".vstm":
-                    return VisioVersion.Visio2013;
+                    return VisioVersion.Visio2013 | VisioVersion.Visio2016;
 
                 default:
-                    return VisioVersion.Visio2007 | VisioVersion.Visio2010 | VisioVersion.Visio2013;
+                    return VisioVersion.Visio2007 | VisioVersion.Visio2010 | VisioVersion.Visio2013 | VisioVersion.Visio2016;
             }
         }
 
@@ -199,13 +200,16 @@ namespace VisioWixExtension
                 case VisioVersion.Visio2013:
                     return "{6D9D8B6F-D0EF-4BC0-8DD4-09DD6CE2B20X}";
 
+                case VisioVersion.Visio2016:
+                    return "{6D9D8B6F-D0EF-4BC0-8DD4-09DD6CE2B30X}";
+
                 default:
                     throw new ArgumentOutOfRangeException("visioVersion");
             }
         }
 
         /// <summary>
-        /// Retursn "edition code" used to build "AppData" field in the PublishComponent table.
+        /// Returns "edition code" used to build "AppData" field in the PublishComponent table.
         /// </summary>
         /// <param name="visioEdition"></param>
         /// <returns></returns>
@@ -442,6 +446,43 @@ namespace VisioWixExtension
                         VisioComponentId = GetVisioComponentId(visioContentType, VisioVersion.Visio2013),
                         Qualifier = qualifier,
                         AppData = appData2013
+                    });
+            }
+
+            if ((VisioVersion & VisioVersion.Visio2016) == VisioVersion.Visio2016)
+            {
+                string appData2016 = "";
+
+                switch (visioContentType)
+                {
+                    case VisioContentType.Stencil:
+                        appData2016 = String.Format(@"{0}|{1}|{2}|{3}", MenuPath, AltNames,
+                                                    QuickShapesCount, editionCode);
+                        break;
+
+                    case VisioContentType.Template:
+                        appData2016 = String.Format(@"{0}|{1}|{2}|{3}", MenuPath, AltNames, 1,
+                                                    editionCode);
+                        break;
+
+                    case VisioContentType.Help:
+                        appData2016 = "-1";
+                        break;
+
+                    case VisioContentType.Addon:
+                        appData2016 = String.Format(@"{0}|{1}|{2}|{3}|{4}|{5}|{6}|{7}",
+                                                    MenuPath, LocalizedName, UniversalName,
+                                                    Ordinal, addonAttrsCode, enablingPolicyCode, invokeOnStartupCode,
+                                                    editionCode);
+                        break;
+                }
+
+                result.Add(
+                    new RowInfo
+                    {
+                        VisioComponentId = GetVisioComponentId(visioContentType, VisioVersion.Visio2016),
+                        Qualifier = qualifier,
+                        AppData = appData2016
                     });
             }
 
