@@ -497,6 +497,71 @@
     </xs:complexType>
   </xs:element>
 
+  <xs:element name="PublishAddinVSTO">
+    <xs:annotation>
+      <xs:appinfo>
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="File" />
+      </xs:appinfo>
+      <xs:documentation>
+        Specifies the information to be published to the Registry for Microsoft Visio VSTO addin.
+      </xs:documentation>
+    </xs:annotation>
+
+    <xs:complexType>
+
+      <xs:attribute name="Visio2007" type="wix:YesNoType" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+            Install for Visio 2007. By default is "yes".
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="Visio2010" type="wix:YesNoType" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+            Install for Visio 2010. By default is "yes".
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="Visio2013" type="wix:YesNoType" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+            Install for Visio 2013. By default is "yes".
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="Visio2016" type="wix:YesNoType" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+            Install for Visio 2016. By default is "yes".
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="VisioEdition" type="VisioEditionType" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+            Specifies Visio Edition the item should be registered with (x32/x64)
+            If not specified, then then the template is registered for both Visio x32 and Visio x64
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="Language" type="xs:string" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+            Specifies language the template should be registered with. You can specify either LCID, such as "1033" or language code, such as "en-us".
+            If not specified, publishing will be done in all languages.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+    </xs:complexType>
+  </xs:element>
+  
   <xs:simpleType name="VisioEditionType">
     <xs:annotation>
       <xs:documentation>Values of this type could be "x32" or "x64"</xs:documentation>
