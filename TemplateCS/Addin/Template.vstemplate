@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
   <TemplateData>
-    <Name>Visio VSTO C# Panel Addin Project</Name>
-    <Description>Creates a VSTO-based Visio Panel Addin Project</Description>
+    <Name>Extended Visio C# Addin Project</Name>
+    <Description>Creates Extended Visio C# Addin Project</Description>
     <ProjectType>CSharp</ProjectType>
     <RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
     <SortOrder>1001</SortOrder>
     <TemplateID>773A143B-BC75-495B-A849-FD548B59D45F</TemplateID>
     <CreateNewFolder>true</CreateNewFolder>
-    <DefaultName>VisioPanelAddin</DefaultName>
+    <DefaultName>ExtendedVisioAddin</DefaultName>
     <ProvideDefaultName>true</ProvideDefaultName>
     <Icon>IconCS.ico</Icon>
   </TemplateData>

@@ -660,7 +660,7 @@ namespace PanelAddinWizard
                     "You have not selected any project(s) to create. \n\n" +
                     "Please select either the AddIn project, or Setup project, or combination of the two. " +
                     "If some projects creation options are disabled then please install the missing components (check download links links in descriptions).",
-                    "Visio VSTO Panel Addin: Nothing to create", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    "Extended Visio Addin: Nothing to create", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 
                 e.Cancel = true;
             }
