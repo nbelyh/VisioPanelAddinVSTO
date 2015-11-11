@@ -192,7 +192,8 @@
     <Compile Include="AddinRibbon.vb" />
     <Content Include="Resources\Ribbon.xml" />
   </ItemGroup>
-  $endif$$if$ ($ribbonComponent$ == true)
+  $endif$
+  $if$ ($ribbonComponent$ == true)
   <ItemGroup>
     <Compile Include="AddinRibbonComponent.vb">
       <SubType>Component</SubType>

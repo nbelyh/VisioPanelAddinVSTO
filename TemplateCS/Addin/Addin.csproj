@@ -9,10 +9,10 @@
     <NoStandardLibraries>false</NoStandardLibraries>
     <AssemblyName>$csprojectname$</AssemblyName>
     <RootNamespace>$csprojectname$</RootNamespace>
-    <LoadBehavior>3</LoadBehavior>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <DefineConstants>VSTO40</DefineConstants>
+    <LoadBehavior>3</LoadBehavior>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <ItemGroup>
@@ -148,7 +148,8 @@
     <Compile Include="AddinRibbon.cs" />
     <Content Include="Resources\Ribbon.xml" />
   </ItemGroup>
-  $endif$$if$ ($ribbonComponent$ == true)
+  $endif$
+  $if$ ($ribbonComponent$ == true)
   <ItemGroup>
     <Compile Include="AddinRibbonComponent.cs">
       <SubType>Component</SubType>
