@@ -15,7 +15,7 @@ namespace $csprojectname$
     /// Creates and controls a custom command bar with buttons
     /// </summary>
     /// 
-    public class AddinCommandBars
+    public partial class AddinUI
     {
         private string _toolbarName;
 
@@ -32,13 +32,13 @@ namespace $csprojectname$
             _toolbarName = toolbarName;
             _commands.AddRange(commands);
 
-            Globals.ThisAddIn.Application.VisioIsIdle += ApplicationIdle;
+            ThisAddIn.Application.VisioIsIdle += ApplicationIdle;
             UpdateCommandBars();
         }
 
         public void ShutdownCommandBars()
         {
-            Globals.ThisAddIn.Application.VisioIsIdle -= ApplicationIdle;
+            ThisAddIn.Application.VisioIsIdle -= ApplicationIdle;
         }
 
         private bool _updateRequest;
@@ -68,7 +68,7 @@ namespace $csprojectname$
 
         private void UpdateToolbar()
         {
-            var cbs = (CommandBars)Globals.ThisAddIn.Application.CommandBars;
+            var cbs = (CommandBars)ThisAddIn.Application.CommandBars;
 
             var cb = FindCommandBar(cbs, _toolbarName) ?? cbs.Add(_toolbarName);
             cb.Visible = true;
@@ -93,13 +93,13 @@ namespace $csprojectname$
             var button = (CommandBarButton)cb.FindControl(Tag: id) ??
                 (CommandBarButton)cb.Controls.Add(MsoControlType.msoControlButton);
 
-            button.Enabled = Globals.ThisAddIn.IsCommandEnabled(id);
+            button.Enabled = ThisAddIn.IsCommandEnabled(id);
 
-            var checkState = Globals.ThisAddIn.IsCommandChecked(id);
+            var checkState = ThisAddIn.IsCommandChecked(id);
             button.State = checkState ? MsoButtonState.msoButtonDown : MsoButtonState.msoButtonUp;
 
             button.Tag = id;
-            button.Caption = Globals.ThisAddIn.GetCommandLabel(id);
+            button.Caption = ThisAddIn.GetCommandLabel(id);
             SetCommandBarButtonImage(button, id);
 
             button.Click += CommandBarButtonClicked;
@@ -109,12 +109,12 @@ namespace $csprojectname$
 
         private void CommandBarButtonClicked(CommandBarButton ctrl, ref bool cancelDefault)
         {
-            Globals.ThisAddIn.OnCommand(ctrl.Tag);
+            ThisAddIn.OnCommand(ctrl.Tag);
         }
 
         private void SetCommandBarButtonImage(CommandBarButton button, string id)
         {
-            var image= Globals.ThisAddIn.GetCommandBitmap(id + "_sm");
+            var image = ThisAddIn.GetCommandBitmap(id + "_sm");
             if (image == null)
                 return;
 

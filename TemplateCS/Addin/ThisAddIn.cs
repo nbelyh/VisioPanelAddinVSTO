@@ -4,19 +4,19 @@ $if$ ($uiCallbacks$ == true)using System.Drawing;
 $endif$$if$ ($ribbonANDcommandbars$ == true)using System.Globalization;
 $endif$$if$ ($ui$ == true)using System.Windows.Forms;
 $endif$$if$ ($uiCallbacks$ == true)using $csprojectname$.Properties;
+$endif$$if$ ($uiCallbacks$ == true)using System.Runtime.InteropServices;
 $endif$using Visio = Microsoft.Office.Interop.Visio;
 
 namespace $csprojectname$
 {
     public partial class ThisAddIn
     {
-        $if$ ($commandbars$ == true)
-        private readonly AddinCommandBars _addinCommandBars = new AddinCommandBars();
+        $if$ ($uiCallbacks$ == true)
+        private readonly AddinUI _addinUI = new AddinUI();
         $endif$$if$ ($ribbonXml$ == true)
-        private readonly AddinRibbon _addinRibbon = new AddinRibbon();
         protected override Office.IRibbonExtensibility CreateRibbonExtensibilityObject()
         {
-            return _addinRibbon;
+            return _addinUI;
         }
         $endif$$if$ ($ui$ == true)
         /// <summary>
@@ -138,8 +138,8 @@ namespace $csprojectname$
         $endif$$if$ ($uiCallbacks$ == true)
         internal void UpdateUI()
         {
-            $endif$$if$ ($commandbars$ == true) _addinCommandBars.UpdateCommandBars();
-            $endif$$if$ ($ribbonXml$ == true)_addinRibbon.UpdateRibbon();
+            $endif$$if$ ($commandbars$ == true) _addinUI.UpdateCommandBars();
+            $endif$$if$ ($ribbonXml$ == true)_addinUI.UpdateRibbon();
         $endif$$if$ ($uiCallbacks$ == true)}
         $endif$$if$ ($uiCallbacks$ == true)
         private void Application_SelectionChanged(Visio.Window window)
@@ -149,17 +149,17 @@ namespace $csprojectname$
         $endif$
         private void ThisAddIn_Startup(object sender, EventArgs e)
         {
-            $if$ ($taskpane$ == true)_panelManager = new PanelManager();
+            $if$ ($taskpane$ == true)_panelManager = new PanelManager(this);
             $endif$$if$ ($ribbonANDcommandbars$ == true)var version = int.Parse(Application.Version, NumberStyles.AllowDecimalPoint);
             if (version < 14)
-                $endif$$if$ ($commandbars$ == true)_addinCommandBars.StartupCommandBars("$csprojectname$", new[] { "Command1", "Command2" $endif$$if$ ($commandbarsANDtaskpane$ == true) , "TogglePanel"$endif$$if$ ($commandbars$ == true)});
+                $endif$$if$ ($commandbars$ == true)_addinUI.StartupCommandBars("$csprojectname$", new[] { "Command1", "Command2" $endif$$if$ ($commandbarsANDtaskpane$ == true) , "TogglePanel"$endif$$if$ ($commandbars$ == true)});
             $endif$$if$ ($uiCallbacks$ == true)Application.SelectionChanged += Application_SelectionChanged;
             $endif$
         }
 
         private void ThisAddIn_Shutdown(object sender, EventArgs e)
         {
-            $if$ ($commandbars$ == true)_addinCommandBars.ShutdownCommandBars();
+            $if$ ($commandbars$ == true)_addinUI.ShutdownCommandBars();
             $endif$$if$ ($taskpane$ == true)_panelManager.Dispose();
             $endif$$if$ ($uiCallbacks$ == true)Application.SelectionChanged -= Application_SelectionChanged;
             $endif$
@@ -179,4 +179,11 @@ namespace $csprojectname$
 
         #endregion
     }
+	$if$ ($uiCallbacks$ == true)
+    [ComVisible(true)]
+    public partial class AddinUI
+    {
+        ThisAddIn ThisAddIn { get { return Globals.ThisAddIn; } }
+    }
+	$endif$
 }

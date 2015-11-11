@@ -8,7 +8,7 @@ Imports System.Windows.Forms
 Imports Microsoft.Office.Core
 Imports stdole
 
-Partial Public Class AddinCommandBars
+Partial Public Class AddinUI
     Private _toolbarName As String
 
     Private ReadOnly _commands As New List(Of String)()
@@ -20,12 +20,12 @@ Partial Public Class AddinCommandBars
         _toolbarName = toolbarName
         _commands.AddRange(commands)
 
-        AddHandler Globals.ThisAddIn.Application.VisioIsIdle, AddressOf ApplicationIdle
+        AddHandler ThisAddIn.Application.VisioIsIdle, AddressOf ApplicationIdle
         UpdateCommandBars()
     End Sub
 
     Public Sub ShutdownCommandBars()
-        RemoveHandler Globals.ThisAddIn.Application.VisioIsIdle, AddressOf ApplicationIdle
+        RemoveHandler ThisAddIn.Application.VisioIsIdle, AddressOf ApplicationIdle
     End Sub
 
     Private _updateRequest As Boolean
@@ -51,7 +51,7 @@ Partial Public Class AddinCommandBars
     End Function
 
     Private Sub UpdateToolbar()
-        Dim cbs = DirectCast(Globals.ThisAddIn.Application.CommandBars, CommandBars)
+        Dim cbs = DirectCast(ThisAddIn.Application.CommandBars, CommandBars)
 
         Dim cb = If(FindCommandBar(cbs, _toolbarName), cbs.Add(_toolbarName))
         cb.Visible = True
@@ -74,13 +74,13 @@ Partial Public Class AddinCommandBars
 
         Dim button = If(DirectCast(cb.FindControl(Tag:=id), CommandBarButton), DirectCast(cb.Controls.Add(MsoControlType.msoControlButton), CommandBarButton))
 
-        button.Enabled = Globals.ThisAddIn.IsCommandEnabled(id)
+        button.Enabled = ThisAddIn.IsCommandEnabled(id)
 
-        Dim checkState = Globals.ThisAddIn.IsCommandChecked(id)
+        Dim checkState = ThisAddIn.IsCommandChecked(id)
         button.State = If(checkState, MsoButtonState.msoButtonDown, MsoButtonState.msoButtonUp)
 
         button.Tag = id
-        button.Caption = Globals.ThisAddIn.GetCommandLabel(id)
+        button.Caption = ThisAddIn.GetCommandLabel(id)
         SetCommandBarButtonImage(button, id)
 
         AddHandler button.Click, AddressOf CommandBarButtonClicked
@@ -89,11 +89,11 @@ Partial Public Class AddinCommandBars
     End Sub
 
     Private Sub CommandBarButtonClicked(ctrl As CommandBarButton, ByRef cancelDefault As Boolean)
-        Globals.ThisAddIn.OnCommand(ctrl.Tag)
+        ThisAddIn.OnCommand(ctrl.Tag)
     End Sub
 
     Private Sub SetCommandBarButtonImage(button As CommandBarButton, id As String)
-        Dim image = Globals.ThisAddIn.GetCommandBitmap(id & "_sm")
+        Dim image = ThisAddIn.GetCommandBitmap(id & "_sm")
         If image Is Nothing Then
             Return
         End If

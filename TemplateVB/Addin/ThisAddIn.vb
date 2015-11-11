@@ -2,13 +2,14 @@
 $endif$$if$ ($ribbonANDcommandbars$ == true)Imports System.Globalization
 $endif$$if$ ($ui$ == true)Imports System.Windows.Forms
 $endif$$if$ ($ui$ == true)Imports Visio = Microsoft.Office.Interop.Visio
+$endif$$if$ ($uiCallbacks$ == true)Imports System.Runtime.InteropServices
 $endif$
 Public Class ThisAddIn
 
-    $if$ ($commandbars$ == true)Private ReadOnly _addinCommandBars As AddinCommandBars = New AddinCommandBars()
-    $endif$$if$ ($ribbonXml$ == true)Private ReadOnly _addinRibbon As AddinRibbon = New AddinRibbon()
+    $if$ ($uiCallbacks$ == true)Private ReadOnly _addinUI As AddinUI = New AddinUI()
+    $endif$$if$ ($ribbonXml$ == true)
     Protected Overrides Function CreateRibbonExtensibilityObject() As Office.IRibbonExtensibility
-        Return _addinRibbon
+        Return _addinUI
     End Function
     $endif$$if$ ($ui$ == true)
     ''' 
@@ -118,8 +119,8 @@ Public Class ThisAddIn
 	$endif$
 	$if$ ($uiCallbacks$ == true)
     Sub UpdateUI()
-        $endif$$if$ ($commandbars$ == true)_addinCommandBars.UpdateCommandBars()
-        $endif$$if$ ($ribbonXml$ == true)_addinRibbon.UpdateRibbon()
+        $endif$$if$ ($commandbars$ == true)_addinUI.UpdateCommandBars()
+        $endif$$if$ ($ribbonXml$ == true)_addinUI.UpdateRibbon()
     $endif$$if$ ($uiCallbacks$ == true)
     End Sub
     $endif$$if$ ($uiCallbacks$ == true)
@@ -128,20 +129,30 @@ Public Class ThisAddIn
     End Sub
     $endif$
     Private Sub ThisAddIn_Startup() Handles Me.Startup
-        $if$ ($taskpane$ == true)_panelManager = New PanelManager()
+        $if$ ($taskpane$ == true)_panelManager = New PanelManager(Me)
 		$endif$$if$ ($ribbonANDcommandbars$ == true)Dim version = Integer.Parse(Application.Version, NumberStyles.AllowDecimalPoint)
         If (version < 14) Then
-			$endif$$if$ ($commandbars$ == true)_addinCommandBars.StartupCommandBars("$csprojectname$", New String() {"Command1", "Command2"$endif$$if$ ($commandbarsANDtaskpane$ == true), "TogglePanel"$endif$$if$ ($commandbars$ == true)})
+			$endif$$if$ ($commandbars$ == true)_addinUI.StartupCommandBars("$csprojectname$", New String() {"Command1", "Command2"$endif$$if$ ($commandbarsANDtaskpane$ == true), "TogglePanel"$endif$$if$ ($commandbars$ == true)})
         $endif$$if$ ($ribbonANDcommandbars$ == true)End If
         $endif$$if$ ($uiCallbacks$ == true)AddHandler Application.SelectionChanged, AddressOf Application_SelectionChanged
         $endif$
     End Sub
 
     Private Sub ThisAddIn_Shutdown() Handles Me.Shutdown
-        $if$ ($commandbars$ == true)_addinCommandBars.ShutdownCommandBars()
+        $if$ ($commandbars$ == true)_addinUI.ShutdownCommandBars()
         $endif$$if$ ($taskpane$ == true)_panelManager.Dispose()
         $endif$$if$ ($uiCallbacks$ == true)RemoveHandler Application.SelectionChanged, AddressOf Application_SelectionChanged
         $endif$
     End Sub
 
 End Class
+$if$ ($uiCallbacks$ == true)
+<ComVisible(True)>
+Partial Public Class AddinUI
+    ReadOnly Property ThisAddIn() As ThisAddIn
+        Get
+            Return Globals.ThisAddIn
+        End Get
+    End Property
+End Class
+$endif$

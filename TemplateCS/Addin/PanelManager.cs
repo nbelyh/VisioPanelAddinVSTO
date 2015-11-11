@@ -10,23 +10,27 @@ namespace $csprojectname$
     /// 
     public class PanelManager : IDisposable
     {
-        public PanelManager()
+        private ThisAddIn ThisAddIn { get; set; }
+
+        public PanelManager(ThisAddIn thisAddIn)
         {
-            $if$ ($uiCallbacks$ == true)Globals.ThisAddIn.Application.DocumentCreated += OnDocumentListChanged;
-            Globals.ThisAddIn.Application.DocumentOpened += OnDocumentListChanged;
-            Globals.ThisAddIn.Application.BeforeDocumentClose += OnDocumentListChanged;
+            ThisAddIn = thisAddIn;
+
+            $if$ ($uiCallbacks$ == true)ThisAddIn.Application.DocumentCreated += OnDocumentListChanged;
+            ThisAddIn.Application.DocumentOpened += OnDocumentListChanged;
+            ThisAddIn.Application.BeforeDocumentClose += OnDocumentListChanged;
         $endif$}
 
         public void Dispose()
         {
-            $if$ ($uiCallbacks$ == true)Globals.ThisAddIn.Application.DocumentCreated -= OnDocumentListChanged;
-            Globals.ThisAddIn.Application.DocumentOpened -= OnDocumentListChanged;
-            Globals.ThisAddIn.Application.BeforeDocumentClose -= OnDocumentListChanged;
+            $if$ ($uiCallbacks$ == true)ThisAddIn.Application.DocumentCreated -= OnDocumentListChanged;
+            ThisAddIn.Application.DocumentOpened -= OnDocumentListChanged;
+            ThisAddIn.Application.BeforeDocumentClose -= OnDocumentListChanged;
         $endif$}
         $if$ ($uiCallbacks$ == true)
         private void OnDocumentListChanged(Visio.Document doc)
         {
-            Globals.ThisAddIn.UpdateUI();
+            ThisAddIn.UpdateUI();
         }
         $endif$
         private readonly Dictionary<int, PanelFrame> _panelFrames =
@@ -64,14 +68,14 @@ namespace $csprojectname$
                 _panelFrames.Remove(window.ID);
             }
             $if$ ($uiCallbacks$ == true)
-            Globals.ThisAddIn.UpdateUI();
+            ThisAddIn.UpdateUI();
         $endif$}
 
         private void OnPanelFrameClosed(Visio.Window window)
         {
             _panelFrames.Remove(window.ID);
             $if$ ($uiCallbacks$ == true)
-            Globals.ThisAddIn.UpdateUI();
+            ThisAddIn.UpdateUI();
         $endif$}
 
         /// <summary>
