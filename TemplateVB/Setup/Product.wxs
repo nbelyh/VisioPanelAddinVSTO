@@ -7,10 +7,19 @@
 
   <?define Version="1.0.0.0"?>
   <?define ProductCode = "{$guid7$}" ?>
+  
+  <?if $(var.Platform)=x64 ?>
+  <?define Win64YesNo="yes" ?>
   <?define UpgradeCode = "{$guid5$}" ?>
+  <?define pf="ProgramFiles64Folder" ?>
+  <?else ?>
+  <?define Win64YesNo="no" ?>
+  <?define UpgradeCode = "{$guid6$}" ?>
+  <?define pf="ProgramFilesFolder" ?>
+  <?endif ?>
 
   <Product Id="$(var.ProductCode)" Name="$csprojectname$ Setup" Language="1033" Version="$(var.Version)" Manufacturer="UnmanagedVisio" UpgradeCode="$(var.UpgradeCode)">
-    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" Platform="x86" />
+    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" Platform="$(var.Platform)" />
 
     <!-- check taht .NET 4 (client profile at least) is installed -->
     <PropertyRef Id="NETFRAMEWORK40CLIENT" />
@@ -47,7 +56,7 @@
   
   <Fragment>
     <Directory Id="TARGETDIR" Name="SourceDir">
-      <Directory Id="ProgramFilesFolder">
+      <Directory Id="$(var.pf)">
         <Directory Id="INSTALLFOLDER" Name="$csprojectname$">
 
         </Directory>
@@ -71,6 +80,7 @@
       </Component>
       $endif$
     </ComponentGroup>
+
     $if$ ($addinProject$ == true)
     <!-- Addin files to be included in setup -->
     <ComponentGroup Id="AddinFiles" Directory="INSTALLFOLDER">
