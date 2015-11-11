@@ -6,7 +6,7 @@ $endif$$if$ ($uiCallbacks$ == true)Imports System.Runtime.InteropServices
 $endif$
 Public Class ThisAddIn
 
-    $if$ ($uiCallbacks$ == true)Private ReadOnly _addinUI As AddinUI = New AddinUI()
+    $if$ ($uiCallbacks$ == true)Private ReadOnly AddinUI As AddinUI = New AddinUI()
     $endif$$if$ ($ribbonXml$ == true)
     Protected Overrides Function CreateRibbonExtensibilityObject() As Office.IRibbonExtensibility
         Return _addinUI
@@ -119,12 +119,12 @@ Public Class ThisAddIn
 	$endif$
 	$if$ ($uiCallbacks$ == true)
     Sub UpdateUI()
-        $endif$$if$ ($commandbars$ == true)_addinUI.UpdateCommandBars()
-        $endif$$if$ ($ribbonXml$ == true)_addinUI.UpdateRibbon()
+        $endif$$if$ ($commandbars$ == true)AddinUI.UpdateCommandBars()
+        $endif$$if$ ($ribbonXml$ == true)AddinUI.UpdateRibbon()
     $endif$$if$ ($uiCallbacks$ == true)
     End Sub
     $endif$$if$ ($uiCallbacks$ == true)
-    Public Sub Application_SelectionChanged(Window As Visio.Window)
+    Public Sub Application_SelectionChanged(window As Visio.Window)
         UpdateUI()
     End Sub
     $endif$
@@ -132,14 +132,14 @@ Public Class ThisAddIn
         $if$ ($taskpane$ == true)_panelManager = New PanelManager(Me)
 		$endif$$if$ ($ribbonANDcommandbars$ == true)Dim version = Integer.Parse(Application.Version, NumberStyles.AllowDecimalPoint)
         If (version < 14) Then
-			$endif$$if$ ($commandbars$ == true)_addinUI.StartupCommandBars("$csprojectname$", New String() {"Command1", "Command2"$endif$$if$ ($commandbarsANDtaskpane$ == true), "TogglePanel"$endif$$if$ ($commandbars$ == true)})
+			$endif$$if$ ($commandbars$ == true)AddinUI.StartupCommandBars("$csprojectname$", New String() {"Command1", "Command2"$endif$$if$ ($commandbarsANDtaskpane$ == true), "TogglePanel"$endif$$if$ ($commandbars$ == true)})
         $endif$$if$ ($ribbonANDcommandbars$ == true)End If
         $endif$$if$ ($uiCallbacks$ == true)AddHandler Application.SelectionChanged, AddressOf Application_SelectionChanged
         $endif$
     End Sub
 
     Private Sub ThisAddIn_Shutdown() Handles Me.Shutdown
-        $if$ ($commandbars$ == true)_addinUI.ShutdownCommandBars()
+        $if$ ($commandbars$ == true)AddinUI.ShutdownCommandBars()
         $endif$$if$ ($taskpane$ == true)_panelManager.Dispose()
         $endif$$if$ ($uiCallbacks$ == true)RemoveHandler Application.SelectionChanged, AddressOf Application_SelectionChanged
         $endif$

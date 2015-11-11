@@ -170,6 +170,7 @@ namespace $csprojectname$
             mask.UnlockBits(maskBits);
         }
 
+        [System.ComponentModel.DesignerCategory("")]
         class PictureConvert : AxHost
         {
             private PictureConvert() : base("") { }

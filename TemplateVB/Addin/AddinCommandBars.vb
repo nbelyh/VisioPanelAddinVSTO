@@ -148,6 +148,7 @@ Partial Public Class AddinUI
         mask.UnlockBits(maskBits)
     End Sub
 
+    <System.ComponentModel.DesignerCategory("")>
     Private Class PictureConvert
         Inherits AxHost
         Private Sub New()
