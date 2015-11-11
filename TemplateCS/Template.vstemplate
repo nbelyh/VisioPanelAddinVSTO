@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <VSTemplate Version="3.0.0" Type="ProjectGroup" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
   <TemplateData>
-    <Name>Extended Visio C# Addin</Name>
+    <Name>Extended Visio C# VSTO Addin</Name>
     <DefaultName>ExtendedVisioAddin</DefaultName>
-    <Description>Creates Extended Visio C# Addin Project and WiX installer project</Description>
+    <Description>Creates Extended Visio VSTO C# Addin Project and WiX installer project</Description>
     <ProjectType>CSharp</ProjectType>
     <RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
     <Icon>IconCS.ico</Icon>
