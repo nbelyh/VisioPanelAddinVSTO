@@ -146,13 +146,3 @@ Public Class ThisAddIn
     End Sub
 
 End Class
-$if$ ($uiCallbacks$ == true)
-<ComVisible(True)>
-Partial Public Class AddinUI
-    ReadOnly Property ThisAddIn() As ThisAddIn
-        Get
-            Return Globals.ThisAddIn
-        End Get
-    End Property
-End Class
-$endif$
