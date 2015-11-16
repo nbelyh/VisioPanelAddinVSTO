@@ -94,6 +94,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Setup\License.rtf" />
     <None Include="Setup\Stencil_1_M.vss" />
     <None Include="Setup\Template_1_M.vst" />
   </ItemGroup>

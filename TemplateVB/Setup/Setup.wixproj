@@ -27,7 +27,10 @@
   <ItemGroup>
     <Compile Include="Product.wxs" />
   </ItemGroup>
-  $if$ ($addinProject$ == true)<ItemGroup>
+  $if$ ($EnableWixUI$ == true)<ItemGroup>
+    <Content Include="License.rtf" />
+  </ItemGroup>
+  $endif$$if$ ($addinProject$ == true)<ItemGroup>
     <ProjectReference Include="..\$csprojectname$\$csprojectname$.vbproj">
       <Name>$csprojectname$</Name>
       <Project>$csprojectguid$</Project>

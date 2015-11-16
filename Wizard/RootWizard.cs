@@ -87,9 +87,6 @@ namespace PanelAddinWizard
             GlobalDictionary["$EnableWixUI$"] = SetupOptions.EnableWixUI ? "true" : "false";
             GlobalDictionary["$WixUI$"] = SetupOptions.EnableWixUI ? SetupOptions.WixUI : "";
             GlobalDictionary["$defaultVisioFiles$"] = SetupOptions.EnableWixSetup && SetupOptions.CreateNewVisioFiles ? "true" : "false";
-
-            GlobalDictionary["$EnableLicense$"] = SetupOptions.EnableLicense ? "true" : "false";
-            GlobalDictionary["$LicenseFileName$"] = Path.GetFileName(SetupOptions.LicenseFilePath);
         }
 
         private static string beautifyXml(XmlDocument doc)
@@ -132,13 +129,6 @@ namespace PanelAddinWizard
 
             var wxs = "";
             var wixProj = "";
-
-            if (options.EnableLicense)
-            {
-                var nodeLicense = docWixProj.CreateElement("Content");
-                nodeLicense.SetAttribute("Include", Path.GetFileName(options.LicenseFilePath));
-                nodeWixProj.AppendChild(nodeLicense);
-            }
 
             if (options.HaveVisioFiles)
             {

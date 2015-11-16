@@ -123,14 +123,14 @@
   <metadata name="licenseFileDialog.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>147, 17</value>
   </metadata>
+  <data name="checkWixSetupDescription.Text" xml:space="preserve">
+    <value>Create a WiX installer project to install addin for all users. If you skip the MSI installer you can deploy your addin using ClickOnce publishing. Note that you must have WiX Toolset installed (http://wixtoolset.org)</value>
+  </data>
   <data name="radioSupportRibbonXmlDescription.Text" xml:space="preserve">
     <value>XML option provides more flexibility for adnvacned user interface features (enabled/disabled ribbon items, hide/show items, localization, dynamic images, and so on) overcoming the limitations of the visual designer. But you'll have to define the ribbon with xml if you choose this option.</value>
   </data>
   <data name="checkAddinProjectDescription.Text" xml:space="preserve">
     <value>You can skip addin project creation and create only installer project to install Visio files. Note that to create addin project, you must have Visual Studio Tools for Office package installed. For VS2013 and VS2015, you can download it for free from the Microsoft website</value>
-  </data>
-  <data name="checkWixSetupDescription.Text" xml:space="preserve">
-    <value>Create a WiX installer project to install addin for all users. If you skip the MSI installer you can deploy your addin using ClickOnce publishing. Note that you must have WiX Toolset installed (http://wixtoolset.org)</value>
   </data>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>56</value>

@@ -30,8 +30,8 @@
       <![CDATA[Installed OR NETFRAMEWORK40CLIENT OR NETFRAMEWORK40 OR NETFRAMEWORK45]]>
     </Condition>
 
-    $if$ ($EnableLicense$ == true)<!-- override default license -->
-    <WixVariable Id="WixUILicenseRtf" Value="$LicenseFileName$" />
+    $if$ ($EnableWixUI$ == true)<!-- override default license -->
+    <WixVariable Id="WixUILicenseRtf" Value="License.rtf" />
     $endif$
     <!-- allow major upgrades -->
     <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
@@ -47,8 +47,24 @@
     </Feature>
 
     $if$ ($EnableWixUI$ == true)<!-- UI settings -->
-    <UIRef Id="$WixUI$"/>
-    $endif$$if$ ($WixUI$ == WixUI_InstallDir)<Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />$endif$
+    <UI>
+      <UIRef Id="$WixUI$"/>
+      $endif$$if$ ($WixUI$ == WixUI_InstallDir)<Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
+      $endif$$if$ ($WixUI$ == WixUI_InstallDirNoLicense)
+      <!-- Skip license dialog -->
+      <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
+      <Publish Dialog="WelcomeDlg"
+               Control="Next"
+               Event="NewDialog"
+               Value="InstallDirDlg"
+               Order="2">1</Publish>
+      <Publish Dialog="InstallDirDlg"
+               Control="Back"
+               Event="NewDialog"
+               Value="WelcomeDlg"
+               Order="2">1</Publish>
+      $endif$
+    </UI>
     
   </Product>
 

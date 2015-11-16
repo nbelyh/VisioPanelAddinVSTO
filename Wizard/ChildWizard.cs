@@ -63,8 +63,6 @@ namespace PanelAddinWizard
             replacementsDictionary.Add("$addinProject$", RootWizard.GlobalDictionary["$addinProject$"]);
             replacementsDictionary.Add("$WixUI$", RootWizard.GlobalDictionary["$WixUI$"]);
             replacementsDictionary.Add("$EnableWixUI$", RootWizard.GlobalDictionary["$EnableWixUI$"]);
-            replacementsDictionary.Add("$EnableLicense$", RootWizard.GlobalDictionary["$EnableLicense$"]);
-            replacementsDictionary.Add("$LicenseFileName$", RootWizard.GlobalDictionary["$LicenseFileName$"]);
         }
 
         public void RunFinished()
@@ -93,9 +91,6 @@ namespace PanelAddinWizard
 
         void GenerateVisioFiles(string projectPath, WixSetupOptions options)
         {
-            if (options.EnableLicense)
-                File.Copy(options.LicenseFilePath, Path.Combine(projectPath, Path.GetFileName(options.LicenseFilePath)));
-
             if (!options.HaveVisioFiles)
                 return;
 

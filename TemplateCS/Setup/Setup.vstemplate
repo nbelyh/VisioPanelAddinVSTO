@@ -18,6 +18,7 @@
       <ProjectItem ReplaceParameters="false" >build/VisioWixExtension.dll</ProjectItem>
       <ProjectItem ReplaceParameters="false" >Stencil_1_M.vss</ProjectItem>
       <ProjectItem ReplaceParameters="false" >Template_1_M.vst</ProjectItem>
+      <ProjectItem ReplaceParameters="false" >License.rtf</ProjectItem>
     </Project>
   </TemplateContent>
   <WizardExtension>

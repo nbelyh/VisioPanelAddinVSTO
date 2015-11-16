@@ -14,8 +14,6 @@ namespace PanelAddinWizard
 
         public bool EnableWixUI { get; set; }
         public string WixUI { get; set; }
-        public bool EnableLicense { get; set; }
-        public string LicenseFilePath { get; set; }
 
         public bool HaveVisioFiles { get { return EnableWixSetup && !CreateNewVisioFiles && VisioFilePaths != null && VisioFilePaths.Length > 0; } }
     }
