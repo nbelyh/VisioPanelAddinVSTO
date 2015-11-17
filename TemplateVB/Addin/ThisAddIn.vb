@@ -16,7 +16,9 @@ Public Class ThisAddIn
     ''' A simple command
     ''' 
     Public Sub Command1()
-        MessageBox.Show("Hello from command 1!")
+        MessageBox.Show(
+            "Hello from command 1!",
+            "$csprojectname$")
     End Sub
     $endif$$if$ ($uiCallbacks$ == true)
     ''' 
@@ -26,7 +28,9 @@ Public Class ThisAddIn
     Public Sub Command2()
         If Application Is Nothing OrElse Application.ActiveWindow Is Nothing OrElse Application.ActiveWindow.Selection Is Nothing Then Exit Sub
 
-        MessageBox.Show(String.Format("Hello from (conditional) command 2! You have {0} shapes selected.", Application.ActiveWindow.Selection.Count))
+        MessageBox.Show(
+            String.Format("Hello from (conditional) command 2! You have {0} shapes selected.", Application.ActiveWindow.Selection.Count),
+            "$csprojectname$")
     End Sub
     $endif$$if$ ($uiCallbacks$ == true)
     ''' 

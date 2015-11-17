@@ -46,7 +46,7 @@ namespace PanelAddinWizard
             checkWixSetup.Enabled = checkWixSetup.Checked = _host.IsWixInstalled();
             checkAddinProject.Enabled = checkAddinProject.Checked = _host.IsVstoInstalled();
 
-            checkAddVisioFiles.Checked = true;
+            checkAddVisioFiles.Checked = false;
             radioCreateNewVisioFiles.Checked = true;
             checkCopyVisioFiles.Checked = true;
 

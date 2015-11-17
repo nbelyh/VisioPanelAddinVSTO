@@ -111,10 +111,15 @@
         <File Source="$(var.$csprojectname$.TargetPath).manifest"></File>
       </Component>
       
+      <!-- VSTO framework file -->
+      <Component>
+        <File Source="$(var.$csprojectname$.TargetDir)Microsoft.Office.Tools.Common.v4.0.Utilities.dll"></File>
+      </Component>
+
       <!--  The .vsto file is addin discovery file. Set up registry to point to this file using |vstolocal -->
       <Component>
         <File Id="Addin_vsto" Source="$(var.$csprojectname$.TargetDir)$(var.$csprojectname$.TargetName).vsto"></File>
-        <RegistryKey Root="HKLM" Key="Software\Microsoft\Visio\Addins\$csprojectname$.Addin">
+        <RegistryKey Root="HKLM" Key="Software\Microsoft\Visio\Addins\$progid$">
           <RegistryValue Name="Manifest" Type="string" Value="[#Addin_vsto]|vstolocal" />
           <RegistryValue Name="Description" Type="string" Value="$csprojectname$" />
           <RegistryValue Name="CommandLineSafe" Type="integer" Value="1" />
@@ -123,11 +128,6 @@
         </RegistryKey>
       </Component>
       
-      <!-- VSTO framework file -->
-      <Component>
-        <File Source="$(var.$csprojectname$.TargetDir)Microsoft.Office.Tools.Common.v4.0.Utilities.dll"></File>
-      </Component>
-
     </ComponentGroup>
     $endif$
   </Fragment>

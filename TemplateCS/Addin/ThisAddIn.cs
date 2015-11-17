@@ -22,7 +22,9 @@ namespace $csprojectname$
         /// </summary>
         public void Command1()
         {
-            MessageBox.Show("Hello from command 1!");
+            MessageBox.Show(
+                "Hello from command 1!", 
+                "$csprojectname$");
         }
         $endif$$if$ ($uiCallbacks$ == true)
         /// <summary>
@@ -34,7 +36,9 @@ namespace $csprojectname$
             if (Application == null || Application.ActiveWindow == null || Application.ActiveWindow.Selection == null)
                 return;
 
-            MessageBox.Show(string.Format("Hello from (conditional) command 2! You have {0} shapes selected.", Application.ActiveWindow.Selection.Count));
+            MessageBox.Show(
+                string.Format("Hello from (conditional) command 2! You have {0} shapes selected.", Application.ActiveWindow.Selection.Count),
+                "$csprojectname$");
         }
         $endif$$if$ ($uiCallbacks$ == true)
         /// <summary>
