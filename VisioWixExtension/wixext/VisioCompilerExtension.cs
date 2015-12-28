@@ -8,7 +8,7 @@ using System.Globalization;
 
 namespace VisioWixExtension
 {
-    internal class RowGenerator : CompilerExtension
+    internal class VisioCompilerExtension : CompilerExtension
     {
         private XmlSchema _schema;
 
@@ -40,31 +40,41 @@ namespace VisioWixExtension
             switch (parentElement.LocalName)
             {
                 case "File":
+                    
+                    string fileId = contextValues[0];
                     string componentId = contextValues[1];
 
-                    var fileName = 
-                        Core.GetAttributeLongFilename(sourceLineNumbers, parentElement.Attributes["Name"], false);
+                    Func<string> fileName = () => 
+                        parentElement.HasAttribute("Name")
+                        ? Core.GetAttributeLongFilename(sourceLineNumbers, parentElement.Attributes["Name"], false)
+                        : parentElement.HasAttribute("Source")
+                            ? Path.GetFileNameWithoutExtension(Core.GetAttributeValue(sourceLineNumbers, parentElement.Attributes["Source"], false))
+                            : null;
 
                     switch (element.LocalName)
                     {
                         case "PublishStencil":
-                            ParseVisioElement(element, componentId, fileName, VisioContentType.Stencil);
+                            ParseVisioElement(element, componentId, fileName(), VisioContentType.Stencil);
                             break;
 
                         case "PublishTemplate":
-                            ParseVisioElement(element, componentId, fileName, VisioContentType.Template);
+                            ParseVisioElement(element, componentId, fileName(), VisioContentType.Template);
                             break;
 
                         case "PublishHelpFile":
-                            ParseVisioElement(element, componentId, fileName, VisioContentType.Help);
+                            ParseVisioElement(element, componentId, fileName(), VisioContentType.Help);
                             break;
 
                         case "PublishAddon":
-                            ParseVisioElement(element, componentId, fileName, VisioContentType.Addon);
+                            ParseVisioElement(element, componentId, fileName(), VisioContentType.Addon);
                             break;
 
                         case "Publish":
                             Core.OnMessage(VisioErrors.UsingPublish(sourceLineNumbers));
+                            break;
+
+                        case "PublishAddinVSTO":
+                            ParseAddinElement(element, fileName(), fileId);
                             break;
 
                         default:
@@ -78,6 +88,75 @@ namespace VisioWixExtension
             }
         }
 
+        private void ParseAddinElement(XmlElement node, string friendlyName, string fileId)
+        {
+            string description = null;
+
+            var visioEdition = VisioEdition.Default;
+            string id = null;
+            var sourceLineNumbers = Preprocessor.GetSourceLineNumbers(node);
+            var commandLinkeSafe = 1;
+            var loadBehavior = 3;
+
+            foreach (XmlAttribute attrib in node.Attributes)
+            {
+                switch (attrib.LocalName)
+                {
+                    case "File":
+                        fileId = Core.GetAttributeIdentifierValue(sourceLineNumbers, attrib);
+                        Core.CreateWixSimpleReferenceRow(sourceLineNumbers, "File", fileId);
+                        break;
+
+                    case "Id":
+                        id = Core.GetAttributeIdentifierValue(sourceLineNumbers, attrib);
+                        break;
+
+                    case "FriendlyName":
+                        friendlyName = Core.GetAttributeBundleVariableValue(sourceLineNumbers, attrib);
+                        break;
+
+                    case "Description":
+                        description = Core.GetAttributeBundleVariableValue(sourceLineNumbers, attrib);
+                        break;
+
+                    case "VisioEdition":
+                        visioEdition = ParseVisioEditionAttributeValue(sourceLineNumbers, attrib);
+                        break;
+
+                    case "CommandLineSafe":
+                        commandLinkeSafe = (YesNoType.Yes == Core.GetAttributeYesNoValue(sourceLineNumbers, attrib) ? 1 : 0);
+                        break;
+
+                    case "LoadBehavior":
+                        loadBehavior = Core.GetAttributeIntegerValue(sourceLineNumbers, attrib, 0, 32);
+                        break;
+
+                    default:
+                        Core.UnexpectedAttribute(sourceLineNumbers, attrib);
+                        break;
+                }
+            }
+
+            if (Core.EncounteredError)
+                return;
+
+            Core.EnsureTable(sourceLineNumbers, "AddinRegistration");
+            var r = Core.CreateRow(sourceLineNumbers, "AddinRegistration");
+
+            if (id == null)
+                id = CompilerCore.GetIdentifierFromName(friendlyName);
+
+            r[0] = id;
+            r[1] = fileId;
+            r[2] = friendlyName;
+            r[3] = description;
+            r[4] = (int)visioEdition;
+            r[5] = commandLinkeSafe;
+            r[6] = loadBehavior;
+
+            Core.CreateWixSimpleReferenceRow(sourceLineNumbers, "CustomAction", "SchedAddinRegistration");
+        }
+
         /// <summary>
         /// Parses a "Visio" element.
         /// </summary>
@@ -85,7 +164,7 @@ namespace VisioWixExtension
         /// <param name="contextComponentId">Identifier for parent component.</param>
         /// <param name="fileName"></param>
         /// <param name="visioContentType"></param>
-        private void ParseVisioElement(XmlNode node, string contextComponentId, string fileName, VisioContentType visioContentType)
+        private void ParseVisioElement(XmlElement node, string contextComponentId, string fileName, VisioContentType visioContentType)
         {
             var sourceLineNumbers = Preprocessor.GetSourceLineNumbers(node);
 
@@ -97,7 +176,6 @@ namespace VisioWixExtension
 
             var publishInfo = new VisioPublishInfo(fileName);
 
-            if (node.Attributes != null)
             foreach (XmlAttribute attrib in node.Attributes)
             {
                 switch (attrib.LocalName)
@@ -256,10 +334,10 @@ namespace VisioWixExtension
                 publishInfo.VisioEdition = (VisioEdition.X86 | VisioEdition.X64);
 
             if ((publishInfo.VisioEdition & VisioEdition.X86) == VisioEdition.X86)
-                Core.CreateWixSimpleReferenceRow(sourceLineNumbers, "CustomAction", "SetConfigChangeID");
+                Core.CreateWixSimpleReferenceRow(sourceLineNumbers, "CustomAction", "UpdateConfigChangeID32");
 
             if ((publishInfo.VisioEdition & VisioEdition.X64) == VisioEdition.X64)
-                Core.CreateWixSimpleReferenceRow(sourceLineNumbers, "CustomAction", "SetConfigChangeID64");
+                Core.CreateWixSimpleReferenceRow(sourceLineNumbers, "CustomAction", "UpdateConfigChangeID64");
 
             if (Core.EncounteredError)
                 return;
@@ -434,7 +512,7 @@ namespace VisioWixExtension
         /// </summary>
         /// <param name="fileName"></param>
         /// <returns></returns>
-        static private VisioContentType GetVisioContentType(string fileName)
+        private static VisioContentType GetVisioContentType(string fileName)
         {
             switch (Path.GetExtension(fileName))
             {

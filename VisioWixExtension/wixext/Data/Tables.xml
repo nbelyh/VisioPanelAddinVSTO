@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<tableDefinitions xmlns="http://schemas.microsoft.com/wix/2006/tables">
+  <tableDefinition name="AddinRegistration">
+    
+    <columnDefinition name="AddinRegistration" type="string" length="72" primaryKey="yes" modularize="column" 
+                      category="identifier" />
+    
+    <columnDefinition name="File_" type="string" length="72" nullable="no" modularize="column"
+        keyTable="File" keyColumn="1" category="identifier" description=""/>
+
+    <columnDefinition name="FriendlyName" type="string" length="0" modularize="none" 
+                      category="formatted" nullable="no" />
+    
+    <columnDefinition name="Description" type="string" length="0" modularize="none" 
+                      category="formatted" nullable="yes" />
+
+    <columnDefinition name="Bitness" type="number" length="2" nullable="no"
+            maxValue="2" description="Target Visio version: 0 => both, 1 => 32bit, 2 => 64bit."/>
+
+    <columnDefinition name="CommandLineSafe" type="number" length="2" nullable="no"
+            maxValue="1" description="CommandLineSafe parameter."/>
+    
+    <columnDefinition name="LoadBehavior" type="number" length="2" nullable="no"
+            description="LoadBehavior parameter."/>
+
+  </tableDefinition>
+</tableDefinitions>

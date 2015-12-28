@@ -94,7 +94,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CustomAction.cpp" />
+    <ClCompile Include="CustomActionRegisterAddins.cpp" />
+    <ClCompile Include="CustomActionUpdateConfig.cpp" />
+    <ClCompile Include="DllMain.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

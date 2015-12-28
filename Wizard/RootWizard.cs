@@ -86,6 +86,7 @@ namespace PanelAddinWizard
 
             GlobalDictionary["$EnableWixUI$"] = SetupOptions.EnableWixUI ? "true" : "false";
             GlobalDictionary["$WixUI$"] = SetupOptions.EnableWixUI ? SetupOptions.WixUI : "";
+            GlobalDictionary["$addVisioFiles$"] = SetupOptions.EnableWixSetup && SetupOptions.AddVisioFiles ? "true" : "false";
             GlobalDictionary["$defaultVisioFiles$"] = SetupOptions.EnableWixSetup && SetupOptions.CreateNewVisioFiles ? "true" : "false";
         }
 

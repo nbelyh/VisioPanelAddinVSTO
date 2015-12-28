@@ -8,6 +8,7 @@ namespace PanelAddinWizard
     public class WixSetupOptions
     {
         public bool EnableWixSetup { get; set; }
+        public bool AddVisioFiles { get; set; }
         public bool CreateNewVisioFiles { get; set; }
         public bool DuplicateExistingVisioFiles { get; set; }
         public string[] VisioFilePaths { get; set; }

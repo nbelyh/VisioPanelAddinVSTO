@@ -7,19 +7,10 @@
 
   <?define Version="1.0.0.0"?>
   <?define ProductCode = "{$guid7$}" ?>
-  
-  <?if $(var.Platform)=x64 ?>
-  <?define Win64YesNo="yes" ?>
   <?define UpgradeCode = "{$guid5$}" ?>
-  <?define pf="ProgramFiles64Folder" ?>
-  <?else ?>
-  <?define Win64YesNo="no" ?>
-  <?define UpgradeCode = "{$guid6$}" ?>
-  <?define pf="ProgramFilesFolder" ?>
-  <?endif ?>
 
   <Product Id="$(var.ProductCode)" Name="$csprojectname$ Setup" Language="1033" Version="$(var.Version)" Manufacturer="UnmanagedVisio" UpgradeCode="$(var.UpgradeCode)">
-    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" Platform="$(var.Platform)" />
+    <Package InstallerVersion="200" Compressed="yes" />
 
     <!-- check taht .NET 4 (client profile at least) is installed -->
     <PropertyRef Id="NETFRAMEWORK40CLIENT" />
@@ -43,16 +34,16 @@
 
     <Feature Id="ProductFeature" Title="Setup" Level="1">
       $if$ ($addinProject$ == true)<ComponentGroupRef Id="AddinFiles"/>
-      $endif$<ComponentGroupRef Id="VisioFiles"/>
-    </Feature>
+      $endif$$if$ ($addVisioFiles$ == true)<ComponentGroupRef Id="VisioFiles"/>
+    $endif$</Feature>
 
     $if$ ($EnableWixUI$ == true)<!-- UI settings -->
     <UI>
       <UIRef Id="$WixUI$"/>
-      $endif$$if$ ($WixUI$ == WixUI_InstallDir)<Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
-      $endif$$if$ ($WixUI$ == WixUI_InstallDirNoLicense)
-      <!-- Skip license dialog -->
-      <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
+      $endif$$if$ ($WixUI$ == WixUI_InstallDir)<!-- WixUI_InstallDir settings -->
+      <Property Id="WIXUI_INSTALLDIR" Value="APPLICATIONFOLDER" />
+      $endif$$if$ ($WixUI$ == WixUI_InstallDirNoLicense)<!-- Skip license dialog -->
+      <Property Id="WIXUI_INSTALLDIR" Value="APPLICATIONFOLDER" />
       <Publish Dialog="WelcomeDlg"
                Control="Next"
                Event="NewDialog"
@@ -63,25 +54,32 @@
                Event="NewDialog"
                Value="WelcomeDlg"
                Order="2">1</Publish>
-    $endif$</UI>
-    
+      $endif$$if$ ($WixUI$ == WixUI_Advanced)
+      <UIRef Id="WixUI_Advanced"/>
+      <Property Id="ALLUSERS" Value="2" />
+      <Property Id="ApplicationFolderName" Value="$csprojectname$" />
+      <Property Id="WixAppFolder" Value="WixPerMachineFolder" />
+
+      <Publish Dialog="InstallScopeDlg" Control="Next" Property="MSIINSTALLPERUSER" Value="1" >WixAppFolder = "WixPerUserFolder"</Publish>
+      <Publish Dialog="InstallScopeDlg" Control="Next" Property="MSIINSTALLPERUSER" Value="{}" >WixAppFolder = "WixPerMachineFolder"</Publish>
+    $endif$
+    </UI>
   </Product>
 
   <!-- Define default directory structure -->
   
   <Fragment>
     <Directory Id="TARGETDIR" Name="SourceDir">
-      <Directory Id="$(var.pf)">
-        <Directory Id="INSTALLFOLDER" Name="$csprojectname$">
-
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="APPLICATIONFOLDER" Name="$csprojectname$">
+          
         </Directory>
       </Directory>
     </Directory>
-
-    <!-- Visio files to be included in setup -->
-    <ComponentGroup Id="VisioFiles" Directory="INSTALLFOLDER">
-      $visioFilesWxs$
-      $if$ ($defaultVisioFiles$ == true)<!-- Sample template file. Feel free to modify the optional parameters -->
+    
+    $if$ ($addVisioFiles$ == true)<!-- Visio files to be included in setup -->
+    <ComponentGroup Id="VisioFiles" Directory="APPLICATIONFOLDER">
+      $endif$$visioFilesWxs$$if$ ($defaultVisioFiles$ == true)<!-- Sample template file. Feel free to modify the optional parameters -->
       <Component>
         <File Name="Stencil_1_M.vss">
           <visio:PublishStencil MenuPath="$csprojectname$\Stencil 1" />
@@ -93,11 +91,10 @@
           <visio:PublishTemplate MenuPath="$csprojectname$\Template 1" />
         </File>
       </Component>
-      $endif$
-    </ComponentGroup>
-    $if$ ($addinProject$ == true)
+    $endif$$if$ ($addVisioFiles$ == true)</ComponentGroup>
+    $endif$$if$ ($addinProject$ == true)
     <!-- Addin files to be included in setup -->
-    <ComponentGroup Id="AddinFiles" Directory="INSTALLFOLDER">
+    <ComponentGroup Id="AddinFiles" Directory="APPLICATIONFOLDER">
       
       <!-- Add the addin dll to the setup. Reference using project referencing -->
       <Component>
@@ -116,14 +113,9 @@
       
       <!--  The .vsto file is addin discovery file. Set up registry to point to this file using |vstolocal -->
       <Component>
-        <File Id="Addin_vsto" Source="$(var.$csprojectname$.TargetDir)$(var.$csprojectname$.TargetName).vsto"></File>
-        <RegistryKey Root="HKLM" Key="Software\Microsoft\Visio\Addins\$progid$">
-          <RegistryValue Name="Manifest" Type="string" Value="[#Addin_vsto]|vstolocal" />
-          <RegistryValue Name="Description" Type="string" Value="$csprojectname$" />
-          <RegistryValue Name="CommandLineSafe" Type="integer" Value="1" />
-          <RegistryValue Name="FriendlyName" Type="string" Value="$csprojectname$"/>
-          <RegistryValue Name="LoadBehavior" Type="integer" Value="3" />
-        </RegistryKey>
+        <File Source="$(var.$csprojectname$.TargetDir)$(var.$csprojectname$.TargetName).vsto">
+          <visio:PublishAddinVSTO FriendlyName="$csprojectname$" Description="PUT DESCRIPTION HERE" />
+        </File>
       </Component>
       
     </ComponentGroup>

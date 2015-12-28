@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>VisioWixExtension</RootNamespace>
     <AssemblyName>VisioWixExtension</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -55,12 +55,14 @@
   <ItemGroup>
     <Compile Include="Data\Messages.cs" />
     <Compile Include="VisioCompilerExtension.cs" />
+    <Compile Include="VisioDecompilerExtension.cs" />
     <Compile Include="VisioPublishInfo.cs" />
     <Compile Include="VisioWixExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="wix">
       <HintPath>$(WIX)bin\wix.dll</HintPath>
@@ -76,7 +78,12 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Data\Messages.xml" />
+    <Content Include="Data\Messages.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <EmbeddedResource Include="Data\Tables.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

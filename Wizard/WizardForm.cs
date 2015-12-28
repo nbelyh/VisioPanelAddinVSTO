@@ -90,11 +90,12 @@ namespace PanelAddinWizard
         {
             return new WixSetupOptions
             {
-                EnableWixSetup = checkAddVisioFiles.Checked,
-                CreateNewVisioFiles = radioCreateNewVisioFiles.Checked,
-                DuplicateExistingVisioFiles = checkCopyVisioFiles.Checked,
+                EnableWixSetup = checkWixSetup.Checked,
+                AddVisioFiles = checkWixSetup.Checked && checkAddVisioFiles.Checked,
+                CreateNewVisioFiles = checkAddVisioFiles.Checked && radioCreateNewVisioFiles.Checked,
+                DuplicateExistingVisioFiles = checkAddVisioFiles.Checked && checkCopyVisioFiles.Checked,
                 VisioFilePaths = visioFileDialog.FileNames,
-                EnableWixUI = checkEnableSetupUI.Checked,
+                EnableWixUI = checkWixSetup.Checked && checkEnableSetupUI.Checked,
                 WixUI = comboSetupUI.Text
             };
         }
@@ -234,7 +235,8 @@ namespace PanelAddinWizard
             "WixUI_Minimal",
             "WixUI_InstallDir",
             "WixUI_InstallDirNoLicense",
-            "WixUI_Mondo"});
+            "WixUI_Mondo",
+            "WixUI_Advanced"});
             this.comboSetupUI.Location = new System.Drawing.Point(48, 364);
             this.comboSetupUI.Name = "comboSetupUI";
             this.comboSetupUI.Size = new System.Drawing.Size(262, 21);
@@ -375,7 +377,7 @@ namespace PanelAddinWizard
             this.pageAddin.Description = "Please select the add-in project features";
             this.pageAddin.Location = new System.Drawing.Point(0, 0);
             this.pageAddin.Name = "pageAddin";
-            this.pageAddin.Size = new System.Drawing.Size(644, 466);
+            this.pageAddin.Size = new System.Drawing.Size(816, 537);
             this.pageAddin.TabIndex = 11;
             this.pageAddin.Title = "Add-in project";
             // 
@@ -450,7 +452,7 @@ namespace PanelAddinWizard
             // checkSupportTaskPaneDescription
             // 
             this.checkSupportTaskPaneDescription.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.checkSupportTaskPaneDescription.Location = new System.Drawing.Point(48, 326);
+            this.checkSupportTaskPaneDescription.Location = new System.Drawing.Point(48, 337);
             this.checkSupportTaskPaneDescription.Name = "checkSupportTaskPaneDescription";
             this.checkSupportTaskPaneDescription.Size = new System.Drawing.Size(380, 24);
             this.checkSupportTaskPaneDescription.TabIndex = 12;
@@ -459,7 +461,7 @@ namespace PanelAddinWizard
             // checkSupportTaskPane
             // 
             this.checkSupportTaskPane.AutoSize = true;
-            this.checkSupportTaskPane.Location = new System.Drawing.Point(32, 306);
+            this.checkSupportTaskPane.Location = new System.Drawing.Point(32, 317);
             this.checkSupportTaskPane.Name = "checkSupportTaskPane";
             this.checkSupportTaskPane.Size = new System.Drawing.Size(157, 17);
             this.checkSupportTaskPane.TabIndex = 9;
@@ -470,7 +472,7 @@ namespace PanelAddinWizard
             // checkSupportCommandBarsDescription
             // 
             this.checkSupportCommandBarsDescription.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.checkSupportCommandBarsDescription.Location = new System.Drawing.Point(48, 387);
+            this.checkSupportCommandBarsDescription.Location = new System.Drawing.Point(48, 398);
             this.checkSupportCommandBarsDescription.Name = "checkSupportCommandBarsDescription";
             this.checkSupportCommandBarsDescription.Size = new System.Drawing.Size(380, 24);
             this.checkSupportCommandBarsDescription.TabIndex = 14;
@@ -479,7 +481,7 @@ namespace PanelAddinWizard
             // checkSupportCommandBars
             // 
             this.checkSupportCommandBars.AutoSize = true;
-            this.checkSupportCommandBars.Location = new System.Drawing.Point(32, 367);
+            this.checkSupportCommandBars.Location = new System.Drawing.Point(32, 378);
             this.checkSupportCommandBars.Name = "checkSupportCommandBars";
             this.checkSupportCommandBars.Size = new System.Drawing.Size(247, 17);
             this.checkSupportCommandBars.TabIndex = 11;

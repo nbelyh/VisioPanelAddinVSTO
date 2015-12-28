@@ -59,6 +59,7 @@ namespace PanelAddinWizard
             replacementsDictionary.Add("$visioFilesWxs$", RootWizard.GlobalDictionary["$visioFilesWxs$"]);
             replacementsDictionary.Add("$visioFilesWixProj$", RootWizard.GlobalDictionary["$visioFilesWixProj$"]);
             replacementsDictionary.Add("$defaultVisioFiles$", RootWizard.GlobalDictionary["$defaultVisioFiles$"]);
+            replacementsDictionary.Add("$addVisioFiles$", RootWizard.GlobalDictionary["$addVisioFiles$"]);
 
             replacementsDictionary.Add("$addinProject$", RootWizard.GlobalDictionary["$addinProject$"]);
             replacementsDictionary.Add("$WixUI$", RootWizard.GlobalDictionary["$WixUI$"]);

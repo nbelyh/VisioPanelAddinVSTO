@@ -3,37 +3,30 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
 
   <Fragment>
-    <Binary
-      Id="VisioCustomActions"
-      SourceFile="$(var.SolutionDir)\$(var.Configuration)\VisioCustomActions.dll"/>
-
+    <Binary Id="VisioCustomActions" SourceFile="$(var.SolutionDir)\$(var.Configuration)\VisioCustomActions.dll"/>
   </Fragment>
 
   <Fragment>
-    <CustomAction Id="SetConfigChangeID"
-                  BinaryKey="VisioCustomActions"
-                  DllEntry="UpdateVisioConfigChangeID"
-                  Execute="deferred"
-                  Impersonate="no"
-                  Return="check" />
+    <CustomAction Id="UpdateConfigChangeID32" BinaryKey="VisioCustomActions" DllEntry="UpdateVisioConfigChangeID32" Execute="deferred" Impersonate="no" Return="ignore" />
+    <CustomAction Id="UpdateConfigChangeID64" BinaryKey="VisioCustomActions" DllEntry="UpdateVisioConfigChangeID64" Execute="deferred" Impersonate="no" Return="ignore" />
 
     <InstallExecuteSequence>
-      <Custom Action="SetConfigChangeID" After="InstallInitialize" />
+      <Custom Action="UpdateConfigChangeID32" After="InstallFiles" Overridable="yes" />
+      <Custom Action="UpdateConfigChangeID64" After="InstallFiles" Overridable="yes" />
     </InstallExecuteSequence>
-
   </Fragment>
+
 
   <Fragment>
-    <CustomAction Id="SetConfigChangeID64"
-                    BinaryKey="VisioCustomActions"
-                    DllEntry="UpdateVisioConfigChangeID64"
-                    Execute="deferred"
-                    Impersonate="no"
-                    Return="check" />
+    <CustomAction Id="SchedAddinRegistration" BinaryKey="VisioCustomActions" DllEntry="SchedAddinRegistrationInstall" Execute="immediate" Return="check" SuppressModularization="yes" Impersonate="yes" />
+    <CustomAction Id="SchedAddinRegistrationUninstall" BinaryKey="VisioCustomActions" DllEntry="SchedAddinRegistrationUninstall" Execute="immediate" Return="check" SuppressModularization="yes" Impersonate="yes" />
+    <CustomAction Id="ExecAddinRegistration" BinaryKey="VisioCustomActions" DllEntry="ExecAddinRegistration" Execute="deferred" Impersonate="no" Return="ignore" SuppressModularization="yes" />
+    <CustomAction Id="RollbackAddinRegistration" BinaryKey="VisioCustomActions" DllEntry="ExecAddinRegistration" Execute="rollback" Impersonate="no" Return="ignore" SuppressModularization="yes" />
 
     <InstallExecuteSequence>
-      <Custom Action="SetConfigChangeID64" After="InstallInitialize" />
+      <Custom Action="SchedAddinRegistrationUninstall" Before="RemoveFiles" Overridable="yes" />
+      <Custom Action="SchedAddinRegistration" After="InstallFiles" Overridable="yes" />
     </InstallExecuteSequence>
   </Fragment>
-    
+
 </Wix>

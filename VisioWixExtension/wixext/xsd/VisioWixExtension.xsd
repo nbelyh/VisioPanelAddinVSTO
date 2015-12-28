@@ -509,34 +509,45 @@
 
     <xs:complexType>
 
-      <xs:attribute name="Visio2007" type="wix:YesNoType" use="optional">
+      <xs:attribute name="Manifest" type="xs:string" use="optional">
         <xs:annotation>
           <xs:documentation>
-            Install for Visio 2007. By default is "yes".
+            Specifies manifest file name to be registered. 
+            Not required if this registraction is nested under the manifest file.
           </xs:documentation>
         </xs:annotation>
       </xs:attribute>
 
-      <xs:attribute name="Visio2010" type="wix:YesNoType" use="optional">
+      <xs:attribute name="FriendlyName" type="xs:string" use="optional">
         <xs:annotation>
           <xs:documentation>
-            Install for Visio 2010. By default is "yes".
+            Specifies a friendly name for the Add-in to be shown in Visio UI
           </xs:documentation>
         </xs:annotation>
       </xs:attribute>
 
-      <xs:attribute name="Visio2013" type="wix:YesNoType" use="optional">
+      <xs:attribute name="Description" type="xs:string" use="optional">
         <xs:annotation>
           <xs:documentation>
-            Install for Visio 2013. By default is "yes".
+            Specifies description for the Add-in to be shown in Visio UI
           </xs:documentation>
         </xs:annotation>
       </xs:attribute>
 
-      <xs:attribute name="Visio2016" type="wix:YesNoType" use="optional">
+      <xs:attribute name="CommandLineSafe" type="wix:YesNoType" use="optional">
         <xs:annotation>
           <xs:documentation>
-            Install for Visio 2016. By default is "yes".
+            Specifies whether the add-in is safe to run when starting Visio from command line. 
+            Yes by default.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="LoadBehavior" type="xs:integer" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+            A value that specifies when the application attempts to load the VSTO Add-in and the current state of the VSTO Add-in (loaded or unloaded).
+            By default, this entry is set to 3, which specifies that the VSTO Add-in is loaded at startup.
           </xs:documentation>
         </xs:annotation>
       </xs:attribute>
@@ -545,16 +556,7 @@
         <xs:annotation>
           <xs:documentation>
             Specifies Visio Edition the item should be registered with (x32/x64)
-            If not specified, then then the template is registered for both Visio x32 and Visio x64
-          </xs:documentation>
-        </xs:annotation>
-      </xs:attribute>
-
-      <xs:attribute name="Language" type="xs:string" use="optional">
-        <xs:annotation>
-          <xs:documentation>
-            Specifies language the template should be registered with. You can specify either LCID, such as "1033" or language code, such as "en-us".
-            If not specified, publishing will be done in all languages.
+            If not specified, then then the stencil is registered for both Visio x32 and Visio x64
           </xs:documentation>
         </xs:annotation>
       </xs:attribute>
