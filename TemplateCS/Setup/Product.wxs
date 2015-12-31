@@ -114,7 +114,7 @@
       <!--  The .vsto file is addin discovery file. Set up registry to point to this file using |vstolocal -->
       <Component>
         <File Source="$(var.$csprojectname$.TargetDir)$(var.$csprojectname$.TargetName).vsto">
-          <visio:PublishAddinVSTO FriendlyName="$csprojectname$" Description="PUT DESCRIPTION HERE" />
+          <visio:PublishAddin FriendlyName="$csprojectname$" Description="PUT DESCRIPTION HERE" />
         </File>
       </Component>
       

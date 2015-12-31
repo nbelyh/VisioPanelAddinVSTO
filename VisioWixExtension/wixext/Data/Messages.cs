@@ -59,7 +59,22 @@ namespace VisioWixExtension
         
         public static VisioErrorEventArgs UsingPublish(SourceLineNumberCollection sourceLineNumbers)
         {
-            return new VisioErrorEventArgs(sourceLineNumbers, 6508, "VisioErrors_UsingPublish_1");
+            return new VisioErrorEventArgs(sourceLineNumbers, 6504, "VisioErrors_UsingPublish_1");
+        }
+        
+        public static VisioErrorEventArgs FileIdentifierNotFound(string fileId)
+        {
+            return new VisioErrorEventArgs(null, 6505, "VisioErrors_FileIdentifierNotFound_1", fileId);
+        }
+        
+        public static VisioErrorEventArgs AddinNotFound(string filePath)
+        {
+            return new VisioErrorEventArgs(null, 6506, "VisioErrors_AddinNotFound_1", filePath);
+        }
+        
+        public static VisioErrorEventArgs InvalidAddinType(SourceLineNumberCollection sourceLineNumbers, string value)
+        {
+            return new VisioErrorEventArgs(sourceLineNumbers, 6507, "VisioErrors_InvalidAddinType_1", value);
         }
     }
     
@@ -91,7 +106,7 @@ namespace VisioWixExtension
         
         public static VisioWarningEventArgs InvalidFileExtension(SourceLineNumberCollection sourceLineNumbers, string fileName, string expectedVisioContentType)
         {
-            return new VisioWarningEventArgs(sourceLineNumbers, 6507, "VisioWarnings_InvalidFileExtension_1", fileName, expectedVisioContentType);
+            return new VisioWarningEventArgs(sourceLineNumbers, 6600, "VisioWarnings_InvalidFileExtension_1", fileName, expectedVisioContentType);
         }
     }
 }

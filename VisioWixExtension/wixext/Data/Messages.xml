@@ -1,17 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<!--
-    Copyright (c) Microsoft Corporation.  All rights reserved.
-    
-    The use and distribution terms for this software are covered by the
-    Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
-    which can be found in the file CPL.TXT at the root of this distribution.
-    By using this software in any fashion, you are agreeing to be bound by
-    the terms of this license.
-    
-    You must not remove this notice, or any other, from this software.
 
-    The messages for the Windows Installer XML Toolset Visio Extension.
--->
 <Messages Namespace="VisioWixExtension" Resources="Data.Messages" xmlns="http://schemas.microsoft.com/genmsgs/2004/07/messages">
 
   <Class Name="VisioErrors" ContainerName="VisioErrorEventArgs" BaseContainerName="WixErrorEventArgs">
@@ -41,17 +29,40 @@
       </Instance>
     </Message>
 
-    <Message Id="UsingPublish" Number="6508">
+    <Message Id="UsingPublish" Number="6504">
       <Instance>
         Please use typed element instead of &lt;Publis&lt;: &lt;PublishStencil&gt;, &lt;PublishTemplate&gt;, &lt;PublishAddon&gt;, &lt;PublishHelp&gt;
       </Instance>
     </Message>
-    
+
+    <Message Id="FileIdentifierNotFound" Number="6505" SourceLineNumbers="no">
+      <Instance>
+        Addin registration references file row with identifier '{0}' that could not be found.
+        <Parameter Type="System.String" Name="fileId" />
+      </Instance>
+    </Message>
+
+    <Message Id="AddinNotFound" Number="6506" SourceLineNumbers="no">
+      <Instance>
+        Visio COM Addin (a class implementing IDTExtensibility2) is not found in file '{0}' marked for registration.
+        If you are registering a VSTO addin then please register the .vsto file not .dll (nest the &lt;PublishAddin&gt; element under .vsto file).
+        <Parameter Type="System.String" Name="filePath" />
+      </Instance>
+    </Message>
+
+    <Message Id="InvalidAddinType" Number="6507">
+      <Instance>
+        Invalid addin type specified: "{0}". The addin type should be either "COM" or "VSTO"
+        If you want to auto-detect the addin type by file extension, omit this attribute.
+        <Parameter Type="System.String" Name="value" />
+      </Instance>
+    </Message>
+
   </Class>
 
   <Class Name="VisioWarnings" ContainerName="VisioWarningEventArgs" BaseContainerName="WixWarningEventArgs">
 
-    <Message Id="InvalidFileExtension" Number="6507">
+    <Message Id="InvalidFileExtension" Number="6600">
       <Instance>
         Possibly invalid parent Visio file extension: "{0}". 
         The parent file is expected to be a {1} file.

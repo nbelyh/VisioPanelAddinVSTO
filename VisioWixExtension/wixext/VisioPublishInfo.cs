@@ -46,6 +46,16 @@ namespace VisioWixExtension
     };
 
     /// <summary>
+    /// Supported Addin types (see Xsd for more information)
+    /// </summary>
+    enum AddinType
+    {
+        Unknown = 0,
+        VSTO = 1,
+        COM = 2,
+    }
+
+    /// <summary>
     /// Supported Visio Addon Attributes (see Xsd for more information)
     /// </summary>
     [Flags]

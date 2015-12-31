@@ -31,10 +31,10 @@ namespace VisioWixExtension
         {
             public void OutputXml(XmlWriter writer)
             {
-                writer.WriteStartElement("visio", "PublishAddinVSTO", "http://schemas.microsoft.com/wix/Visio");
+                writer.WriteStartElement("visio", "PublishAddin", "http://schemas.microsoft.com/wix/Visio");
 
                 if (Id != null) 
-                    writer.WriteAttributeString("Id", Id);
+                    writer.WriteAttributeString("ProgId", Id);
 
                 if (FriendlyName != null)
                     writer.WriteAttributeString("FriendlyName", FriendlyName);

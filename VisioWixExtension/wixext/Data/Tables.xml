@@ -2,26 +2,44 @@
 <tableDefinitions xmlns="http://schemas.microsoft.com/wix/2006/tables">
   <tableDefinition name="AddinRegistration">
     
-    <columnDefinition name="AddinRegistration" type="string" length="72" primaryKey="yes" modularize="column" 
+    <columnDefinition name="ProgId" type="string" length="72" nullable="yes" modularize="column" 
                       category="identifier" />
     
     <columnDefinition name="File_" type="string" length="72" nullable="no" modularize="column"
         keyTable="File" keyColumn="1" category="identifier" description=""/>
 
     <columnDefinition name="FriendlyName" type="string" length="0" modularize="none" 
-                      category="formatted" nullable="no" />
+                      category="formatted" nullable="yes" />
     
     <columnDefinition name="Description" type="string" length="0" modularize="none" 
                       category="formatted" nullable="yes" />
 
     <columnDefinition name="Bitness" type="number" length="2" nullable="no"
-            maxValue="2" description="Target Visio version: 0 => both, 1 => 32bit, 2 => 64bit."/>
+            maxValue="2" description="Defines target Visio version: 0 => both, 1 => 32bit, 2 => 64bit."/>
 
     <columnDefinition name="CommandLineSafe" type="number" length="2" nullable="no"
-            maxValue="1" description="CommandLineSafe parameter."/>
-    
+            maxValue="1" description="Defines addin command line lauch flag."/>
+
     <columnDefinition name="LoadBehavior" type="number" length="2" nullable="no"
-            description="LoadBehavior parameter."/>
+            description="Defines the Addin load behavior"/>
+    
+    <columnDefinition name="AddinType" type="number" length="2" nullable="no"
+            description="Defines the Addin type"/>
+
+    <columnDefinition name="ClassId" type="string"  length="72" nullable="yes" modularize="column"
+        category="guid" description="ClassId (COM registration)"/>
+
+    <columnDefinition name="Class" type="string"  length="255" nullable="yes" modularize="column"
+        category="text" description="Class (COM registration)"/>
+    
+    <columnDefinition name="Assembly" type="string"  length="255" nullable="yes" modularize="column"
+        category="text" description="Assembly (COM registration)"/>
+
+    <columnDefinition name="Version" type="string"  length="128" nullable="yes" modularize="column"
+        category="version" description="Assembly version (COM registration)"/>
+    
+    <columnDefinition name="RuntimeVersion" type="string"  length="128" nullable="yes" modularize="column"
+        category="text" description=".NET Runtime version (COM registration)"/>
 
   </tableDefinition>
 </tableDefinitions>

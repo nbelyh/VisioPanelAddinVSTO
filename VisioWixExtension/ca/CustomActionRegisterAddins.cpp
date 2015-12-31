@@ -1,103 +1,51 @@
 
 #include "stdafx.h"
+#include "Register.h"
 
 LPCWSTR vcsRegisterAddinsQuery =
     L"SELECT "
-		L"`AddinRegistration`.`AddinRegistration`, "
+		L"`AddinRegistration`.`ProgId`, "
 		L"`AddinRegistration`.`File_`, "
 		L"`AddinRegistration`.`FriendlyName`, "
 		L"`AddinRegistration`.`Description`, "
 		L"`AddinRegistration`.`Bitness`, "
 		L"`AddinRegistration`.`CommandLineSafe`, "
 		L"`AddinRegistration`.`LoadBehavior`, "
+		L"`AddinRegistration`.`AddinType`, "
+		L"`AddinRegistration`.`ClassId`, "
+		L"`AddinRegistration`.`Class`, "
+		L"`AddinRegistration`.`Assembly`, "
+		L"`AddinRegistration`.`Version`, "
+		L"`AddinRegistration`.`RuntimeVersion`, "
 		L"`File`.`Component_` "
     L"FROM `AddinRegistration`, `File` WHERE `File`.`File`=`AddinRegistration`.`File_`";
 
-enum eRegisterAddinsQuery { arqId = 1, arqFile, arqName, arqDescription, arqBitness, arqCommandLineSafe, arqLoadBehavior, arqComponent };
+enum eRegisterAddinsQuery
+{
+	arqProgId = 1, 
+	arqFile, 
+	arqFriendlyName, 
+	arqDescription, 
+	arqBitness, 
+	arqCommandLineSafe, 
+	arqLoadBehavior, 
+	arqAddinType,
+	arqClassId,
+	arqClass,
+	arqAssembly,
+	arqVersion,
+	arqRuntimeVersion,
+	arqComponent
+};
 
+typedef enum ADDIN_TYPE
+{
+    ADDIN_TYPE_UNKNOWN = 0,
+    ADDIN_TYPE_VSTO = 1,
+    ADDIN_TYPE_COM = 2
+} ADDIN_TYPE;
 
 /***************************************************************/
-
-HRESULT CreateRegistryKey(REG_KEY_BITNESS iBitness, 
-	LPCWSTR pwzId, 
-	LPCWSTR pwzFile, 
-	LPCWSTR pwzFriendlyName, 
-	LPCWSTR pwzDescription,
-	int iCommandLineSafe,
-	int iLoadBehavior,
-	HKEY hKeyRoot)
-{
-	HRESULT hr = S_OK;
-	HKEY hKey = NULL;
-
-	LPWSTR wszRegPath = NULL;
-	LPWSTR wszFileEntry = NULL;
-
-    WcaLog(LOGMSG_VERBOSE, "CreateRegistryKey: Bitness=%ld, Id=%ls, Manifest=%ls, FriendlyName=%ls, Description=%ls", 
-		iBitness, pwzId, pwzFile, pwzFriendlyName, pwzDescription);
-
-    hr = StrAllocFormatted(&wszRegPath, L"Software\\Microsoft\\Visio\\Addins\\%ls", pwzId);
-    ExitOnFailure(hr, "Failed to allocate string for registry path.");
-
-	DWORD sam = KEY_READ|KEY_WRITE;
-	if (iBitness == REG_KEY_32BIT)
-		sam |= KEY_WOW64_32KEY;
-	if (iBitness == REG_KEY_64BIT)
-		sam |= KEY_WOW64_64KEY;
-
-	hr = RegCreateEx(hKeyRoot, wszRegPath, sam, FALSE, NULL, &hKey, NULL);
-	ExitOnFailure(hr, "Failed to create or open the registry key: %ls. It looks like Visio is not installed or security issue", wszRegPath);
-
-	WcaLog(LOGMSG_VERBOSE, "Created or opened registry key: %ls", wszRegPath);
-
-    hr = StrAllocFormatted(&wszFileEntry, L"file:///%ls|vstolocal", pwzFile);
-    ExitOnFailure(hr, "Failed to allocate string for registry file entry.");
-
-	hr = RegWriteString(hKey, L"Manifest", wszFileEntry);
-	ExitOnFailure(hr, "Failed set Manifest value.");
-
-	hr = RegWriteString(hKey, L"FriendlyName", pwzFriendlyName);
-	ExitOnFailure(hr, "Failed set FriendlyName value.");
-
-	hr = RegWriteString(hKey, L"Description", pwzDescription);
-	ExitOnFailure(hr, "Failed set Description value.");
-
-	hr = RegWriteNumber(hKey, L"CommandLineSafe", iCommandLineSafe);
-	ExitOnFailure(hr, "Failed set CommandLineSafe value value.");
-
-	hr = RegWriteNumber(hKey, L"LoadBehavior", iLoadBehavior);
-	ExitOnFailure(hr, "Failed set LoadBehavior value value.");
-
-LExit:
-	ReleaseStr(wszFileEntry);
-	ReleaseStr(wszRegPath);
-	ReleaseRegKey(hKey);
-	return hr;
-}
-
-/***************************************************************/
-
-HRESULT DeleteRegistryKey(REG_KEY_BITNESS iBitness, LPCWSTR pwzId, HKEY hKeyRoot)
-{
-	HRESULT hr = S_OK;
-
-    WcaLog(LOGMSG_VERBOSE, "DeleteRegistryKey: Bitness:%ld, Id=%ls", 
-		iBitness, pwzId);
-
-	LPWSTR wszRegPath = NULL;
-    hr = StrAllocFormatted(&wszRegPath, L"Software\\Microsoft\\Visio\\Addins\\%ls", pwzId);
-    ExitOnFailure(hr, "Failed to allocate registry path.");
-
-	hr = RegDelete(hKeyRoot, wszRegPath, iBitness, FALSE);
-
-	if (E_FILENOTFOUND != hr)
-		ExitOnFailure(hr, "Failed to delete the registry key: %ls.", wszRegPath);
-
-	WcaLog(LOGMSG_VERBOSE, "Deleted registry key: %ls", wszRegPath);
-
-LExit:
-	return hr;
-}
 
 const UINT COST_REGISTER_ADDIN = 100;
 
@@ -120,14 +68,21 @@ HRESULT SchedAddinRegistration(MSIHANDLE hInstall, BOOL fInstall)
     LPWSTR pwzTemp = NULL;
     LPWSTR pwzComponent = NULL;
 
-    LPWSTR pwzId = NULL;
+    LPWSTR wszProgId = NULL;
     LPWSTR pwzFile = NULL;
 	LPWSTR pwzFriendlyName = NULL;
 	LPWSTR pwzDescription = NULL;
 
+    LPWSTR wszClassId = NULL;
+    LPWSTR wszClass = NULL;
+    LPWSTR wszAssembly = NULL;
+    LPWSTR wszVersion = NULL;
+	LPWSTR wszRuntimeVersion = NULL;
+
 	int iBitness = 0;
 	int iCommandLineSafe = 1;
 	int iLoadBehavior = 0;
+	int iAddinType = 0;
 
 	LPWSTR pwzAllUsers = NULL;
 
@@ -145,36 +100,56 @@ HRESULT SchedAddinRegistration(MSIHANDLE hInstall, BOOL fInstall)
 		++nAddins;
 
         // Get Id
-        hr = WcaGetRecordString(hRec, arqId, &pwzId);
+        hr = WcaGetRecordString(hRec, arqProgId, &wszProgId);
         ExitOnFailure(hr, "failed to get AddinRegistration.AddinRegistration");
 
         // Get File
         hr = WcaGetRecordString(hRec, arqFile, &pwzData);
-        ExitOnFailure1(hr, "failed to get AddinRegistration.File_ for record: %ls", pwzId);
+        ExitOnFailure1(hr, "failed to get AddinRegistration.File_ for record: %ls", wszProgId);
         hr = StrAllocFormatted(&pwzTemp, L"[#%ls]", pwzData);
         ExitOnFailure1(hr, "failed to format file string for file: %ls", pwzData);
         hr = WcaGetFormattedString(pwzTemp, &pwzFile);
         ExitOnFailure1(hr, "failed to get formatted string for file: %ls", pwzData);
 
         // Get name
-        hr = WcaGetRecordFormattedString(hRec, arqName, &pwzFriendlyName);
-        ExitOnFailure1(hr, "failed to get AddinRegistration.Name for record: %ls", pwzId);
+        hr = WcaGetRecordFormattedString(hRec, arqFriendlyName, &pwzFriendlyName);
+        ExitOnFailure1(hr, "failed to get AddinRegistration.Name for record: %ls", wszProgId);
 
         // Get description
         hr = WcaGetRecordFormattedString(hRec, arqDescription, &pwzDescription);
-        ExitOnFailure1(hr, "failed to get AddinRegistration.Description for record: %ls", pwzId);
+        ExitOnFailure1(hr, "failed to get AddinRegistration.Description for record: %ls", wszProgId);
 
         // Get description
         hr = WcaGetRecordInteger(hRec, arqBitness, &iBitness);
-        ExitOnFailure1(hr, "failed to get AddinRegistration.Bitnesss for record: %ls", pwzId);
+        ExitOnFailure1(hr, "failed to get AddinRegistration.Bitnesss for record: %ls", wszProgId);
 
-        // Get description
+        // Get CommandLineSafe
         hr = WcaGetRecordInteger(hRec, arqCommandLineSafe, &iCommandLineSafe);
-        ExitOnFailure1(hr, "failed to get AddinRegistration.CommandLineSafe for record: %ls", pwzId);
+        ExitOnFailure1(hr, "failed to get AddinRegistration.CommandLineSafe for record: %ls", wszProgId);
 
-        // Get description
+        // Get LoadBehavior
         hr = WcaGetRecordInteger(hRec, arqLoadBehavior, &iLoadBehavior);
-        ExitOnFailure1(hr, "failed to get AddinRegistration.LoadBehavior for record: %ls", pwzId);
+        ExitOnFailure1(hr, "failed to get AddinRegistration.LoadBehavior for record: %ls", wszProgId);
+
+        hr = WcaGetRecordInteger(hRec, arqAddinType, &iAddinType);
+        ExitOnFailure1(hr, "failed to get AddinRegistration.AddinType for record: %ls", wszProgId);
+
+        // Get ClassId
+        hr = WcaGetRecordString(hRec, arqClassId, &wszClassId);
+        ExitOnFailure1(hr, "failed to get AddinRegistration.Class for record: %ls", wszProgId);
+        // Get Class
+        hr = WcaGetRecordString(hRec, arqClass, &wszClass);
+        ExitOnFailure1(hr, "failed to get AddinRegistration.Class for record: %ls", wszProgId);
+        // Get Assembly
+        hr = WcaGetRecordString(hRec, arqAssembly, &wszAssembly);
+        ExitOnFailure1(hr, "failed to get AddinRegistration.Assembly for record: %ls", wszProgId);
+        // Get Version
+        hr = WcaGetRecordString(hRec, arqVersion, &wszVersion);
+        ExitOnFailure1(hr, "failed to get AddinRegistration.Version for record: %ls", wszProgId);
+        // Get RuntimeVersion
+        hr = WcaGetRecordString(hRec, arqRuntimeVersion, &wszRuntimeVersion);
+        ExitOnFailure1(hr, "failed to get AddinRegistration.RuntimeVersion for record: %ls", wszProgId);
+
 
 		// get component and its install/action states
         hr = WcaGetRecordString(hRec, arqComponent, &pwzComponent);
@@ -197,31 +172,45 @@ HRESULT SchedAddinRegistration(MSIHANDLE hInstall, BOOL fInstall)
 
         // write custom action data: operation, instance guid, path, directory
         hr = WcaWriteIntegerToCaData(todo, &pwzCustomActionData);
-        ExitOnFailure1(hr, "failed to write operation to custom action data for instance id: %ls", pwzId);
+        ExitOnFailure1(hr, "failed to write operation to custom action data for instance id: %ls", wszProgId);
 
-        hr = WcaWriteStringToCaData(pwzId, &pwzCustomActionData);
-        ExitOnFailure1(hr, "failed to write id to custom action data for instance id: %ls", pwzId);
+        hr = WcaWriteStringToCaData(wszProgId, &pwzCustomActionData);
+        ExitOnFailure1(hr, "failed to write id to custom action data for instance id: %ls", wszProgId);
 
         hr = WcaWriteStringToCaData(pwzFile, &pwzCustomActionData);
-        ExitOnFailure1(hr, "failed to write custom action data for instance id: %ls", pwzId);
+        ExitOnFailure1(hr, "failed to write custom action data for instance id: %ls", wszProgId);
 
         hr = WcaWriteStringToCaData(pwzFriendlyName, &pwzCustomActionData);
-        ExitOnFailure1(hr, "failed to write addin name to custom action data for instance id: %ls", pwzId);
+        ExitOnFailure1(hr, "failed to write addin name to custom action data for instance id: %ls", wszProgId);
 
         hr = WcaWriteStringToCaData(pwzDescription, &pwzCustomActionData);
-        ExitOnFailure1(hr, "failed to write addin description to custom action data for instance id: %ls", pwzId);
+        ExitOnFailure1(hr, "failed to write addin description to custom action data for instance id: %ls", wszProgId);
 
         hr = WcaWriteIntegerToCaData(iBitness, &pwzCustomActionData);
-        ExitOnFailure1(hr, "failed to write Bitness to custom action data for instance id: %ls", pwzId);
+        ExitOnFailure1(hr, "failed to write Bitness to custom action data for instance id: %ls", wszProgId);
 
         hr = WcaWriteIntegerToCaData(iCommandLineSafe, &pwzCustomActionData);
-        ExitOnFailure1(hr, "failed to write CommandLineSafe to custom action data for instance id: %ls", pwzId);
+        ExitOnFailure1(hr, "failed to write CommandLineSafe to custom action data for instance id: %ls", wszProgId);
 
         hr = WcaWriteIntegerToCaData(iLoadBehavior, &pwzCustomActionData);
-        ExitOnFailure1(hr, "failed to write LoadBehavior to custom action data for instance id: %ls", pwzId);
+        ExitOnFailure1(hr, "failed to write LoadBehavior to custom action data for instance id: %ls", wszProgId);
+
+        hr = WcaWriteIntegerToCaData(iAddinType, &pwzCustomActionData);
+        ExitOnFailure1(hr, "failed to write AddinType to custom action data for instance id: %ls", wszProgId);
 
 		hr = WcaWriteStringToCaData(pwzAllUsers, &pwzCustomActionData);
-		ExitOnFailure(hr,  "failed to write allusers property to custom action data for instance id: %ls", pwzId);
+		ExitOnFailure(hr,  "failed to write allusers property to custom action data for instance id: %ls", wszProgId);
+
+		hr = WcaWriteStringToCaData(wszClassId, &pwzCustomActionData);
+		ExitOnFailure(hr,  "failed to write ClassId property to custom action data for instance id: %ls", wszProgId);
+		hr = WcaWriteStringToCaData(wszClass, &pwzCustomActionData);
+		ExitOnFailure(hr,  "failed to write Class property to custom action data for instance id: %ls", wszProgId);
+		hr = WcaWriteStringToCaData(wszAssembly, &pwzCustomActionData);
+		ExitOnFailure(hr,  "failed to write Assembly property to custom action data for instance id: %ls", wszProgId);
+		hr = WcaWriteStringToCaData(wszVersion, &pwzCustomActionData);
+		ExitOnFailure(hr,  "failed to write Version property to custom action data for instance id: %ls", wszProgId);
+		hr = WcaWriteStringToCaData(wszRuntimeVersion, &pwzCustomActionData);
+		ExitOnFailure(hr,  "failed to write RuntimeVersion property to custom action data for instance id: %ls", wszProgId);
 	}
 
     if (E_NOMOREITEMS == hr)
@@ -244,7 +233,7 @@ HRESULT SchedAddinRegistration(MSIHANDLE hInstall, BOOL fInstall)
 LExit:
 	ReleaseStr(pwzAllUsers);
     ReleaseStr(pwzCustomActionData);
-    ReleaseStr(pwzId);
+    ReleaseStr(wszProgId);
     ReleaseStr(pwzData);
 	ReleaseStr(pwzData);
     ReleaseStr(pwzTemp);
@@ -252,6 +241,12 @@ LExit:
     ReleaseStr(pwzFile);
 	ReleaseStr(pwzFriendlyName);
 	ReleaseStr(pwzDescription);
+
+    ReleaseStr(wszClassId);
+	ReleaseStr(wszClass);
+    ReleaseStr(wszAssembly);
+    ReleaseStr(wszVersion);
+	ReleaseStr(wszRuntimeVersion);
 
     return hr;
 }
@@ -294,13 +289,20 @@ UINT __stdcall ExecAddinRegistration(MSIHANDLE hInstall)
     LPWSTR pwz = NULL;
 
     int iOperation = 0;
-    LPWSTR pwzId = NULL;
+    LPWSTR pwzProgId = NULL;
     LPWSTR pwzFile = NULL;
 	LPWSTR pwzName = NULL;
 	LPWSTR pwzDescription = NULL;
 	int iBitness = REG_KEY_DEFAULT;
 	int iCommandLineSafe = 1;
 	int iLoadBehavior = 3;
+	int iAddinType = 0;
+
+    LPWSTR wszClassId = NULL;
+	LPWSTR wszClass = NULL;
+    LPWSTR wszAssembly = NULL;
+    LPWSTR wszVersion = NULL;
+	LPWSTR wszRuntimeVersion = NULL;
 
 	LPWSTR pwzAllUsers = NULL;
 
@@ -314,9 +316,6 @@ UINT __stdcall ExecAddinRegistration(MSIHANDLE hInstall)
 
     pwz = pwzCustomActionData;
 
-    hr = RegInitialize();
-    ExitOnFailure(hr, "Failed to initialize the registry functions.");
-
     // loop through all the passed in data
     while (pwz && *pwz)
     {
@@ -324,7 +323,7 @@ UINT __stdcall ExecAddinRegistration(MSIHANDLE hInstall)
         hr = WcaReadIntegerFromCaData(&pwz, &iOperation);
         ExitOnFailure(hr, "failed to read operation from custom action data");
 
-        hr = WcaReadStringFromCaData(&pwz, &pwzId);
+        hr = WcaReadStringFromCaData(&pwz, &pwzProgId);
         ExitOnFailure(hr, "failed to read id from custom action data");
 
         hr = WcaReadStringFromCaData(&pwz, &pwzFile);
@@ -345,8 +344,22 @@ UINT __stdcall ExecAddinRegistration(MSIHANDLE hInstall)
 		hr = WcaReadIntegerFromCaData(&pwz, &iLoadBehavior);
 		ExitOnFailure(hr, "failed to read LoadBehavior from custom action data");
 
+		hr = WcaReadIntegerFromCaData(&pwz, &iAddinType);
+		ExitOnFailure(hr, "failed to read iAddinType from custom action data");
+
 		hr = WcaReadStringFromCaData(&pwz, &pwzAllUsers);
 		ExitOnFailure(hr, "failed to read ALLUSERS from custom action data");
+
+		hr = WcaReadStringFromCaData(&pwz, &wszClassId);
+		ExitOnFailure(hr,  "failed to read ClassId property from custom action data");
+		hr = WcaReadStringFromCaData(&pwz, &wszClass);
+		ExitOnFailure(hr,  "failed to read Class property from custom action data");
+		hr = WcaReadStringFromCaData(&pwz, &wszAssembly);
+		ExitOnFailure(hr,  "failed to read Assembly property from custom action data");
+		hr = WcaReadStringFromCaData(&pwz, &wszVersion);
+		ExitOnFailure(hr,  "failed to read Version property from custom action data");
+		hr = WcaReadStringFromCaData(&pwz, &wszRuntimeVersion);
+		ExitOnFailure(hr,  "failed to read RuntimeVersion property from custom action data");
 
 		BOOL fPerUserInstall = (!pwzAllUsers || !*pwzAllUsers);
 
@@ -367,64 +380,50 @@ UINT __stdcall ExecAddinRegistration(MSIHANDLE hInstall)
         {
         case WCA_TODO_INSTALL:
         case WCA_TODO_REINSTALL:
-			if (fPerUserInstall)
+
+			if (iAddinType == ADDIN_TYPE_COM)
 			{
-				hr = CreateRegistryKey(REG_KEY_32BIT, pwzId, pwzFile, pwzName, pwzDescription, iCommandLineSafe, iLoadBehavior, HKEY_CURRENT_USER);
-				ExitOnFailure1(hr, "failed to register addin (HKCU): %ls", pwzId);
+				hr = RegisterCOM(wszClassId, pwzProgId, wszClass, wszAssembly, wszVersion, pwzFile, wszRuntimeVersion, fPerUserInstall, iBitness);
+				ExitOnFailure1(hr, "failed to register addin %ls", pwzProgId);
 			}
-			else
-			{
-				if (iBitness == REG_KEY_32BIT || iBitness == REG_KEY_DEFAULT)
-				{
-					hr = CreateRegistryKey(REG_KEY_32BIT, pwzId, pwzFile, pwzName, pwzDescription, iCommandLineSafe, iLoadBehavior, HKEY_LOCAL_MACHINE);
-					ExitOnFailure1(hr, "failed to register addin (HKLM, 32bit): %ls", pwzId);
-				}
-				if (iBitness == REG_KEY_64BIT || iBitness == REG_KEY_DEFAULT)
-				{
-					hr = CreateRegistryKey(REG_KEY_64BIT, pwzId, pwzFile, pwzName, pwzDescription, iCommandLineSafe, iLoadBehavior, HKEY_LOCAL_MACHINE);
-					ExitOnFailure1(hr, "failed to register addin (HKLM, 64bit): %ls", pwzId);
-				}
-			}
+
+			hr = CreateOfficeRegistryKey(pwzProgId, pwzFile, pwzName, pwzDescription, iCommandLineSafe, iLoadBehavior, fPerUserInstall, iBitness);
+			ExitOnFailure1(hr, "failed to register addin %ls", pwzProgId);
             break;
 
         case WCA_TODO_UNINSTALL:
-			if (fPerUserInstall)
+			if (iAddinType == ADDIN_TYPE_COM)
 			{
-				hr = DeleteRegistryKey(REG_KEY_DEFAULT, pwzId, HKEY_CURRENT_USER);
-				ExitOnFailure1(hr, "failed to unregister addin (HKCU): %ls", pwzId);
+				hr = UnregisterCOM(wszClass, pwzProgId, wszVersion, fPerUserInstall, iBitness);
+				ExitOnFailure1(hr, "failed to unregister addin %ls", pwzProgId);
 			}
-			else
-			{
-				if (iBitness == REG_KEY_32BIT || iBitness == REG_KEY_DEFAULT)
-				{
-					hr = DeleteRegistryKey(REG_KEY_32BIT, pwzId, HKEY_LOCAL_MACHINE);
-					ExitOnFailure1(hr, "failed to unregister addin (HKLM, 32bit): %ls", pwzId);
-				}
-				if (iBitness == REG_KEY_64BIT || iBitness == REG_KEY_DEFAULT)
-				{
-					hr = DeleteRegistryKey(REG_KEY_64BIT, pwzId, HKEY_LOCAL_MACHINE);
-					ExitOnFailure1(hr, "failed to unregister addin (HKLM, 64bit): %ls", pwzId);
-				}
-			}
+
+			hr = DeleteOfficeRegistryKey(pwzProgId, fPerUserInstall, iBitness);
+			ExitOnFailure1(hr, "failed to unregister addin %ls", pwzProgId);
             break;
         }
 
         // Tick the progress bar along for this addin
         hr = WcaProgressMessage(COST_REGISTER_ADDIN, FALSE);
-        ExitOnFailure1(hr, "failed to tick progress bar for addin registration: %ls", pwzId);
+        ExitOnFailure1(hr, "failed to tick progress bar for addin registration: %ls", pwzProgId);
 	}
 
 LExit:
-    RegUninitialize();
-
+    
 	ReleaseStr(pwzAllUsers);
     ReleaseStr(pwzCustomActionData);
     ReleaseStr(pwzData);
 
-    ReleaseStr(pwzId);
+    ReleaseStr(pwzProgId);
     ReleaseStr(pwzFile);
 	ReleaseStr(pwzName);
 	ReleaseStr(pwzDescription);
+
+    ReleaseStr(wszClassId);
+	ReleaseStr(wszClass);
+    ReleaseStr(wszAssembly);
+    ReleaseStr(wszVersion);
+	ReleaseStr(wszRuntimeVersion);
 
 	return WcaFinalize(SUCCEEDED(hr) ? ERROR_SUCCESS : ERROR_INSTALL_FAILURE);
 }

@@ -41,6 +41,25 @@ namespace VisioWixExtension
             }
         }
 
+        private VisioBinderExtension _binderExtension;
+
+        /// <summary>
+        /// Gets the optional binder extension.
+        /// </summary>
+        /// <value>The optional binder extension.</value>
+        public override BinderExtension BinderExtension
+        {
+            get
+            {
+                if (null == _binderExtension)
+                {
+                    _binderExtension = new VisioBinderExtension();
+                }
+
+                return _binderExtension;
+            }
+        }
+
         private TableDefinitionCollection _tableDefinitions;
 
         public override TableDefinitionCollection TableDefinitions

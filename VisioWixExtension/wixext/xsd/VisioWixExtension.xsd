@@ -497,7 +497,7 @@
     </xs:complexType>
   </xs:element>
 
-  <xs:element name="PublishAddinVSTO">
+  <xs:element name="PublishAddin">
     <xs:annotation>
       <xs:appinfo>
         <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="File" />
@@ -509,11 +509,29 @@
 
     <xs:complexType>
 
-      <xs:attribute name="Manifest" type="xs:string" use="optional">
+      <xs:attribute name="ProgId" type="xs:string" use="optional">
         <xs:annotation>
           <xs:documentation>
-            Specifies manifest file name to be registered. 
-            Not required if this registraction is nested under the manifest file.
+            Specifies the progId to be used as unique add-in identifier.
+            Must be set to COM ProgId for COM add-ins and to some unique value for VSTO addins.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="Type" type="VisioAddinType" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+            Explicitly sets the type of the Addin to register. 
+            If not specified then determined automatically based on parent file type (.vsto for VSTO addins or .dll for COM addins)
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      
+      <xs:attribute name="File" type="xs:string" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+            Specifies the addin file to be registered (.vsto for VSTO addins or .dll for COM addins)
+            Not required if this registraction is nested under the file element.
           </xs:documentation>
         </xs:annotation>
       </xs:attribute>
@@ -521,7 +539,9 @@
       <xs:attribute name="FriendlyName" type="xs:string" use="optional">
         <xs:annotation>
           <xs:documentation>
-            Specifies a friendly name for the Add-in to be shown in Visio UI
+            Specifies a friendly name for the Add-in to be shown in Visio UI.
+            If not specified then value is taken from the addin assembly "Title" attribute.
+            If assembly title is also not specified then file name is used by default.
           </xs:documentation>
         </xs:annotation>
       </xs:attribute>
@@ -529,7 +549,8 @@
       <xs:attribute name="Description" type="xs:string" use="optional">
         <xs:annotation>
           <xs:documentation>
-            Specifies description for the Add-in to be shown in Visio UI
+            Specifies description for the Add-in to be shown in Visio UI.
+            If not specified then value is taken from the addin assembly "Description" attribute.
           </xs:documentation>
         </xs:annotation>
       </xs:attribute>
@@ -557,6 +578,7 @@
           <xs:documentation>
             Specifies Visio Edition the item should be registered with (x32/x64)
             If not specified, then then the stencil is registered for both Visio x32 and Visio x64
+            Note that addin must target "AnyCPU" platform for this to work.
           </xs:documentation>
         </xs:annotation>
       </xs:attribute>
@@ -571,6 +593,16 @@
     <xs:restriction base='xs:NMTOKEN'>
       <xs:enumeration value="x86"/>
       <xs:enumeration value="x64"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="VisioAddinType">
+    <xs:annotation>
+      <xs:documentation>Values of this type could be "VSTO" or "COM"</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base='xs:NMTOKEN'>
+      <xs:enumeration value="VSTO"/>
+      <xs:enumeration value="COM"/>
     </xs:restriction>
   </xs:simpleType>
 

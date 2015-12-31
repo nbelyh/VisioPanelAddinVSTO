@@ -73,8 +73,8 @@ namespace VisioWixExtension
                             Core.OnMessage(VisioErrors.UsingPublish(sourceLineNumbers));
                             break;
 
-                        case "PublishAddinVSTO":
-                            ParseAddinElement(element, fileName(), fileId);
+                        case "PublishAddin":
+                            ParseAddinElement(element, fileId);
                             break;
 
                         default:
@@ -88,12 +88,14 @@ namespace VisioWixExtension
             }
         }
 
-        private void ParseAddinElement(XmlElement node, string friendlyName, string fileId)
+        private void ParseAddinElement(XmlElement node, string fileId)
         {
+            string friendlyName = null;
             string description = null;
 
             var visioEdition = VisioEdition.Default;
-            string id = null;
+            var addinType = AddinType.Unknown;
+            string progId = null;
             var sourceLineNumbers = Preprocessor.GetSourceLineNumbers(node);
             var commandLinkeSafe = 1;
             var loadBehavior = 3;
@@ -107,8 +109,12 @@ namespace VisioWixExtension
                         Core.CreateWixSimpleReferenceRow(sourceLineNumbers, "File", fileId);
                         break;
 
-                    case "Id":
-                        id = Core.GetAttributeIdentifierValue(sourceLineNumbers, attrib);
+                    case "ProgId":
+                        progId = Core.GetAttributeIdentifierValue(sourceLineNumbers, attrib);
+                        break;
+
+                    case "Type":
+                        addinType = ParseAddinType(sourceLineNumbers, attrib);
                         break;
 
                     case "FriendlyName":
@@ -143,16 +149,14 @@ namespace VisioWixExtension
             Core.EnsureTable(sourceLineNumbers, "AddinRegistration");
             var r = Core.CreateRow(sourceLineNumbers, "AddinRegistration");
 
-            if (id == null)
-                id = CompilerCore.GetIdentifierFromName(friendlyName);
-
-            r[0] = id;
-            r[1] = fileId;
-            r[2] = friendlyName;
-            r[3] = description;
-            r[4] = (int)visioEdition;
-            r[5] = commandLinkeSafe;
-            r[6] = loadBehavior;
+            r[(int)TableFields.arqProgId] = progId;
+            r[(int)TableFields.arqFile] = fileId;
+            r[(int)TableFields.arqFriendlyName] = friendlyName;
+            r[(int)TableFields.arqDescription] = description;
+            r[(int)TableFields.arqBitness] = (int) visioEdition;
+            r[(int)TableFields.arqCommandLineSafe] = commandLinkeSafe;
+            r[(int)TableFields.arqLoadBehavior] = loadBehavior;
+            r[(int) TableFields.arqAddinType] = (int) addinType;
 
             Core.CreateWixSimpleReferenceRow(sourceLineNumbers, "CustomAction", "SchedAddinRegistration");
         }
@@ -418,6 +422,30 @@ namespace VisioWixExtension
                 default:
                     Core.OnMessage(VisioErrors.InvalidVisioEdition(sourceLineNumbers, attribValue));
                     return VisioEdition.Default;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sourceLineNumbers"></param>
+        /// <param name="attrib"></param>
+        /// <returns></returns>
+
+        private AddinType ParseAddinType(SourceLineNumberCollection sourceLineNumbers, XmlAttribute attrib)
+        {
+            string attribValue = Core.GetAttributeBundleVariableValue(sourceLineNumbers, attrib);
+            switch (attribValue)
+            {
+                case "COM":
+                    return AddinType.COM;
+
+                case "VSTO":
+                    return AddinType.VSTO;
+
+                default:
+                    Core.OnMessage(VisioErrors.InvalidAddinType(sourceLineNumbers, attribValue));
+                    return AddinType.Unknown;
             }
         }
 
