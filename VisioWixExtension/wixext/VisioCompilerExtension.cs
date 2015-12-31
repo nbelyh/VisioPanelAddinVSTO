@@ -149,6 +149,9 @@ namespace VisioWixExtension
             Core.EnsureTable(sourceLineNumbers, "AddinRegistration");
             var r = Core.CreateRow(sourceLineNumbers, "AddinRegistration");
 
+            if (string.IsNullOrEmpty(progId))
+                progId = fileId;
+
             r[(int)TableFields.arqProgId] = progId;
             r[(int)TableFields.arqFile] = fileId;
             r[(int)TableFields.arqFriendlyName] = friendlyName;

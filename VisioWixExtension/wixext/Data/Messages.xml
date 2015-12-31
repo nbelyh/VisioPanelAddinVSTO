@@ -58,6 +58,22 @@
       </Instance>
     </Message>
 
+    <Message Id="UnknownAddinType" Number="6508" SourceLineNumbers="no">
+      <Instance>
+        Unable to to auto-detect the addin type by file extension for file '{0}', expecting either '.vsto' or '.dll'
+        If you are sure that you want a different file extension for your addin assembly then please specify addin type explicitly with 'Type' attribute.
+        <Parameter Type="System.String" Name="value" />
+      </Instance>
+    </Message>
+    
+    <Message Id="InternalException" Number="6509" SourceLineNumbers="no">
+      <Instance>
+        Visio WiX Extension Internal Error. In case you see that please report the issue to support@unmanagedvisio.com.
+        Exception: {0}
+        <Parameter Type="System.String" Name="value" />
+      </Instance>
+    </Message>
+    
   </Class>
 
   <Class Name="VisioWarnings" ContainerName="VisioWarningEventArgs" BaseContainerName="WixWarningEventArgs">

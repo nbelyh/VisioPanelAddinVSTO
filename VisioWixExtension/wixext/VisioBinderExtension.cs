@@ -16,14 +16,21 @@ namespace VisioWixExtension
     {
         public override void DatabaseFinalize(Output output)
         {
-            HarvestAddinRegistrationsFromSourceFiles(output);
+            try
+            {
+                HarvestAddinRegistrationsFromSourceFiles(output);
+            }
+            catch (Exception e)
+            {
+                Core.OnMessage(VisioErrors.InternalException(e.ToString()));
+            }
 
             base.DatabaseFinalize(output);
         }
 
         private void SetDefaultFriendlyNameFromAssemblyTitle(Row row, Assembly assembly)
         {
-            var addinFriendlyName = row[(int)TableFields.arqFriendlyName].ToString();
+            var addinFriendlyName = (string) row[(int)TableFields.arqFriendlyName];
 
             if (!string.IsNullOrEmpty(addinFriendlyName))
                 return;
@@ -37,7 +44,7 @@ namespace VisioWixExtension
 
         private void SetDefaultDescriptionFromAssemblyDescription(Row row, Assembly assembly)
         {
-            var addinDescription = row[(int)TableFields.arqDescription].ToString();
+            var addinDescription = (string) row[(int)TableFields.arqDescription];
 
             if (!string.IsNullOrEmpty(addinDescription))
                 return;
@@ -49,6 +56,25 @@ namespace VisioWixExtension
                 row[(int)TableFields.arqDescription] = assemblyDescription.Description;
         }
         
+        AddinType GetAddinTypeFromFilePath(string filePath)
+        {
+            var fileExtension = Path.GetExtension(filePath);
+            if (fileExtension == null)
+                return AddinType.Unknown;
+
+            switch (fileExtension.ToLower(CultureInfo.InvariantCulture))
+            {
+                case ".vsto":
+                    return AddinType.VSTO;
+
+                case ".dll":
+                    return AddinType.COM;
+                    
+                default:
+                    return AddinType.Unknown;
+            }
+        }
+
         private void HarvestAddinRegistrationsFromSourceFiles(Output output)
         {
             var fileTable = output.Tables["WixFile"];
@@ -65,7 +91,8 @@ namespace VisioWixExtension
 
             foreach (Row row in addinRegistrationTable.Rows)
             {
-                var fileId = row[(int) TableFields.arqFile].ToString();
+                var fileId = (string) row[(int) TableFields.arqFile];
+                var addinType = (AddinType) (int) row[(int) TableFields.arqAddinType];
 
                 string filePath;
                 if (!paths.TryGetValue(fileId, out filePath))
@@ -74,21 +101,35 @@ namespace VisioWixExtension
                     continue;
                 }
 
-                if (Path.GetExtension(filePath) == ".vsto")
+                if (addinType == AddinType.Unknown)
+                {
+                    var detectedAddinType = GetAddinTypeFromFilePath(filePath);
+                    if (detectedAddinType == AddinType.Unknown)
+                    {
+                        Core.OnMessage(VisioErrors.UnknownAddinType(fileId));
+                        continue;
+                    }
+
+                    addinType = detectedAddinType;
+                    row[(int) TableFields.arqAddinType] = (int) addinType;
+                }
+
+                if (addinType == AddinType.VSTO)
                 {
                     var addinFilePath = Path.ChangeExtension(filePath, ".dll");
 
                     if (!File.Exists(addinFilePath))
                         continue;
 
-                    var assembly = Assembly.LoadFrom(addinFilePath);
+                    var assembly = Assembly.Load(File.ReadAllBytes(addinFilePath));
 
                     SetDefaultFriendlyNameFromAssemblyTitle(row, assembly);
                     SetDefaultDescriptionFromAssemblyDescription(row, assembly);
                 }
-                else
+
+                if (addinType == AddinType.COM)
                 {
-                    var assembly = Assembly.LoadFrom(filePath);
+                    var assembly = Assembly.Load(File.ReadAllBytes(filePath));
 
                     var addin = assembly
                         .GetTypes()
@@ -106,9 +147,9 @@ namespace VisioWixExtension
                     row[(int)TableFields.arqProgId] = Marshal.GenerateProgIdForType(addin);
                     row[(int)TableFields.arqClassId] = "{" + Marshal.GenerateGuidForType(addin).ToString().ToUpper(CultureInfo.InvariantCulture) + "}";
                     row[(int)TableFields.arqClass] = addin.FullName;
-                    row[(int)TableFields.arqAssembly] = addin.Assembly.FullName;
-                    row[(int)TableFields.arqVersion] = addin.Assembly.GetName().Version.ToString();
-                    row[(int)TableFields.arqRuntimeVersion] = addin.Assembly.ImageRuntimeVersion;
+                    row[(int)TableFields.arqAssembly] = assembly.FullName;
+                    row[(int)TableFields.arqVersion] = assembly.GetName().Version.ToString();
+                    row[(int)TableFields.arqRuntimeVersion] = assembly.ImageRuntimeVersion;
                 }
             }
         }

@@ -2,10 +2,10 @@
 <tableDefinitions xmlns="http://schemas.microsoft.com/wix/2006/tables">
   <tableDefinition name="AddinRegistration">
     
-    <columnDefinition name="ProgId" type="string" length="72" nullable="yes" modularize="column" 
+    <columnDefinition name="ProgId" type="string" length="72" nullable="no" modularize="column" primaryKey="yes"
                       category="identifier" />
     
-    <columnDefinition name="File_" type="string" length="72" nullable="no" modularize="column"
+    <columnDefinition name="File_" type="string" length="72" nullable="no" modularize="column" 
         keyTable="File" keyColumn="1" category="identifier" description=""/>
 
     <columnDefinition name="FriendlyName" type="string" length="0" modularize="none" 

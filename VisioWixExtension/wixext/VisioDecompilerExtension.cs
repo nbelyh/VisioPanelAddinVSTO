@@ -33,8 +33,8 @@ namespace VisioWixExtension
             {
                 writer.WriteStartElement("visio", "PublishAddin", "http://schemas.microsoft.com/wix/Visio");
 
-                if (Id != null) 
-                    writer.WriteAttributeString("ProgId", Id);
+                if (ProgId != null) 
+                    writer.WriteAttributeString("ProgId", ProgId);
 
                 if (FriendlyName != null)
                     writer.WriteAttributeString("FriendlyName", FriendlyName);
@@ -46,23 +46,40 @@ namespace VisioWixExtension
 
                 writer.WriteAttributeString("LoadBehavior", LoadBehavior.ToString());
 
-                if (VisioEditionAttribute == (int)VisioEdition.X86)
-                    writer.WriteAttributeString("VisioEdition", "x86");
+                switch ((VisioEdition)VisioEditionAttribute)
+                {
+                    case VisioEdition.X86:
+                        writer.WriteAttributeString("VisioEdition", "x86");
+                        break;
+                        
+                    case VisioEdition.X64:
+                        writer.WriteAttributeString("VisioEdition", "x64");
+                        break;
+                }
 
-                if (VisioEditionAttribute == (int)VisioEdition.X64)
-                    writer.WriteAttributeString("VisioEdition", "x64");
+                switch ((AddinType)Type)
+                {
+                    case AddinType.COM:
+                        writer.WriteAttributeString("Type", "COM");
+                        break;
+
+                    case AddinType.VSTO:
+                        writer.WriteAttributeString("Type", "VSTO");
+                        break;
+                }
 
                 writer.WriteEndElement();
             }
 
             public WixSerialize.ISchemaElement ParentElement { get; set; }
 
-            public string Id { get; set; }
+            public string ProgId { get; set; }
             public string FriendlyName { get; set; }
             public string Description { get; set; }
             public int CommandLineSafe { get; set; }
             public int LoadBehavior { get; set; }
             public int VisioEditionAttribute { get; set; }
+            public int Type { get; set; }
         }
 
         /// <summary>
@@ -77,12 +94,13 @@ namespace VisioWixExtension
 
                 var item = new AddinRegistration
                 {
-                    Id = row[0].ToString(),
+                    ProgId = row[0].ToString(),
                     FriendlyName = row[2].ToString(),
                     Description = row[3].ToString(),
                     VisioEditionAttribute = int.Parse(row[4].ToString()),
                     CommandLineSafe = int.Parse(row[5].ToString()),
-                    LoadBehavior = int.Parse(row[6].ToString())
+                    LoadBehavior = int.Parse(row[6].ToString()),
+                    Type = int.Parse(row[7].ToString())
                 };
 
                 if (null != file)

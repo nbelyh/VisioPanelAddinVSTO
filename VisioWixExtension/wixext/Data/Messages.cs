@@ -76,6 +76,16 @@ namespace VisioWixExtension
         {
             return new VisioErrorEventArgs(sourceLineNumbers, 6507, "VisioErrors_InvalidAddinType_1", value);
         }
+        
+        public static VisioErrorEventArgs UnknownAddinType(string value)
+        {
+            return new VisioErrorEventArgs(null, 6508, "VisioErrors_UnknownAddinType_1", value);
+        }
+        
+        public static VisioErrorEventArgs InternalException(string value)
+        {
+            return new VisioErrorEventArgs(null, 6509, "VisioErrors_InternalException_1", value);
+        }
     }
     
     public class VisioWarningEventArgs : WixWarningEventArgs
