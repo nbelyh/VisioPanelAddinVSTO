@@ -44,29 +44,29 @@ namespace VisioWixExtension
                     string fileId = contextValues[0];
                     string componentId = contextValues[1];
 
-                    Func<string> fileName = () => 
+                    var fileName = 
                         parentElement.HasAttribute("Name")
                         ? Core.GetAttributeLongFilename(sourceLineNumbers, parentElement.Attributes["Name"], false)
                         : parentElement.HasAttribute("Source")
-                            ? Path.GetFileNameWithoutExtension(Core.GetAttributeValue(sourceLineNumbers, parentElement.Attributes["Source"], false))
+                            ? Path.GetFileName(Core.GetAttributeValue(sourceLineNumbers, parentElement.Attributes["Source"], false))
                             : null;
 
                     switch (element.LocalName)
                     {
                         case "PublishStencil":
-                            ParseVisioElement(element, componentId, fileName(), VisioContentType.Stencil);
+                            ParseVisioElement(element, componentId, fileName, VisioContentType.Stencil);
                             break;
 
                         case "PublishTemplate":
-                            ParseVisioElement(element, componentId, fileName(), VisioContentType.Template);
+                            ParseVisioElement(element, componentId, fileName, VisioContentType.Template);
                             break;
 
                         case "PublishHelpFile":
-                            ParseVisioElement(element, componentId, fileName(), VisioContentType.Help);
+                            ParseVisioElement(element, componentId, fileName, VisioContentType.Help);
                             break;
 
                         case "PublishAddon":
-                            ParseVisioElement(element, componentId, fileName(), VisioContentType.Addon);
+                            ParseVisioElement(element, componentId, fileName, VisioContentType.Addon);
                             break;
 
                         case "Publish":

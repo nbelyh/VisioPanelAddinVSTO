@@ -28,28 +28,28 @@ namespace VisioWixExtension
             base.DatabaseFinalize(output);
         }
 
-        private void SetDefaultFriendlyNameFromAssemblyTitle(Row row, Assembly assembly)
+        private void SetDefaultFriendlyNameFromAssemblyTitle(Row row, Lazy<Assembly> assembly)
         {
             var addinFriendlyName = (string) row[(int)TableFields.arqFriendlyName];
 
             if (!string.IsNullOrEmpty(addinFriendlyName))
                 return;
 
-            var assemblyTitle = Attribute.GetCustomAttribute(assembly, typeof (AssemblyTitleAttribute), false)
+            var assemblyTitle = Attribute.GetCustomAttribute(assembly.Value, typeof (AssemblyTitleAttribute), false)
                 as AssemblyTitleAttribute;
 
             if (assemblyTitle != null)
                 row[(int)TableFields.arqFriendlyName] = assemblyTitle.Title;
         }
 
-        private void SetDefaultDescriptionFromAssemblyDescription(Row row, Assembly assembly)
+        private void SetDefaultDescriptionFromAssemblyDescription(Row row, Lazy<Assembly> assembly)
         {
             var addinDescription = (string) row[(int)TableFields.arqDescription];
 
             if (!string.IsNullOrEmpty(addinDescription))
                 return;
 
-            var assemblyDescription = Attribute.GetCustomAttribute(assembly, typeof (AssemblyDescriptionAttribute), false) 
+            var assemblyDescription = Attribute.GetCustomAttribute(assembly.Value, typeof (AssemblyDescriptionAttribute), false) 
                 as AssemblyDescriptionAttribute;
 
             if (assemblyDescription != null)
@@ -121,7 +121,7 @@ namespace VisioWixExtension
                     if (!File.Exists(addinFilePath))
                         continue;
 
-                    var assembly = Assembly.Load(File.ReadAllBytes(addinFilePath));
+                    var assembly = new Lazy<Assembly>( () => Assembly.Load(File.ReadAllBytes(addinFilePath)));
 
                     SetDefaultFriendlyNameFromAssemblyTitle(row, assembly);
                     SetDefaultDescriptionFromAssemblyDescription(row, assembly);
@@ -129,9 +129,9 @@ namespace VisioWixExtension
 
                 if (addinType == AddinType.COM)
                 {
-                    var assembly = Assembly.Load(File.ReadAllBytes(filePath));
+                    var assembly = new Lazy<Assembly>(() => Assembly.Load(File.ReadAllBytes(filePath)));
 
-                    var addin = assembly
+                    var addin = assembly.Value
                         .GetTypes()
                         .FirstOrDefault(t => t.IsClass && typeof(IDTExtensibility2).IsAssignableFrom(t));
 
@@ -147,9 +147,9 @@ namespace VisioWixExtension
                     row[(int)TableFields.arqProgId] = Marshal.GenerateProgIdForType(addin);
                     row[(int)TableFields.arqClassId] = "{" + Marshal.GenerateGuidForType(addin).ToString().ToUpper(CultureInfo.InvariantCulture) + "}";
                     row[(int)TableFields.arqClass] = addin.FullName;
-                    row[(int)TableFields.arqAssembly] = assembly.FullName;
-                    row[(int)TableFields.arqVersion] = assembly.GetName().Version.ToString();
-                    row[(int)TableFields.arqRuntimeVersion] = assembly.ImageRuntimeVersion;
+                    row[(int)TableFields.arqAssembly] = assembly.Value.FullName;
+                    row[(int)TableFields.arqVersion] = assembly.Value.GetName().Version.ToString();
+                    row[(int)TableFields.arqRuntimeVersion] = assembly.Value.ImageRuntimeVersion;
                 }
             }
         }
