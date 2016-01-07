@@ -19,6 +19,10 @@
         <ProjectItem ReplaceParameters="true">Resources.Designer.cs</ProjectItem>
         <ProjectItem ReplaceParameters="true">AssemblyInfo.cs</ProjectItem>
       </Folder>
+      <Folder Name="Interop" TargetFolderName="Interop">
+        <ProjectItem ReplaceParameters="false" TargetFileName="Office.dll">Office.dll</ProjectItem>
+        <ProjectItem ReplaceParameters="false" TargetFileName="Microsoft.Office.Interop.Visio.dll">Microsoft.Office.Interop.Visio.dll</ProjectItem>
+      </Folder>
       <Folder Name="Resources" TargetFolderName="Resources">
         <ProjectItem ReplaceParameters="false">Command1.png</ProjectItem>
         <ProjectItem ReplaceParameters="false">Command2.png</ProjectItem>

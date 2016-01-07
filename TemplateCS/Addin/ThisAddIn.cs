@@ -167,8 +167,6 @@ namespace $csprojectname$
             $endif$
         }
         
-        #region VSTO generated code
-
         /// <summary>
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
@@ -178,7 +176,5 @@ namespace $csprojectname$
             Startup += ThisAddIn_Startup;
             Shutdown += ThisAddIn_Shutdown;
         }
-
-        #endregion
     }
 }
