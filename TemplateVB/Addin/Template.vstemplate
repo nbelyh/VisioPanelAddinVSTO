@@ -30,7 +30,7 @@
         <ProjectItem ReplaceParameters="false">TogglePanel_sm.png</ProjectItem>
         <ProjectItem ReplaceParameters="true">Ribbon.xml</ProjectItem>
       </Folder>
-      <ProjectItem ReplaceParameters="true" OpenInEditor="true">ThisAddin.vb</ProjectItem>
+      <ProjectItem ReplaceParameters="true" OpenInEditor="true">ThisAddIn.vb</ProjectItem>
       <ProjectItem ReplaceParameters="true">ThisAddin.Designer.vb</ProjectItem>
       <ProjectItem ReplaceParameters="true">ThisAddin.Designer.xml</ProjectItem>
       <ProjectItem ReplaceParameters="true">AddinCommandBars.vb</ProjectItem>

@@ -38,13 +38,6 @@ enum eRegisterAddinsQuery
 	arqComponent
 };
 
-typedef enum ADDIN_TYPE
-{
-    ADDIN_TYPE_UNKNOWN = 0,
-    ADDIN_TYPE_VSTO = 1,
-    ADDIN_TYPE_COM = 2
-} ADDIN_TYPE;
-
 /***************************************************************/
 
 const UINT COST_REGISTER_ADDIN = 100;
@@ -387,11 +380,12 @@ UINT __stdcall ExecAddinRegistration(MSIHANDLE hInstall)
 				ExitOnFailure1(hr, "failed to register addin %ls", pwzProgId);
 			}
 
-			hr = CreateOfficeRegistryKey(pwzProgId, pwzFile, pwzName, pwzDescription, iCommandLineSafe, iLoadBehavior, fPerUserInstall, iBitness);
+			hr = CreateOfficeRegistryKey(pwzProgId, pwzFile, pwzName, pwzDescription, iCommandLineSafe, iLoadBehavior, iAddinType, fPerUserInstall, iBitness);
 			ExitOnFailure1(hr, "failed to register addin %ls", pwzProgId);
             break;
 
         case WCA_TODO_UNINSTALL:
+
 			if (iAddinType == ADDIN_TYPE_COM)
 			{
 				hr = UnregisterCOM(wszClass, pwzProgId, wszVersion, fPerUserInstall, iBitness);

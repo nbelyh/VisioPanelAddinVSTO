@@ -38,8 +38,9 @@ namespace VisioWixExtension
             var assemblyTitle = Attribute.GetCustomAttribute(assembly.Value, typeof (AssemblyTitleAttribute), false)
                 as AssemblyTitleAttribute;
 
-            if (assemblyTitle != null)
-                row[(int)TableFields.arqFriendlyName] = assemblyTitle.Title;
+            row[(int) TableFields.arqFriendlyName] = assemblyTitle != null && !string.IsNullOrEmpty(assemblyTitle.Title)
+                ? assemblyTitle.Title
+                : assembly.Value.GetName().Name;
         }
 
         private void SetDefaultDescriptionFromAssemblyDescription(Row row, Lazy<Assembly> assembly)
@@ -52,8 +53,9 @@ namespace VisioWixExtension
             var assemblyDescription = Attribute.GetCustomAttribute(assembly.Value, typeof (AssemblyDescriptionAttribute), false) 
                 as AssemblyDescriptionAttribute;
 
-            if (assemblyDescription != null)
-                row[(int)TableFields.arqDescription] = assemblyDescription.Description;
+            row[(int)TableFields.arqDescription] = assemblyDescription != null && !string.IsNullOrEmpty(assemblyDescription.Description)
+                ? assemblyDescription.Description
+                : assembly.Value.GetName().Name;
         }
         
         AddinType GetAddinTypeFromFilePath(string filePath)

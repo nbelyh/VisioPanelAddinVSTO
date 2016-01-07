@@ -1,5 +1,6 @@
 
 #include "stdafx.h"
+#include "Register.h"
 
 /***************************************************************/
 
@@ -21,6 +22,7 @@ HRESULT CreateOfficeRegistryKeyAtRoot(
 	LPCWSTR pwzDescription,
 	int iCommandLineSafe,
 	int iLoadBehavior,
+	int iAddinType,
 	HKEY hKeyRoot, 
 	REG_KEY_BITNESS iBitness)
 {
@@ -41,11 +43,14 @@ HRESULT CreateOfficeRegistryKeyAtRoot(
 
 	WcaLog(LOGMSG_VERBOSE, "Created or opened registry key: %ls", wszRegPath);
 
-    hr = StrAllocFormatted(&wszFileEntry, L"file:///%ls|vstolocal", pwzFile);
-    ExitOnFailure(hr, "Failed to allocate string for registry file entry.");
+	if (iAddinType == ADDIN_TYPE_VSTO)
+	{
+		hr = StrAllocFormatted(&wszFileEntry, L"file:///%ls|vstolocal", pwzFile);
+		ExitOnFailure(hr, "Failed to allocate string for registry file entry.");
 
-	hr = RegWriteString(hKey, L"Manifest", wszFileEntry);
-	ExitOnFailure(hr, "Failed set Manifest value.");
+		hr = RegWriteString(hKey, L"Manifest", wszFileEntry);
+		ExitOnFailure(hr, "Failed set Manifest value.");
+	}
 
 	hr = RegWriteString(hKey, L"FriendlyName", pwzFriendlyName);
 	ExitOnFailure(hr, "Failed set FriendlyName value.");
@@ -342,6 +347,7 @@ HRESULT CreateOfficeRegistryKey(
 	LPCWSTR pwzDescription,
 	int iCommandLineSafe,
 	int iLoadBehavior,
+	int iAddinType,
 	BOOL fPerUserInstall, 
 	int iBitness)
 {
@@ -352,19 +358,19 @@ HRESULT CreateOfficeRegistryKey(
 
 	if (fPerUserInstall)
 	{
-		hr = CreateOfficeRegistryKeyAtRoot(pwzId, pwzFile, pwzFriendlyName, pwzDescription, iCommandLineSafe, iLoadBehavior, HKEY_CURRENT_USER, REG_KEY_DEFAULT);
+		hr = CreateOfficeRegistryKeyAtRoot(pwzId, pwzFile, pwzFriendlyName, pwzDescription, iCommandLineSafe, iLoadBehavior, iAddinType, HKEY_CURRENT_USER, REG_KEY_DEFAULT);
 		ExitOnFailure1(hr, "failed to register addin (HKCU): %ls", pwzId);
 	}
 	else
 	{
 		if (iBitness == REG_KEY_32BIT || iBitness == REG_KEY_DEFAULT)
 		{
-			hr = CreateOfficeRegistryKeyAtRoot(pwzId, pwzFile, pwzFriendlyName, pwzDescription, iCommandLineSafe, iLoadBehavior, HKEY_LOCAL_MACHINE, REG_KEY_32BIT);
+			hr = CreateOfficeRegistryKeyAtRoot(pwzId, pwzFile, pwzFriendlyName, pwzDescription, iCommandLineSafe, iLoadBehavior, iAddinType, HKEY_LOCAL_MACHINE, REG_KEY_32BIT);
 			ExitOnFailure1(hr, "failed to register addin (HKLM, 32bit): %ls", pwzId);
 		}
 		if (iBitness == REG_KEY_64BIT || iBitness == REG_KEY_DEFAULT)
 		{
-			hr = CreateOfficeRegistryKeyAtRoot(pwzId, pwzFile, pwzFriendlyName, pwzDescription, iCommandLineSafe, iLoadBehavior, HKEY_LOCAL_MACHINE, REG_KEY_64BIT);
+			hr = CreateOfficeRegistryKeyAtRoot(pwzId, pwzFile, pwzFriendlyName, pwzDescription, iCommandLineSafe, iLoadBehavior, iAddinType, HKEY_LOCAL_MACHINE, REG_KEY_64BIT);
 			ExitOnFailure1(hr, "failed to register addin (HKLM, 64bit): %ls", pwzId);
 		}
 	}

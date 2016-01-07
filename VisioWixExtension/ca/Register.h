@@ -1,6 +1,13 @@
 
 #pragma once
 
+typedef enum ADDIN_TYPE
+{
+    ADDIN_TYPE_UNKNOWN = 0,
+    ADDIN_TYPE_VSTO = 1,
+    ADDIN_TYPE_COM = 2
+} ADDIN_TYPE;
+
 HRESULT CreateOfficeRegistryKey(
 	LPCWSTR pwzId, 
 	LPCWSTR pwzFile, 
@@ -8,6 +15,7 @@ HRESULT CreateOfficeRegistryKey(
 	LPCWSTR pwzDescription,
 	int iCommandLineSafe,
 	int iLoadBehavior,
+	int iAddinType,
 	BOOL fPerUserInstall, 
 	int iBitness);
 
