@@ -199,9 +199,9 @@ namespace PanelAddinWizard
             // 
             // addinWizard
             // 
+            this.addinWizard.Controls.Add(this.pageAddinOptions);
             this.addinWizard.Controls.Add(this.pageAddin);
             this.addinWizard.Controls.Add(this.pageSetup);
-            this.addinWizard.Controls.Add(this.pageAddinOptions);
             this.addinWizard.HelpVisible = true;
             this.addinWizard.Location = new System.Drawing.Point(0, 0);
             this.addinWizard.Name = "addinWizard";
@@ -532,7 +532,7 @@ namespace PanelAddinWizard
             this.pageAddinOptions.Description = "Please select the add-in project features";
             this.pageAddinOptions.Location = new System.Drawing.Point(0, 0);
             this.pageAddinOptions.Name = "pageAddinOptions";
-            this.pageAddinOptions.Size = new System.Drawing.Size(428, 208);
+            this.pageAddinOptions.Size = new System.Drawing.Size(644, 466);
             this.pageAddinOptions.TabIndex = 12;
             this.pageAddinOptions.Title = "Add-in project options";
             // 
@@ -625,6 +625,7 @@ namespace PanelAddinWizard
             this.checkSupportRibbon.TabIndex = 22;
             this.checkSupportRibbon.Text = "Support Ribbon user interface (Visio 2010 and above)";
             this.checkSupportRibbon.UseVisualStyleBackColor = true;
+            this.checkSupportRibbon.CheckedChanged += new System.EventHandler(this.UpdateButtons);
             // 
             // WizardForm
             // 
