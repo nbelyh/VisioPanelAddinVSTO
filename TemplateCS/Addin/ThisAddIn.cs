@@ -4,14 +4,20 @@ $if$ ($uiCallbacks$ == true)using System.Drawing;
 $endif$$if$ ($ribbonANDcommandbars$ == true)using System.Globalization;
 $endif$$if$ ($ui$ == true)using System.Windows.Forms;
 $endif$$if$ ($uiCallbacks$ == true)using $csprojectname$.Properties;
+$endif$$if$ ($comAddin$ == true)using System.Runtime.InteropServices;
 $endif$using Visio = Microsoft.Office.Interop.Visio;
 
 namespace $csprojectname$
 {
-    public partial class ThisAddIn
+	$if$ ($comAddin$ == true)
+    [ComVisible(true)]
+    [GuidAttribute("$clsid$")]
+    [ProgId("$progid$")]
+    $endif$public partial class ThisAddIn$if$ ($comAddin$ == true) : Extensibility.IDTExtensibility2$endif$
     {
-        $if$ ($uiCallbacks$ == true)private readonly AddinUI AddinUI = new AddinUI();
-        $endif$$if$ ($ribbonXml$ == true)
+		$if$ ($comAddin$ == true)public Visio.Application Application { get; set; }
+        $endif$$if$ ($uiCallbacksVSTO$ == true)private readonly AddinUI AddinUI = new AddinUI();
+        $endif$$if$ ($ribbonXmlVSTO$ == true)
         protected override Office.IRibbonExtensibility CreateRibbonExtensibilityObject()
         {
             return AddinUI;
@@ -140,8 +146,8 @@ namespace $csprojectname$
         $endif$$if$ ($uiCallbacks$ == true)
         internal void UpdateUI()
         {
-            $endif$$if$ ($commandbars$ == true)AddinUI.UpdateCommandBars();
-            $endif$$if$ ($ribbonXml$ == true)AddinUI.UpdateRibbon();
+            $endif$$if$ ($commandbars$ == true)$thisAddInUI$UpdateCommandBars();
+            $endif$$if$ ($ribbonXml$ == true)$thisAddInUI$UpdateRibbon();
         $endif$$if$ ($uiCallbacks$ == true)}
         $endif$$if$ ($uiCallbacks$ == true)
         private void Application_SelectionChanged(Visio.Window window)
@@ -149,24 +155,25 @@ namespace $csprojectname$
             UpdateUI();
         }
         $endif$
-        private void ThisAddIn_Startup(object sender, EventArgs e)
+        private void ThisAddIn_Startup($if$ ($vstoAddin$ == true)object sender, EventArgs e$endif$)
         {
             $if$ ($taskpane$ == true)_panelManager = new PanelManager(this);
             $endif$$if$ ($ribbonANDcommandbars$ == true)var version = int.Parse(Application.Version, NumberStyles.AllowDecimalPoint);
             if (version < 14)
-                $endif$$if$ ($commandbars$ == true)AddinUI.StartupCommandBars("$csprojectname$", new[] { "Command1", "Command2" $endif$$if$ ($commandbarsANDtaskpane$ == true) , "TogglePanel"$endif$$if$ ($commandbars$ == true)});
+                $endif$$if$ ($commandbars$ == true)$thisAddInUI$StartupCommandBars("$csprojectname$", new[] { "Command1", "Command2" $endif$$if$ ($commandbarsANDtaskpane$ == true) , "TogglePanel"$endif$$if$ ($commandbars$ == true)});
             $endif$$if$ ($uiCallbacks$ == true)Application.SelectionChanged += Application_SelectionChanged;
             $endif$
         }
 
-        private void ThisAddIn_Shutdown(object sender, EventArgs e)
+        private void ThisAddIn_Shutdown($if$ ($vstoAddin$ == true)object sender, EventArgs e$endif$)
         {
-            $if$ ($commandbars$ == true)AddinUI.ShutdownCommandBars();
+            $if$ ($commandbars$ == true)$thisAddInUI$ShutdownCommandBars();
             $endif$$if$ ($taskpane$ == true)_panelManager.Dispose();
             $endif$$if$ ($uiCallbacks$ == true)Application.SelectionChanged -= Application_SelectionChanged;
             $endif$
         }
-        
+
+		$if$ ($vstoAddin$ == true)
         /// <summary>
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
@@ -176,5 +183,29 @@ namespace $csprojectname$
             Startup += ThisAddIn_Startup;
             Shutdown += ThisAddIn_Shutdown;
         }
+		$endif$$if$ ($comAddin$ == true)
+        public void OnConnection(object application, Extensibility.ext_ConnectMode connectMode, object addInInst, ref Array custom)
+        {
+            Application = (Visio.Application) application;
+            ThisAddIn_Startup();
+        }
+
+        public void OnDisconnection(Extensibility.ext_DisconnectMode disconnectMode, ref Array custom)
+        {
+            ThisAddIn_Shutdown();
+        }
+
+        public void OnAddInsUpdate(ref Array custom)
+        {
+        }
+
+        public void OnStartupComplete(ref Array custom)
+        {
+        }
+
+        public void OnBeginShutdown(ref Array custom)
+        {
+        }
+		$endif$
     }
 }

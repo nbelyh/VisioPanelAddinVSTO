@@ -88,9 +88,18 @@ namespace PanelAddinWizard
             GlobalDictionary["$WixUI$"] = SetupOptions.EnableWixUI ? SetupOptions.WixUI : "";
             GlobalDictionary["$addVisioFiles$"] = SetupOptions.EnableWixSetup && SetupOptions.AddVisioFiles ? "true" : "false";
             GlobalDictionary["$defaultVisioFiles$"] = SetupOptions.EnableWixSetup && SetupOptions.CreateNewVisioFiles ? "true" : "false";
+
+            GlobalDictionary["$vstoAddin$"] = wizardForm.AddinTypeVSTO ? "true" : "false";
+            GlobalDictionary["$comAddin$"] = wizardForm.AddinTypeCOM ? "true" : "false";
+            GlobalDictionary["$registerForComInterop$"] = wizardForm.AddinTypeCOM ? "true" : "false";
+
+            GlobalDictionary["$ribbonXmlVSTO$"] = wizardForm.RibbonXml && wizardForm.AddinTypeVSTO ? "true" : "false";
+            GlobalDictionary["$thisAddIn$"] = wizardForm.AddinTypeVSTO ? "Globals.ThisAddIn." : "";
+            GlobalDictionary["$thisAddInUI$"] = wizardForm.AddinTypeVSTO ? "AddinUI." : "";
+            GlobalDictionary["$uiCallbacksVSTO$"] = wizardForm.AddinTypeVSTO && uiCallbacks ? "true" : "";
         }
 
-        private static string beautifyXml(XmlDocument doc)
+        private static string BeautifyXml(XmlDocument doc)
         {
             var sb = new StringBuilder();
             var settings =
@@ -172,14 +181,14 @@ namespace PanelAddinWizard
                 }
             }
 
-            wxs = beautifyXml(docWxs)
+            wxs = BeautifyXml(docWxs)
                 .Replace(PublishTemplateItemName, "visio:PublishTemplate")
                 .Replace(PublishStencilItemName, "visio:PublishStencil")
                 .Replace("<root>", "")
                 .Replace("<root />", "")
                 .Replace("</root>", "");
 
-            wixProj = beautifyXml(docWixProj)
+            wixProj = BeautifyXml(docWixProj)
                 .Replace("<root>", "")
                 .Replace("<root />", "")
                 .Replace("</root>", "");

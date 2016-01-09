@@ -1,7 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
+    $if$ ($vstoAddin$ == true)
     <ProjectTypeGuids>{BAA0C2D2-18E2-41B9-852F-F413020CAA33};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    $endif$
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>$guid1$</ProjectGuid>
@@ -11,9 +13,13 @@
     <RootNamespace>$csprojectname$</RootNamespace>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+  </PropertyGroup>
+  $if$ ($vstoAddin$ == true)
+  <PropertyGroup>
     <DefineConstants>VSTO40</DefineConstants>
     <LoadBehavior>3</LoadBehavior>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <OfficeApplication>Visio</OfficeApplication>
   </PropertyGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">
@@ -27,9 +33,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <PropertyGroup>
-    <OfficeApplication>Visio</OfficeApplication>
-  </PropertyGroup>
+  $endif$
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
@@ -38,7 +42,7 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
     <DefineConstants>$(DefineConstants);DEBUG;TRACE</DefineConstants>
     <WarningLevel>4</WarningLevel>
-    <RegisterForComInterop>false</RegisterForComInterop>
+    <RegisterForComInterop>$registerForComInterop$</RegisterForComInterop>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -47,13 +51,16 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
     <DefineConstants>$(DefineConstants);TRACE</DefineConstants>
     <WarningLevel>4</WarningLevel>
-    <RegisterForComInterop>false</RegisterForComInterop>
+    <RegisterForComInterop>$registerForComInterop$</RegisterForComInterop>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+  $if$ ($vstoAddin$ == true)
+  <ItemGroup>
     <Reference Include="Microsoft.VisualStudio.Tools.Applications.Runtime, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Office.Tools, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Office.Tools.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
@@ -62,6 +69,15 @@
     <Reference Include="Microsoft.Office.Tools.Common.v4.0.Utilities, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <Private>True</Private>
     </Reference>
+  </ItemGroup>
+  $endif$$if$ ($comAddin$ == true)
+  <ItemGroup>
+    <Reference Include="Extensibility, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+  </ItemGroup>
+  $endif$
+  <ItemGroup>
     <Reference Include="Office, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c">
       <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>true</EmbedInteropTypes>
@@ -92,12 +108,14 @@
     <Compile Include="ThisAddIn.cs">
       <SubType>Code</SubType>
     </Compile>
+    $if$ ($vstoAddin$ == true)
     <None Include="ThisAddIn.Designer.xml">
       <DependentUpon>ThisAddIn.cs</DependentUpon>
     </None>
     <Compile Include="ThisAddIn.Designer.cs">
       <DependentUpon>ThisAddIn.Designer.xml</DependentUpon>
     </Compile>
+    $endif$
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   $if$ ($taskpane$ == true)
@@ -122,7 +140,7 @@
   <ItemGroup>
     <Content Include="Resources\TogglePanel_sm.png" />
   </ItemGroup>
-  $endif$ $if$ ($ui$ == true)
+  $endif$$if$ ($ui$ == true)
   <ItemGroup>
     <Compile Include="Properties\Resources.Designer.cs">
       <DependentUpon>Resources.resx</DependentUpon>
@@ -152,8 +170,7 @@
     <Compile Include="AddinRibbon.cs" />
     <Content Include="Resources\Ribbon.xml" />
   </ItemGroup>
-  $endif$
-  $if$ ($ribbonComponent$ == true)
+  $endif$$if$ ($ribbonComponent$ == true)
   <ItemGroup>
     <Compile Include="AddinRibbonComponent.cs">
       <SubType>Component</SubType>
@@ -168,8 +185,9 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
-  $endif$ 
+  $endif$
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  $if$ ($vstoAddin$ == true)
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v10.0\OfficeTools\Microsoft.VisualStudio.Tools.Office.targets" />
   <ProjectExtensions>
     <VisualStudio>
@@ -181,4 +199,5 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+  $endif$
 </Project>

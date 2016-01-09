@@ -10,9 +10,8 @@ namespace $csprojectname$
     /// </summary>
     /// 
 
-    [ComVisible(true)]
-    public partial class AddinUI
-        : Office.IRibbonExtensibility
+    $if$ ($vstoAddin$ == true)[ComVisible(true)]
+    $endif$public partial class $if$ ($vstoAddin$ == true)AddinUI$else$ThisAddIn$endif$ : Office.IRibbonExtensibility
     {
         private Office.IRibbonUI _ribbon;
 
@@ -29,27 +28,27 @@ namespace $csprojectname$
 
         public bool IsRibbonCommandEnabled(Office.IRibbonControl ctrl)
         {
-            return Globals.ThisAddIn.IsCommandEnabled(ctrl.Id);
+            return $thisAddIn$IsCommandEnabled(ctrl.Id);
         }
 
         public bool IsRibbonCommandChecked(Office.IRibbonControl ctrl)
         {
-            return Globals.ThisAddIn.IsCommandChecked(ctrl.Id);
+            return $thisAddIn$IsCommandChecked(ctrl.Id);
         }
 
         public void OnRibbonButtonCheckClick(Office.IRibbonControl control, bool pressed)
         {
-            Globals.ThisAddIn.OnCommand(control.Id);
+            $thisAddIn$OnCommand(control.Id);
         }
 
         public void OnRibbonButtonClick(Office.IRibbonControl control)
         {
-            Globals.ThisAddIn.OnCommand(control.Id);
+            $thisAddIn$OnCommand(control.Id);
         }
 
         public string OnGetRibbonLabel(Office.IRibbonControl control)
         {
-            return Globals.ThisAddIn.GetCommandLabel(control.Id);
+            return $thisAddIn$GetCommandLabel(control.Id);
         }
 
         public void OnRibbonLoad(Office.IRibbonUI ribbonUI)
@@ -59,7 +58,7 @@ namespace $csprojectname$
 
         public Bitmap GetRibbonImage(Office.IRibbonControl control)
         {
-            return Globals.ThisAddIn.GetCommandBitmap(control.Id);
+            return $thisAddIn$GetCommandBitmap(control.Id);
         }
 
         #endregion

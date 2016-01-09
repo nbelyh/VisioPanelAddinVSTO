@@ -29,41 +29,8 @@ namespace PanelAddinWizard
             }
 
             // Add custom parameters.
-            replacementsDictionary.Add("$csprojectname$", RootWizard.GlobalDictionary["$csprojectname$"]);
-            replacementsDictionary.Add("$progid$", RootWizard.GlobalDictionary["$progid$"]);
-            replacementsDictionary.Add("$clsid$", RootWizard.GlobalDictionary["$clsid$"]);
-            replacementsDictionary.Add("$csprojectguid$", RootWizard.GlobalDictionary["$csprojectguid$"]);
-            replacementsDictionary.Add("$wixproject$", RootWizard.GlobalDictionary["$wixproject$"]);
-
-            replacementsDictionary.Add("$mergeguid$", RootWizard.GlobalDictionary["$mergeguid$"]);
-
-            replacementsDictionary.Add("$ribbon$", RootWizard.GlobalDictionary["$ribbon$"]);
-            replacementsDictionary.Add("$commandbars$", RootWizard.GlobalDictionary["$commandbars$"]);
-
-            replacementsDictionary.Add("$ribbonANDcommandbars$", RootWizard.GlobalDictionary["$ribbonANDcommandbars$"]);
-            replacementsDictionary.Add("$commandbarsANDtaskpane$", RootWizard.GlobalDictionary["$commandbarsANDtaskpane$"]);
-            replacementsDictionary.Add("$taskpane$", RootWizard.GlobalDictionary["$taskpane$"]);
-
-            replacementsDictionary.Add("$ui$", RootWizard.GlobalDictionary["$ui$"]);
-            replacementsDictionary.Add("$taskpaneANDui$", RootWizard.GlobalDictionary["$taskpaneANDui$"]);
-            replacementsDictionary.Add("$taskpaneORui$", RootWizard.GlobalDictionary["$taskpaneORui$"]);
-
-            replacementsDictionary.Add("$uiCallbacks$", RootWizard.GlobalDictionary["$uiCallbacks$"]);
-            replacementsDictionary.Add("$taskpaneANDuiCallbacks$", RootWizard.GlobalDictionary["$taskpaneANDuiCallbacks$"]);
-
-            replacementsDictionary.Add("$ribbonComponent$", RootWizard.GlobalDictionary["$ribbonComponent$"]);
-            replacementsDictionary.Add("$ribbonXml$", RootWizard.GlobalDictionary["$ribbonXml$"]);
-
-            replacementsDictionary.Add("$office$", RootWizard.GlobalDictionary["$office$"]);
-
-            replacementsDictionary.Add("$visioFilesWxs$", RootWizard.GlobalDictionary["$visioFilesWxs$"]);
-            replacementsDictionary.Add("$visioFilesWixProj$", RootWizard.GlobalDictionary["$visioFilesWixProj$"]);
-            replacementsDictionary.Add("$defaultVisioFiles$", RootWizard.GlobalDictionary["$defaultVisioFiles$"]);
-            replacementsDictionary.Add("$addVisioFiles$", RootWizard.GlobalDictionary["$addVisioFiles$"]);
-
-            replacementsDictionary.Add("$addinProject$", RootWizard.GlobalDictionary["$addinProject$"]);
-            replacementsDictionary.Add("$WixUI$", RootWizard.GlobalDictionary["$WixUI$"]);
-            replacementsDictionary.Add("$EnableWixUI$", RootWizard.GlobalDictionary["$EnableWixUI$"]);
+            foreach (var kvp in RootWizard.GlobalDictionary)
+                replacementsDictionary.Add(kvp.Key, kvp.Value);
         }
 
         public void RunFinished()

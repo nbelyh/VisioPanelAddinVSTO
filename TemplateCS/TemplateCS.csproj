@@ -45,7 +45,9 @@
     </VSTemplate>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Addin\Addin.csproj" />
+    <Content Include="Addin\Addin.csproj">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Addin\AddinCommandBars.cs" />
     <Content Include="Addin\Resources\Command1.png" />
     <Content Include="Addin\Resources\Command1_sm.png" />
@@ -64,6 +66,12 @@
     <Content Include="Addin\TheForm.resx">
       <SubType>Designer</SubType>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Addin\Interop\Microsoft.Office.Interop.Visio.dll" />
+    <Content Include="Addin\Interop\OFFICE.DLL" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="Addin\Resources\Ribbon.xml" />
     <Content Include="Addin\Template.vstemplate">
       <SubType>Designer</SubType>
