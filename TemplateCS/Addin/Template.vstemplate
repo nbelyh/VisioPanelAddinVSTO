@@ -20,6 +20,7 @@
         <ProjectItem ReplaceParameters="true">AssemblyInfo.cs</ProjectItem>
       </Folder>
       <Folder Name="Interop" TargetFolderName="Interop">
+        <ProjectItem ReplaceParameters="false" TargetFileName="Extensibility.dll">Extensibility.dll</ProjectItem>
         <ProjectItem ReplaceParameters="false" TargetFileName="Office.dll">Office.dll</ProjectItem>
         <ProjectItem ReplaceParameters="false" TargetFileName="Microsoft.Office.Interop.Visio.dll">Microsoft.Office.Interop.Visio.dll</ProjectItem>
       </Folder>

@@ -52,32 +52,45 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Addin\AddinCommandBars.vb" />
-    <Content Include="Addin\AddinRibbon.vb" />
-    <Content Include="Addin\PanelFrame.vb" />
-    <Content Include="Addin\PanelManager.vb" />
     <Content Include="Addin\Resources\Command1.png" />
     <Content Include="Addin\Resources\Command1_sm.png" />
     <Content Include="Addin\Resources\Command2.png" />
     <Content Include="Addin\Resources\Command2_sm.png" />
-    <Content Include="Addin\Resources\Ribbon.xml" />
     <Content Include="Addin\Resources\TogglePanel.png" />
     <Content Include="Addin\Resources\TogglePanel_sm.png" />
-    <Content Include="Addin\Template.vstemplate" />
+    <Content Include="Addin\ThisAddIn.vb" />
+    <Content Include="Addin\ThisAddIn.Designer.vb" />
+    <Content Include="Addin\ThisAddIn.Designer.xml" />
+    <Content Include="Addin\AddinRibbon.vb" />
+    <Content Include="Addin\PanelFrame.vb" />
+    <Content Include="Addin\PanelManager.vb" />
     <Content Include="Addin\TheForm.vb" />
     <Content Include="Addin\TheForm.Designer.vb" />
     <Content Include="Addin\TheForm.resx">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Addin\My Project\Application.myapp" />
-    <Content Include="Addin\My Project\Application.Designer.vb" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Addin\Interop\Extensibility.dll" />
+    <Content Include="Addin\Interop\Microsoft.Office.Interop.Visio.dll" />
+    <Content Include="Addin\Interop\Office.DLL" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Addin\Resources\Ribbon.xml" />
+    <Content Include="Addin\Template.vstemplate">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Addin\My Project\AssemblyInfo.vb" />
     <Content Include="Addin\My Project\Resources.resx">
       <SubType>Designer</SubType>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="Addin\My Project\Resources.Designer.vb" />
-    <Content Include="Addin\ThisAddIn.Designer.xml" />
-    <Content Include="Addin\ThisAddIn.Designer.vb" />
-    <Content Include="Addin\ThisAddIn.vb" />
+    <Content Include="Addin\My Project\Application.myapp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Addin\My Project\Application.Designer.vb" />
     <Content Include="IconVB.ico" />
     <Content Include="Setup\build\VisioWixExtension.dll" />
     <Content Include="Setup\Product.wxs">
@@ -86,9 +99,11 @@
     </Content>
     <Content Include="Setup\Setup.vstemplate">
       <IncludeInVSIX>true</IncludeInVSIX>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Setup\Setup.wixproj">
       <IncludeInVSIX>true</IncludeInVSIX>
+      <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
   <ItemGroup>
@@ -102,13 +117,14 @@
     <None Include="Setup\Template_1_M.vst" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Addin\AddinRibbonComponent.Designer.vb">
+    <Content Include="Addin\AddinRibbonComponent.resx">
       <DependentUpon>AddinRibbonComponent.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </Content>
-    <Content Include="Addin\AddinRibbonComponent.vb" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Addin\AddinRibbonComponent.resx">
+    <Content Include="Addin\AddinRibbonComponent.vb" />
+    <Content Include="Addin\AddinRibbonComponent.Designer.vb">
       <DependentUpon>AddinRibbonComponent.vb</DependentUpon>
       <SubType>Designer</SubType>
     </Content>

@@ -1,17 +1,17 @@
 ﻿using System;
-using Office = Microsoft.Office.Core;
 $if$ ($uiCallbacks$ == true)using System.Drawing;
 $endif$$if$ ($ribbonANDcommandbars$ == true)using System.Globalization;
 $endif$$if$ ($ui$ == true)using System.Windows.Forms;
 $endif$$if$ ($uiCallbacks$ == true)using $csprojectname$.Properties;
 $endif$$if$ ($comAddin$ == true)using System.Runtime.InteropServices;
+$endif$$if$ ($ribbonXmlVSTO$ == true)using Office = Microsoft.Office.Core;
 $endif$using Visio = Microsoft.Office.Interop.Visio;
 
 namespace $csprojectname$
 {
 	$if$ ($comAddin$ == true)
     [ComVisible(true)]
-    [GuidAttribute("$clsid$")]
+    [Guid("$clsid$")]
     [ProgId("$progid$")]
     $endif$public partial class ThisAddIn$if$ ($comAddin$ == true) : Extensibility.IDTExtensibility2$endif$
     {

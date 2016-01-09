@@ -89,14 +89,16 @@ namespace PanelAddinWizard
             GlobalDictionary["$addVisioFiles$"] = SetupOptions.EnableWixSetup && SetupOptions.AddVisioFiles ? "true" : "false";
             GlobalDictionary["$defaultVisioFiles$"] = SetupOptions.EnableWixSetup && SetupOptions.CreateNewVisioFiles ? "true" : "false";
 
-            GlobalDictionary["$vstoAddin$"] = wizardForm.AddinTypeVSTO ? "true" : "false";
-            GlobalDictionary["$comAddin$"] = wizardForm.AddinTypeCOM ? "true" : "false";
+            GlobalDictionary["$vstoAddin$"] = wizardForm.AddinEnabled && wizardForm.AddinTypeVSTO ? "true" : "false";
+            GlobalDictionary["$comAddin$"] = wizardForm.AddinEnabled && wizardForm.AddinTypeCOM ? "true" : "false";
             GlobalDictionary["$registerForComInterop$"] = wizardForm.AddinTypeCOM ? "true" : "false";
 
             GlobalDictionary["$ribbonXmlVSTO$"] = wizardForm.RibbonXml && wizardForm.AddinTypeVSTO ? "true" : "false";
             GlobalDictionary["$thisAddIn$"] = wizardForm.AddinTypeVSTO ? "Globals.ThisAddIn." : "";
             GlobalDictionary["$thisAddInUI$"] = wizardForm.AddinTypeVSTO ? "AddinUI." : "";
             GlobalDictionary["$uiCallbacksVSTO$"] = wizardForm.AddinTypeVSTO && uiCallbacks ? "true" : "";
+
+            GlobalDictionary["$copyInterops$"] = wizardForm.AddinTypeCOM ? "true" : "false";
         }
 
         private static string BeautifyXml(XmlDocument doc)

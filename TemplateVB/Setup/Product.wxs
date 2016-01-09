@@ -98,9 +98,11 @@
       
       <!-- Add the addin dll to the setup. Reference using project referencing -->
       <Component>
-        <File Source="$(var.$csprojectname$.TargetPath)" />
+        <File Source="$(var.$csprojectname$.TargetPath)" >
+          $endif$$if$ ($comAddin$ == true)<visio:PublishAddin />$endif$$if$ ($addinProject$ == true)
+        </File>
       </Component>
-      
+      $endif$$if$ ($vstoAddin$ == true)
       <!-- VSTO framework file -->
       <Component>
         <File Source="$(var.$csprojectname$.TargetDir)Microsoft.Office.Tools.Common.v4.0.Utilities.dll"></File>
@@ -117,7 +119,7 @@
           <visio:PublishAddin FriendlyName="$csprojectname$" Description="PUT DESCRIPTION HERE" />
         </File>
       </Component>
-      
+      $endif$$if$ ($addinProject$ == true)
     </ComponentGroup>
     $endif$
   </Fragment>

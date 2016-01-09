@@ -1,13 +1,19 @@
 ﻿$if$ ($uiCallbacks$ == true)Imports System.Drawing
 $endif$$if$ ($ribbonANDcommandbars$ == true)Imports System.Globalization
 $endif$$if$ ($ui$ == true)Imports System.Windows.Forms
+$endif$$if$ ($ribbonXmlVSTO$ == true)Imports Office = Microsoft.Office.Core
 $endif$$if$ ($ui$ == true)Imports Visio = Microsoft.Office.Interop.Visio
-$endif$$if$ ($uiCallbacks$ == true)Imports System.Runtime.InteropServices
+$endif$$if$ ($comAddin$ == true)Imports System.Runtime.InteropServices
 $endif$
-Public Class ThisAddIn
-
-    $if$ ($uiCallbacks$ == true)Private ReadOnly AddinUI As AddinUI = New AddinUI()
-    $endif$$if$ ($ribbonXml$ == true)
+$if$ ($comAddin$ == true)
+<ComVisible(True)>
+<Guid("$clsid$")>
+<ProgId("$progid$")>
+$endif$Partial Public Class ThisAddIn
+    $if$ ($comAddin$ == true)Implements IDTExtensibility2
+	$endif$$if$ ($comAddin$ == true)Public Property Application As Visio.Application
+    $endif$$if$ ($uiCallbacksVSTO$ == true)Public Property AddinUI As AddinUI = new AddinUI()
+    $endif$$if$ ($ribbonXmlVSTO$ == true)
     Protected Overrides Function CreateRibbonExtensibilityObject() As Office.IRibbonExtensibility
         Return _addinUI
     End Function
@@ -123,8 +129,8 @@ Public Class ThisAddIn
 	$endif$
 	$if$ ($uiCallbacks$ == true)
     Sub UpdateUI()
-        $endif$$if$ ($commandbars$ == true)AddinUI.UpdateCommandBars()
-        $endif$$if$ ($ribbonXml$ == true)AddinUI.UpdateRibbon()
+        $endif$$if$ ($commandbars$ == true)$thisAddInUI$UpdateCommandBars()
+        $endif$$if$ ($ribbonXml$ == true)$thisAddInUI$UpdateRibbon()
     $endif$$if$ ($uiCallbacks$ == true)
     End Sub
     $endif$$if$ ($uiCallbacks$ == true)
@@ -132,21 +138,43 @@ Public Class ThisAddIn
         UpdateUI()
     End Sub
     $endif$
-    Private Sub ThisAddIn_Startup() Handles Me.Startup
+    Private Sub ThisAddIn_Startup()  $if$ ($vstoAddin$ == true)Handles Me.Startup$endif$
         $if$ ($taskpane$ == true)_panelManager = New PanelManager(Me)
 		$endif$$if$ ($ribbonANDcommandbars$ == true)Dim version = Integer.Parse(Application.Version, NumberStyles.AllowDecimalPoint)
         If (version < 14) Then
-			$endif$$if$ ($commandbars$ == true)AddinUI.StartupCommandBars("$csprojectname$", New String() {"Command1", "Command2"$endif$$if$ ($commandbarsANDtaskpane$ == true), "TogglePanel"$endif$$if$ ($commandbars$ == true)})
+			$endif$$if$ ($commandbars$ == true)$thisAddInUI$StartupCommandBars("$csprojectname$", New String() {"Command1", "Command2"$endif$$if$ ($commandbarsANDtaskpane$ == true), "TogglePanel"$endif$$if$ ($commandbars$ == true)})
         $endif$$if$ ($ribbonANDcommandbars$ == true)End If
         $endif$$if$ ($uiCallbacks$ == true)AddHandler Application.SelectionChanged, AddressOf Application_SelectionChanged
         $endif$
     End Sub
 
-    Private Sub ThisAddIn_Shutdown() Handles Me.Shutdown
-        $if$ ($commandbars$ == true)AddinUI.ShutdownCommandBars()
+    Private Sub ThisAddIn_Shutdown() $if$ ($vstoAddin$ == true)Handles Me.Shutdown$endif$
+        $if$ ($commandbars$ == true)$thisAddInUI$ShutdownCommandBars()
         $endif$$if$ ($taskpane$ == true)_panelManager.Dispose()
         $endif$$if$ ($uiCallbacks$ == true)RemoveHandler Application.SelectionChanged, AddressOf Application_SelectionChanged
         $endif$
     End Sub
+$if$ ($comAddin$ == true)
+#Region "IDTExtensibility2"
 
+    Public Sub OnConnection(app As Object, connectMode As ext_ConnectMode, addInInst As Object, ByRef [custom] As Array) Implements IDTExtensibility2.OnConnection
+        Application = app
+        Startup()
+    End Sub
+
+    Public Sub OnDisconnection(disconnectMode As ext_DisconnectMode, ByRef custom As Array) Implements IDTExtensibility2.OnDisconnection
+        Shutdown()
+    End Sub
+
+    Public Sub OnAddInsUpdate(ByRef custom As Array) Implements IDTExtensibility2.OnAddInsUpdate
+    End Sub
+
+    Public Sub OnStartupComplete(ByRef custom As Array) Implements IDTExtensibility2.OnStartupComplete
+    End Sub
+
+    Public Sub OnBeginShutdown(ByRef custom As Array) Implements IDTExtensibility2.OnBeginShutdown
+    End Sub
+
+#End Region
+$endif$
 End Class

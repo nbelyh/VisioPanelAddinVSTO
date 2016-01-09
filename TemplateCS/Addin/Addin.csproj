@@ -8,18 +8,19 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>$guid1$</ProjectGuid>
     <OutputType>Library</OutputType>
+    <RootNamespace>$csprojectname$</RootNamespace>
     <NoStandardLibraries>false</NoStandardLibraries>
     <AssemblyName>$csprojectname$</AssemblyName>
-    <RootNamespace>$csprojectname$</RootNamespace>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
   </PropertyGroup>
   $if$ ($vstoAddin$ == true)
   <PropertyGroup>
-    <DefineConstants>VSTO40</DefineConstants>
     <LoadBehavior>3</LoadBehavior>
+    <DefineConstants>VSTO40</DefineConstants>
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <OfficeApplication>Visio</OfficeApplication>
+    <BootstrapperComponentsLocation>HomeSite</BootstrapperComponentsLocation>
   </PropertyGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">
@@ -30,6 +31,11 @@
     <BootstrapperPackage Include="Microsoft.VSTORuntime.4.0">
       <Visible>false</Visible>
       <ProductName>Microsoft Visual Studio 2010 Tools for Office Runtime %28x86 and x64%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
@@ -61,6 +67,7 @@
   </ItemGroup>
   $if$ ($vstoAddin$ == true)
   <ItemGroup>
+    <Reference Include="Microsoft.Office.Tools.v4.0.Framework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.VisualStudio.Tools.Applications.Runtime, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Office.Tools, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Office.Tools.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
@@ -72,20 +79,22 @@
   </ItemGroup>
   $endif$$if$ ($comAddin$ == true)
   <ItemGroup>
-    <Reference Include="Extensibility, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <Reference Include="Extensibility, Version=7.0.9466.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>Interop\Extensibility.dll</HintPath>
     </Reference>
   </ItemGroup>
   $endif$
   <ItemGroup>
     <Reference Include="Office, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c">
       <SpecificVersion>False</SpecificVersion>
-      <EmbedInteropTypes>true</EmbedInteropTypes>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
       <HintPath>Interop\Office.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Office.Interop.Visio, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c">
       <SpecificVersion>False</SpecificVersion>
-      <EmbedInteropTypes>true</EmbedInteropTypes>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
       <HintPath>Interop\Microsoft.Office.Interop.Visio.dll</HintPath>
     </Reference>
     <Reference Include="stdole, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
@@ -94,11 +103,13 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
   </ItemGroup>
+  $if$ ($copyInterops$ == true)
   <ItemGroup>
+    <None Include="Interop\Extensibility.dll" />
     <None Include="Interop\Office.dll" />
     <None Include="Interop\Microsoft.Office.Interop.Visio.dll" />
   </ItemGroup>
-  $if$ ($commandbars$ == true)
+  $endif$$if$ ($commandbars$ == true)
   <ItemGroup>
     <Compile Include="AddinCommandBars.cs" />
   </ItemGroup>
@@ -108,17 +119,18 @@
     <Compile Include="ThisAddIn.cs">
       <SubType>Code</SubType>
     </Compile>
-    $if$ ($vstoAddin$ == true)
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  $if$ ($vstoAddin$ == true)
+  <ItemGroup>
     <None Include="ThisAddIn.Designer.xml">
       <DependentUpon>ThisAddIn.cs</DependentUpon>
     </None>
     <Compile Include="ThisAddIn.Designer.cs">
       <DependentUpon>ThisAddIn.Designer.xml</DependentUpon>
     </Compile>
-    $endif$
-    <AppDesigner Include="Properties\" />
   </ItemGroup>
-  $if$ ($taskpane$ == true)
+  $endif$$if$ ($taskpane$ == true)
   <ItemGroup>
     <Compile Include="TheForm.cs">
       <SubType>Form</SubType>

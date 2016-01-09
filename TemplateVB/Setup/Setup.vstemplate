@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
   <TemplateData>
-    <Name>WiX Setup Project for .NET Visio VSTO Addin</Name>
+    <Name>WiX Setup Project for .NET Visio Addin</Name>
     <Description>Creates an WiX installer project to install .NET Visio VSTO Addin</Description>
     <ProjectType>WiX</ProjectType>
     <RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
