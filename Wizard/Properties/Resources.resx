@@ -124,4 +124,7 @@
   <data name="IconVB" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\IconVB.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="WizardForm_Adds_local_copies_of_the_interop_assemblies" xml:space="preserve">
+    <value>Add local copies of the interop assemblies for Visio 2013 so that you can write code for Visio up to this version without having it actually installed.  If turned off then current GAC instanned interop assemblies {0} will be used.</value>
+  </data>
 </root>

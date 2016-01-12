@@ -98,7 +98,11 @@ namespace PanelAddinWizard
             GlobalDictionary["$thisAddInUI$"] = wizardForm.AddinTypeVSTO ? "AddinUI." : "";
             GlobalDictionary["$uiCallbacksVSTO$"] = wizardForm.AddinTypeVSTO && uiCallbacks ? "true" : "";
 
-            GlobalDictionary["$copyInterops$"] = wizardForm.AddinTypeCOM ? "true" : "false";
+            GlobalDictionary["$installExtensibilityInterop$"] = wizardForm.InstallExtensibilityInterop ? "true" : "false";
+            GlobalDictionary["$installVisioInterops$"] = wizardForm.InstallVisioInterops ? "true" : "false";
+
+            GlobalDictionary["$AddinFriendlyName$"] = wizardForm.InstallVisioInterops ? "true" : "false";
+            GlobalDictionary["$AddinDescription$"] = wizardForm.InstallVisioInterops ? "true" : "false";
         }
 
         private static string BeautifyXml(XmlDocument doc)
@@ -321,41 +325,10 @@ namespace PanelAddinWizard
             return Registry.GetValue(vstoKey, "ProductDir", null) != null;
         }
 
-        public void OpenExternalLink(ExternalLink link)
+        public int GetVisualStudioVersion()
         {
-            var url = GetExternalLinkUrl(link);
-
-            if (url != null)
-                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(url));
-        }
-
-        string GetExternalLinkUrl(ExternalLink link)
-        {
-            switch (link)
-            {
-                case ExternalLink.WixDocsUI:
-                    return "http://wixtoolset.org/documentation/manual/v3/wixui/wixui_dialog_library.html";
-
-                case ExternalLink.WixDownload:
-                    return "http://wixtoolset.org/releases/";
-
-                case ExternalLink.VstoDownload:
-                {
-                    var match = Regex.Match(_dte.Version, @"\d+");
-                    if (match.Success)
-                    {
-                        if (match.Value == "11")
-                            return "http://aka.ms/OfficeDevToolsForVS2012";
-                        if (match.Value == "12")
-                            return "http://aka.ms/OfficeDevToolsForVS2013";
-                        if (match.Value == "14")
-                            return "http://aka.ms/OfficeDevToolsForVS2015";
-                    }
-                    return "http://dev.office.com/";
-                }
-            }
-
-            return null;
+            var match = Regex.Match(_dte.Version, @"\d+");
+            return match.Success ? int.Parse(match.Value) : 0;
         }
     }
 }

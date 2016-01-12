@@ -8,8 +8,8 @@ Imports System.Runtime.InteropServices
 
 ' Review the values of the assembly attributes
 
-<Assembly: AssemblyTitle("")> 
-<Assembly: AssemblyDescription("")> 
+<Assembly: AssemblyTitle("$AddinFriendlyName$")> 
+<Assembly: AssemblyDescription("$AddinDescription$")> 
 <Assembly: AssemblyCompany("")> 
 <Assembly: AssemblyProduct("")> 
 <Assembly: AssemblyCopyright("Copyright ©  2015")> 

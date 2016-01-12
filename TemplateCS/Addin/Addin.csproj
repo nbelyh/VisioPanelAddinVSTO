@@ -103,9 +103,12 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
   </ItemGroup>
-  $if$ ($copyInterops$ == true)
+  $if$ ($installExtensibilityInterop$ == true)
   <ItemGroup>
     <None Include="Interop\Extensibility.dll" />
+  </ItemGroup>
+  $endif$$if$ ($installVisioInterops$ == true)
+  <ItemGroup>
     <None Include="Interop\Office.dll" />
     <None Include="Interop\Microsoft.Office.Interop.Visio.dll" />
   </ItemGroup>
