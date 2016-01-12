@@ -101,8 +101,8 @@ namespace PanelAddinWizard
             GlobalDictionary["$installExtensibilityInterop$"] = wizardForm.InstallExtensibilityInterop ? "true" : "false";
             GlobalDictionary["$installVisioInterops$"] = wizardForm.InstallVisioInterops ? "true" : "false";
 
-            GlobalDictionary["$AddinFriendlyName$"] = wizardForm.InstallVisioInterops ? "true" : "false";
-            GlobalDictionary["$AddinDescription$"] = wizardForm.InstallVisioInterops ? "true" : "false";
+            GlobalDictionary["$AddinFriendlyName$"] = wizardForm.AddinName;
+            GlobalDictionary["$AddinDescription$"] = wizardForm.AddinDescription;
         }
 
         private static string BeautifyXml(XmlDocument doc)

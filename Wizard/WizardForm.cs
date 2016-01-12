@@ -47,27 +47,50 @@ namespace PanelAddinWizard
 
             InstallExtensibilityInterop = GacUtil.GetInstalledVersion("Extensibility") > 0;
 
-            checkWixSetup.Enabled = checkWixSetup.Checked = _host.IsWixInstalled();
-            checkAddinProject.Checked = true;
+            checkWixSetup.Checked = true;
 
-            var interopVersion = GetInteropVersion();
-
-            InstallVisioInterops = interopVersion < 15;
-
-            checkLocalReferences.Checked = InstallVisioInterops;
-            if (interopVersion == 0)
-                checkLocalReferences.Text = checkLocalReferences.Text + " (disabled: required assemblies not in GAC)";
-
-            if (!_host.IsVstoInstalled())
+            var isVstoInstalled = _host.IsVstoInstalled();
+            if (!isVstoInstalled)
             {
-                radioAddinTypeVSTO.Text = radioAddinTypeVSTO.Text + " (disabled: VSTO not installed)";
+                radioAddinTypeVSTOLabel.Text = "Creates a VSTO addin. To enable this option, please install VSTO tools. For VS2012 and above, you can download them for free from the Microsoft Visual Studio Office Developer web site";
+                radioAddinTypeVSTOLabel.LinkArea = new LinkArea(134, 40);
+                radioAddinTypeVSTOLabel.ForeColor = Color.RosyBrown;
 
                 radioAddinTypeCOM.Checked = true;
                 radioAddinTypeVSTO.Checked = false;
             }
 
+            var isWixInstalled = _host.IsWixInstalled();
+            checkWixSetup.Enabled = isWixInstalled;
+            if (!isWixInstalled)
+            {
+                checkWixSetup.Enabled = false;
+                checkWixSetup.Checked = false;
+                checkWixSetupDescription.ForeColor = Color.RosyBrown;
+                checkWixSetupDescription.LinkColor = Color.Sienna;
+                if (isVstoInstalled)
+                    checkWixSetupDescription.Text = "To create a WiX installer you need to download and install free WiX toolset from http://wixtoolset.org. If you skip the MSI installer you can still deploy your addin using ClickOnce publishing, but the setup features listed below will not be available.";
+                else
+                    checkWixSetupDescription.Text = "To create a WiX installer you need to download and install free WiX toolset from http://wixtoolset.org.";
+                checkWixSetupDescription.LinkArea = new LinkArea(81, 21);
+            }
+
+            checkAddinProject.Checked = true;
+
+            var visioInteropVersion = GetVisioInteropVersion();
+
+            InstallVisioInterops = visioInteropVersion < 15;
+
             checkLocalReferencesLabel.Text =
-                string.Format(Resources.WizardForm_Adds_local_copies_of_the_interop_assemblies, GetVisioVersionName(interopVersion));
+                string.Format(Resources.WizardForm_Adds_local_copies_of_the_interop_assemblies, GetVisioVersionName(visioInteropVersion));
+
+            checkLocalReferences.Checked = InstallVisioInterops;
+            if (visioInteropVersion == 0)
+            {
+                checkLocalReferencesLabel.ForeColor = Color.RosyBrown;
+                checkLocalReferencesLabel.Text = "Local interops must be installed, no relevant assemblies found in GAC. Can be the case if Visio or Office is not installed at this machine.";
+                checkLocalReferences.Checked = true;
+            }
 
             checkAddVisioFiles.Checked = false;
             radioCreateNewVisioFiles.Checked = true;
@@ -121,7 +144,7 @@ namespace PanelAddinWizard
             return null;
         }
 
-	    private static int GetInteropVersion()
+	    private static int GetVisioInteropVersion()
 	    {
             var versions = new[]
 	        {
@@ -147,7 +170,7 @@ namespace PanelAddinWizard
                 case 16:
                     return "(Visio 2016)";
                 default:
-                    return "";
+                    return "(none)";
             }
         }
 
@@ -177,7 +200,6 @@ namespace PanelAddinWizard
         private Button buttonBrowseVisioFiles;
         private RadioButton radioCreateNewVisioFiles;
         private RadioButton radioUseVisioFiles;
-        private LinkLabel checkAddinProjectDescription;
         private CheckBox checkAddinProject;
         private ComboBox comboSetupUI;
         private CheckBox checkEnableSetupUI;
@@ -198,12 +220,13 @@ namespace PanelAddinWizard
         private TextBox addinDescription;
         private TextBox addinName;
         private Label radioAddinTypeCOMLabel;
-        private Label radioAddinTypeVSTOLabel;
         private RadioButton radioAddinTypeCOM;
         private RadioButton radioAddinTypeVSTO;
         private Label addinTypeLabel;
         private Label checkLocalReferencesLabel;
         private CheckBox checkLocalReferences;
+        private LinkLabel radioAddinTypeVSTOLabel;
+        private Label checkAddinProjectDescription;
 
         private OpenFileDialog visioFileDialog;
 
@@ -245,30 +268,6 @@ namespace PanelAddinWizard
             this.visioFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.licenseFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.addinWizard = new PanelAddinWizard.Wizard();
-            this.pageAddinOptions = new PanelAddinWizard.WizardPage();
-            this.checkLocalReferencesLabel = new System.Windows.Forms.Label();
-            this.checkLocalReferences = new System.Windows.Forms.CheckBox();
-            this.radioSupportRibbonXmlDescription = new System.Windows.Forms.Label();
-            this.radioSupportRibbonDesignerDescription = new System.Windows.Forms.Label();
-            this.radioSupportRibbonXml = new System.Windows.Forms.RadioButton();
-            this.radioSupportRibbonDesigner = new System.Windows.Forms.RadioButton();
-            this.checkSupportTaskPaneDescription = new System.Windows.Forms.Label();
-            this.checkSupportTaskPane = new System.Windows.Forms.CheckBox();
-            this.checkSupportCommandBarsDescription = new System.Windows.Forms.Label();
-            this.checkSupportCommandBars = new System.Windows.Forms.CheckBox();
-            this.checkSupportRibbon = new System.Windows.Forms.CheckBox();
-            this.pageAddin = new PanelAddinWizard.WizardPage();
-            this.addinTypeLabel = new System.Windows.Forms.Label();
-            this.addinDescriptionLabel = new System.Windows.Forms.Label();
-            this.addinNameLabel = new System.Windows.Forms.Label();
-            this.addinDescription = new System.Windows.Forms.TextBox();
-            this.addinName = new System.Windows.Forms.TextBox();
-            this.radioAddinTypeCOMLabel = new System.Windows.Forms.Label();
-            this.radioAddinTypeVSTOLabel = new System.Windows.Forms.Label();
-            this.radioAddinTypeCOM = new System.Windows.Forms.RadioButton();
-            this.radioAddinTypeVSTO = new System.Windows.Forms.RadioButton();
-            this.checkAddinProjectDescription = new System.Windows.Forms.LinkLabel();
-            this.checkAddinProject = new System.Windows.Forms.CheckBox();
             this.pageSetup = new PanelAddinWizard.WizardPage();
             this.checkEnableSetupUIDescription = new System.Windows.Forms.LinkLabel();
             this.comboSetupUI = new System.Windows.Forms.ComboBox();
@@ -283,10 +282,34 @@ namespace PanelAddinWizard
             this.radioUseVisioFiles = new System.Windows.Forms.RadioButton();
             this.buttonBrowseVisioFiles = new System.Windows.Forms.Button();
             this.radioCreateNewVisioFiles = new System.Windows.Forms.RadioButton();
+            this.pageAddinOptions = new PanelAddinWizard.WizardPage();
+            this.checkLocalReferencesLabel = new System.Windows.Forms.Label();
+            this.checkLocalReferences = new System.Windows.Forms.CheckBox();
+            this.radioSupportRibbonXmlDescription = new System.Windows.Forms.Label();
+            this.radioSupportRibbonDesignerDescription = new System.Windows.Forms.Label();
+            this.radioSupportRibbonXml = new System.Windows.Forms.RadioButton();
+            this.radioSupportRibbonDesigner = new System.Windows.Forms.RadioButton();
+            this.checkSupportTaskPaneDescription = new System.Windows.Forms.Label();
+            this.checkSupportTaskPane = new System.Windows.Forms.CheckBox();
+            this.checkSupportCommandBarsDescription = new System.Windows.Forms.Label();
+            this.checkSupportCommandBars = new System.Windows.Forms.CheckBox();
+            this.checkSupportRibbon = new System.Windows.Forms.CheckBox();
+            this.pageAddin = new PanelAddinWizard.WizardPage();
+            this.checkAddinProjectDescription = new System.Windows.Forms.Label();
+            this.radioAddinTypeVSTOLabel = new System.Windows.Forms.LinkLabel();
+            this.addinTypeLabel = new System.Windows.Forms.Label();
+            this.addinDescriptionLabel = new System.Windows.Forms.Label();
+            this.addinNameLabel = new System.Windows.Forms.Label();
+            this.addinDescription = new System.Windows.Forms.TextBox();
+            this.addinName = new System.Windows.Forms.TextBox();
+            this.radioAddinTypeCOMLabel = new System.Windows.Forms.Label();
+            this.radioAddinTypeCOM = new System.Windows.Forms.RadioButton();
+            this.radioAddinTypeVSTO = new System.Windows.Forms.RadioButton();
+            this.checkAddinProject = new System.Windows.Forms.CheckBox();
             this.addinWizard.SuspendLayout();
+            this.pageSetup.SuspendLayout();
             this.pageAddinOptions.SuspendLayout();
             this.pageAddin.SuspendLayout();
-            this.pageSetup.SuspendLayout();
             this.SuspendLayout();
             // 
             // visioFileDialog
@@ -302,9 +325,9 @@ namespace PanelAddinWizard
             // 
             // addinWizard
             // 
-            this.addinWizard.Controls.Add(this.pageAddin);
             this.addinWizard.Controls.Add(this.pageSetup);
             this.addinWizard.Controls.Add(this.pageAddinOptions);
+            this.addinWizard.Controls.Add(this.pageAddin);
             this.addinWizard.HelpVisible = true;
             this.addinWizard.Location = new System.Drawing.Point(0, 0);
             this.addinWizard.Name = "addinWizard";
@@ -319,6 +342,180 @@ namespace PanelAddinWizard
             this.addinWizard.Cancel += new System.ComponentModel.CancelEventHandler(this.addinWizard_Cancel);
             this.addinWizard.Finish += new System.ComponentModel.CancelEventHandler(this.addinWizard_Finish);
             this.addinWizard.Help += new System.EventHandler(this.addinWizard_Help);
+            // 
+            // pageSetup
+            // 
+            this.pageSetup.Controls.Add(this.checkEnableSetupUIDescription);
+            this.pageSetup.Controls.Add(this.comboSetupUI);
+            this.pageSetup.Controls.Add(this.checkEnableSetupUI);
+            this.pageSetup.Controls.Add(this.radioUseVisioFilesDescription);
+            this.pageSetup.Controls.Add(this.checkAddVisioFiles);
+            this.pageSetup.Controls.Add(this.radioCreateNewVisioFilesDescription);
+            this.pageSetup.Controls.Add(this.checkWixSetupDescription);
+            this.pageSetup.Controls.Add(this.textBoxVisioFilesPath);
+            this.pageSetup.Controls.Add(this.checkWixSetup);
+            this.pageSetup.Controls.Add(this.checkCopyVisioFiles);
+            this.pageSetup.Controls.Add(this.radioUseVisioFiles);
+            this.pageSetup.Controls.Add(this.buttonBrowseVisioFiles);
+            this.pageSetup.Controls.Add(this.radioCreateNewVisioFiles);
+            this.pageSetup.Description = "Please select deployment options";
+            this.pageSetup.Location = new System.Drawing.Point(0, 0);
+            this.pageSetup.Name = "pageSetup";
+            this.pageSetup.Size = new System.Drawing.Size(662, 491);
+            this.pageSetup.TabIndex = 0;
+            this.pageSetup.Title = "Setup project";
+            // 
+            // checkEnableSetupUIDescription
+            // 
+            this.checkEnableSetupUIDescription.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.checkEnableSetupUIDescription.LinkArea = new System.Windows.Forms.LinkArea(56, 13);
+            this.checkEnableSetupUIDescription.LinkColor = System.Drawing.SystemColors.HotTrack;
+            this.checkEnableSetupUIDescription.Location = new System.Drawing.Point(59, 366);
+            this.checkEnableSetupUIDescription.Name = "checkEnableSetupUIDescription";
+            this.checkEnableSetupUIDescription.Size = new System.Drawing.Size(516, 17);
+            this.checkEnableSetupUIDescription.TabIndex = 15;
+            this.checkEnableSetupUIDescription.TabStop = true;
+            this.checkEnableSetupUIDescription.Text = "To learn more about user interface options, consult the documentation on the WiX " +
+    "website.";
+            this.checkEnableSetupUIDescription.UseCompatibleTextRendering = true;
+            this.checkEnableSetupUIDescription.VisitedLinkColor = System.Drawing.SystemColors.HotTrack;
+            this.checkEnableSetupUIDescription.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.checkEnableSetupUIDescription_LinkClicked);
+            // 
+            // comboSetupUI
+            // 
+            this.comboSetupUI.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboSetupUI.FormattingEnabled = true;
+            this.comboSetupUI.Items.AddRange(new object[] {
+            "WixUI_Minimal",
+            "WixUI_InstallDir",
+            "WixUI_InstallDirNoLicense",
+            "WixUI_Mondo",
+            "WixUI_Advanced"});
+            this.comboSetupUI.Location = new System.Drawing.Point(56, 386);
+            this.comboSetupUI.Name = "comboSetupUI";
+            this.comboSetupUI.Size = new System.Drawing.Size(262, 21);
+            this.comboSetupUI.TabIndex = 14;
+            // 
+            // checkEnableSetupUI
+            // 
+            this.checkEnableSetupUI.AutoSize = true;
+            this.checkEnableSetupUI.Location = new System.Drawing.Point(40, 346);
+            this.checkEnableSetupUI.Name = "checkEnableSetupUI";
+            this.checkEnableSetupUI.Size = new System.Drawing.Size(200, 17);
+            this.checkEnableSetupUI.TabIndex = 13;
+            this.checkEnableSetupUI.Text = "Provide user interface for the installer";
+            this.checkEnableSetupUI.UseVisualStyleBackColor = true;
+            this.checkEnableSetupUI.Click += new System.EventHandler(this.UpdateButtons);
+            // 
+            // radioUseVisioFilesDescription
+            // 
+            this.radioUseVisioFilesDescription.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.radioUseVisioFilesDescription.Location = new System.Drawing.Point(81, 254);
+            this.radioUseVisioFilesDescription.Name = "radioUseVisioFilesDescription";
+            this.radioUseVisioFilesDescription.Size = new System.Drawing.Size(427, 15);
+            this.radioUseVisioFilesDescription.TabIndex = 6;
+            this.radioUseVisioFilesDescription.Text = "Choose this if you already have Visio templates(s) or stencil(s) to include it in" +
+    " the project.";
+            // 
+            // checkAddVisioFiles
+            // 
+            this.checkAddVisioFiles.AutoSize = true;
+            this.checkAddVisioFiles.Location = new System.Drawing.Point(40, 170);
+            this.checkAddVisioFiles.Name = "checkAddVisioFiles";
+            this.checkAddVisioFiles.Size = new System.Drawing.Size(206, 17);
+            this.checkAddVisioFiles.TabIndex = 2;
+            this.checkAddVisioFiles.Text = "Include Visio stencil or template files(s)";
+            this.checkAddVisioFiles.UseVisualStyleBackColor = true;
+            this.checkAddVisioFiles.CheckedChanged += new System.EventHandler(this.UpdateButtons);
+            // 
+            // radioCreateNewVisioFilesDescription
+            // 
+            this.radioCreateNewVisioFilesDescription.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.radioCreateNewVisioFilesDescription.Location = new System.Drawing.Point(84, 213);
+            this.radioCreateNewVisioFilesDescription.Name = "radioCreateNewVisioFilesDescription";
+            this.radioCreateNewVisioFilesDescription.Size = new System.Drawing.Size(540, 15);
+            this.radioCreateNewVisioFilesDescription.TabIndex = 4;
+            this.radioCreateNewVisioFilesDescription.Text = "Creates a sample template and stencil in the project. You could use them as a sta" +
+    "rting point.";
+            // 
+            // checkWixSetupDescription
+            // 
+            this.checkWixSetupDescription.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.checkWixSetupDescription.LinkArea = new System.Windows.Forms.LinkArea(170, 21);
+            this.checkWixSetupDescription.LinkColor = System.Drawing.SystemColors.HotTrack;
+            this.checkWixSetupDescription.Location = new System.Drawing.Point(40, 112);
+            this.checkWixSetupDescription.Name = "checkWixSetupDescription";
+            this.checkWixSetupDescription.Size = new System.Drawing.Size(566, 43);
+            this.checkWixSetupDescription.TabIndex = 1;
+            this.checkWixSetupDescription.TabStop = true;
+            this.checkWixSetupDescription.Text = "Create a WiX installer project to install addin for all users. If you skip the MS" +
+    "I installer you can deploy your addin using ClickOnce publishing. Lear more abou" +
+    "t WIX at http://wixtoolset.org";
+            this.checkWixSetupDescription.UseCompatibleTextRendering = true;
+            this.checkWixSetupDescription.VisitedLinkColor = System.Drawing.SystemColors.HotTrack;
+            this.checkWixSetupDescription.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.checkWixSetupDescription_LinkClicked);
+            // 
+            // textBoxVisioFilesPath
+            // 
+            this.textBoxVisioFilesPath.Location = new System.Drawing.Point(84, 272);
+            this.textBoxVisioFilesPath.Name = "textBoxVisioFilesPath";
+            this.textBoxVisioFilesPath.ReadOnly = true;
+            this.textBoxVisioFilesPath.Size = new System.Drawing.Size(395, 20);
+            this.textBoxVisioFilesPath.TabIndex = 7;
+            // 
+            // checkWixSetup
+            // 
+            this.checkWixSetup.AutoSize = true;
+            this.checkWixSetup.Location = new System.Drawing.Point(24, 88);
+            this.checkWixSetup.Name = "checkWixSetup";
+            this.checkWixSetup.Size = new System.Drawing.Size(121, 17);
+            this.checkWixSetup.TabIndex = 0;
+            this.checkWixSetup.Text = "Create setup project";
+            this.checkWixSetup.UseVisualStyleBackColor = true;
+            this.checkWixSetup.Click += new System.EventHandler(this.UpdateButtons);
+            // 
+            // checkCopyVisioFiles
+            // 
+            this.checkCopyVisioFiles.AutoSize = true;
+            this.checkCopyVisioFiles.Location = new System.Drawing.Point(84, 298);
+            this.checkCopyVisioFiles.Name = "checkCopyVisioFiles";
+            this.checkCopyVisioFiles.Size = new System.Drawing.Size(185, 17);
+            this.checkCopyVisioFiles.TabIndex = 9;
+            this.checkCopyVisioFiles.Text = "Copy file(s) to the project directory";
+            this.checkCopyVisioFiles.UseVisualStyleBackColor = true;
+            // 
+            // radioUseVisioFiles
+            // 
+            this.radioUseVisioFiles.AutoSize = true;
+            this.radioUseVisioFiles.Location = new System.Drawing.Point(59, 234);
+            this.radioUseVisioFiles.Name = "radioUseVisioFiles";
+            this.radioUseVisioFiles.Size = new System.Drawing.Size(224, 17);
+            this.radioUseVisioFiles.TabIndex = 5;
+            this.radioUseVisioFiles.TabStop = true;
+            this.radioUseVisioFiles.Text = "Use already existing template/stencil file(s)";
+            this.radioUseVisioFiles.UseVisualStyleBackColor = true;
+            // 
+            // buttonBrowseVisioFiles
+            // 
+            this.buttonBrowseVisioFiles.Location = new System.Drawing.Point(485, 261);
+            this.buttonBrowseVisioFiles.Name = "buttonBrowseVisioFiles";
+            this.buttonBrowseVisioFiles.Size = new System.Drawing.Size(75, 23);
+            this.buttonBrowseVisioFiles.TabIndex = 8;
+            this.buttonBrowseVisioFiles.Text = "Browse...";
+            this.buttonBrowseVisioFiles.UseVisualStyleBackColor = true;
+            this.buttonBrowseVisioFiles.Click += new System.EventHandler(this.buttonBrowse_Click);
+            // 
+            // radioCreateNewVisioFiles
+            // 
+            this.radioCreateNewVisioFiles.AutoSize = true;
+            this.radioCreateNewVisioFiles.Location = new System.Drawing.Point(59, 193);
+            this.radioCreateNewVisioFiles.Name = "radioCreateNewVisioFiles";
+            this.radioCreateNewVisioFiles.Size = new System.Drawing.Size(243, 17);
+            this.radioCreateNewVisioFiles.TabIndex = 3;
+            this.radioCreateNewVisioFiles.TabStop = true;
+            this.radioCreateNewVisioFiles.Text = "Create a new (sample) template and stencil file";
+            this.radioCreateNewVisioFiles.UseVisualStyleBackColor = true;
+            this.radioCreateNewVisioFiles.CheckedChanged += new System.EventHandler(this.UpdateButtons);
             // 
             // pageAddinOptions
             // 
@@ -336,7 +533,7 @@ namespace PanelAddinWizard
             this.pageAddinOptions.Description = "Please select the add-in project features";
             this.pageAddinOptions.Location = new System.Drawing.Point(0, 0);
             this.pageAddinOptions.Name = "pageAddinOptions";
-            this.pageAddinOptions.Size = new System.Drawing.Size(428, 208);
+            this.pageAddinOptions.Size = new System.Drawing.Size(662, 491);
             this.pageAddinOptions.TabIndex = 12;
             this.pageAddinOptions.Title = "Add-in project options";
             // 
@@ -455,16 +652,16 @@ namespace PanelAddinWizard
             // 
             // pageAddin
             // 
+            this.pageAddin.Controls.Add(this.checkAddinProjectDescription);
+            this.pageAddin.Controls.Add(this.radioAddinTypeVSTOLabel);
             this.pageAddin.Controls.Add(this.addinTypeLabel);
             this.pageAddin.Controls.Add(this.addinDescriptionLabel);
             this.pageAddin.Controls.Add(this.addinNameLabel);
             this.pageAddin.Controls.Add(this.addinDescription);
             this.pageAddin.Controls.Add(this.addinName);
             this.pageAddin.Controls.Add(this.radioAddinTypeCOMLabel);
-            this.pageAddin.Controls.Add(this.radioAddinTypeVSTOLabel);
             this.pageAddin.Controls.Add(this.radioAddinTypeCOM);
             this.pageAddin.Controls.Add(this.radioAddinTypeVSTO);
-            this.pageAddin.Controls.Add(this.checkAddinProjectDescription);
             this.pageAddin.Controls.Add(this.checkAddinProject);
             this.pageAddin.Description = "Addin project general information";
             this.pageAddin.Location = new System.Drawing.Point(0, 0);
@@ -472,6 +669,31 @@ namespace PanelAddinWizard
             this.pageAddin.Size = new System.Drawing.Size(662, 491);
             this.pageAddin.TabIndex = 11;
             this.pageAddin.Title = "Add-in project";
+            // 
+            // checkAddinProjectDescription
+            // 
+            this.checkAddinProjectDescription.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.checkAddinProjectDescription.Location = new System.Drawing.Point(37, 108);
+            this.checkAddinProjectDescription.Name = "checkAddinProjectDescription";
+            this.checkAddinProjectDescription.Size = new System.Drawing.Size(538, 37);
+            this.checkAddinProjectDescription.TabIndex = 40;
+            this.checkAddinProjectDescription.Text = "Adds project for the add-in. Nte taht you can skip addin project creation and cre" +
+    "ate only installer project to install Visio files. ";
+            // 
+            // radioAddinTypeVSTOLabel
+            // 
+            this.radioAddinTypeVSTOLabel.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.radioAddinTypeVSTOLabel.LinkArea = new System.Windows.Forms.LinkArea(229, 47);
+            this.radioAddinTypeVSTOLabel.LinkColor = System.Drawing.Color.Sienna;
+            this.radioAddinTypeVSTOLabel.Location = new System.Drawing.Point(75, 351);
+            this.radioAddinTypeVSTOLabel.Name = "radioAddinTypeVSTOLabel";
+            this.radioAddinTypeVSTOLabel.Size = new System.Drawing.Size(516, 42);
+            this.radioAddinTypeVSTOLabel.TabIndex = 39;
+            this.radioAddinTypeVSTOLabel.Text = "Creates the Addin project using Visual Studio Tools for Office. Select this optio" +
+    "n for visual studio designer support.";
+            this.radioAddinTypeVSTOLabel.UseCompatibleTextRendering = true;
+            this.radioAddinTypeVSTOLabel.VisitedLinkColor = System.Drawing.SystemColors.HotTrack;
+            this.radioAddinTypeVSTOLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.checkAddinProjectDescription_LinkClicked);
             // 
             // addinTypeLabel
             // 
@@ -485,7 +707,7 @@ namespace PanelAddinWizard
             // addinDescriptionLabel
             // 
             this.addinDescriptionLabel.AutoSize = true;
-            this.addinDescriptionLabel.Location = new System.Drawing.Point(40, 216);
+            this.addinDescriptionLabel.Location = new System.Drawing.Point(37, 213);
             this.addinDescriptionLabel.Name = "addinDescriptionLabel";
             this.addinDescriptionLabel.Size = new System.Drawing.Size(284, 13);
             this.addinDescriptionLabel.TabIndex = 37;
@@ -494,7 +716,7 @@ namespace PanelAddinWizard
             // addinNameLabel
             // 
             this.addinNameLabel.AutoSize = true;
-            this.addinNameLabel.Location = new System.Drawing.Point(40, 160);
+            this.addinNameLabel.Location = new System.Drawing.Point(37, 155);
             this.addinNameLabel.Name = "addinNameLabel";
             this.addinNameLabel.Size = new System.Drawing.Size(226, 13);
             this.addinNameLabel.TabIndex = 36;
@@ -502,42 +724,32 @@ namespace PanelAddinWizard
             // 
             // addinDescription
             // 
-            this.addinDescription.Location = new System.Drawing.Point(40, 234);
+            this.addinDescription.Location = new System.Drawing.Point(37, 231);
             this.addinDescription.Multiline = true;
             this.addinDescription.Name = "addinDescription";
-            this.addinDescription.Size = new System.Drawing.Size(436, 50);
+            this.addinDescription.Size = new System.Drawing.Size(385, 50);
             this.addinDescription.TabIndex = 35;
             // 
             // addinName
             // 
-            this.addinName.Location = new System.Drawing.Point(40, 178);
+            this.addinName.Location = new System.Drawing.Point(37, 171);
             this.addinName.Name = "addinName";
-            this.addinName.Size = new System.Drawing.Size(281, 20);
+            this.addinName.Size = new System.Drawing.Size(284, 20);
             this.addinName.TabIndex = 34;
             // 
             // radioAddinTypeCOMLabel
             // 
             this.radioAddinTypeCOMLabel.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.radioAddinTypeCOMLabel.Location = new System.Drawing.Point(72, 408);
+            this.radioAddinTypeCOMLabel.Location = new System.Drawing.Point(72, 419);
             this.radioAddinTypeCOMLabel.Name = "radioAddinTypeCOMLabel";
             this.radioAddinTypeCOMLabel.Size = new System.Drawing.Size(401, 23);
             this.radioAddinTypeCOMLabel.TabIndex = 33;
             this.radioAddinTypeCOMLabel.Text = "Use this option to create COM addin. Does not use VSTO.";
             // 
-            // radioAddinTypeVSTOLabel
-            // 
-            this.radioAddinTypeVSTOLabel.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.radioAddinTypeVSTOLabel.Location = new System.Drawing.Point(75, 351);
-            this.radioAddinTypeVSTOLabel.Name = "radioAddinTypeVSTOLabel";
-            this.radioAddinTypeVSTOLabel.Size = new System.Drawing.Size(401, 31);
-            this.radioAddinTypeVSTOLabel.TabIndex = 31;
-            this.radioAddinTypeVSTOLabel.Text = "Default. Creates the Addin project using Visual Studio Tools for Office. Select t" +
-    "his option for visual studio designer support.";
-            // 
             // radioAddinTypeCOM
             // 
             this.radioAddinTypeCOM.AutoSize = true;
-            this.radioAddinTypeCOM.Location = new System.Drawing.Point(53, 385);
+            this.radioAddinTypeCOM.Location = new System.Drawing.Point(53, 396);
             this.radioAddinTypeCOM.Name = "radioAddinTypeCOM";
             this.radioAddinTypeCOM.Size = new System.Drawing.Size(157, 17);
             this.radioAddinTypeCOM.TabIndex = 32;
@@ -556,21 +768,6 @@ namespace PanelAddinWizard
             this.radioAddinTypeVSTO.Text = "Create a VSTO Addin project";
             this.radioAddinTypeVSTO.UseVisualStyleBackColor = true;
             // 
-            // checkAddinProjectDescription
-            // 
-            this.checkAddinProjectDescription.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.checkAddinProjectDescription.LinkArea = new System.Windows.Forms.LinkArea(229, 47);
-            this.checkAddinProjectDescription.LinkColor = System.Drawing.SystemColors.HotTrack;
-            this.checkAddinProjectDescription.Location = new System.Drawing.Point(40, 108);
-            this.checkAddinProjectDescription.Name = "checkAddinProjectDescription";
-            this.checkAddinProjectDescription.Size = new System.Drawing.Size(584, 46);
-            this.checkAddinProjectDescription.TabIndex = 16;
-            this.checkAddinProjectDescription.TabStop = true;
-            this.checkAddinProjectDescription.Text = resources.GetString("checkAddinProjectDescription.Text");
-            this.checkAddinProjectDescription.UseCompatibleTextRendering = true;
-            this.checkAddinProjectDescription.VisitedLinkColor = System.Drawing.SystemColors.HotTrack;
-            this.checkAddinProjectDescription.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.checkAddinProjectDescription_LinkClicked);
-            // 
             // checkAddinProject
             // 
             this.checkAddinProject.AutoSize = true;
@@ -581,178 +778,6 @@ namespace PanelAddinWizard
             this.checkAddinProject.Text = "Create Visio Addin project";
             this.checkAddinProject.UseVisualStyleBackColor = true;
             this.checkAddinProject.CheckedChanged += new System.EventHandler(this.UpdateButtons);
-            // 
-            // pageSetup
-            // 
-            this.pageSetup.Controls.Add(this.checkEnableSetupUIDescription);
-            this.pageSetup.Controls.Add(this.comboSetupUI);
-            this.pageSetup.Controls.Add(this.checkEnableSetupUI);
-            this.pageSetup.Controls.Add(this.radioUseVisioFilesDescription);
-            this.pageSetup.Controls.Add(this.checkAddVisioFiles);
-            this.pageSetup.Controls.Add(this.radioCreateNewVisioFilesDescription);
-            this.pageSetup.Controls.Add(this.checkWixSetupDescription);
-            this.pageSetup.Controls.Add(this.textBoxVisioFilesPath);
-            this.pageSetup.Controls.Add(this.checkWixSetup);
-            this.pageSetup.Controls.Add(this.checkCopyVisioFiles);
-            this.pageSetup.Controls.Add(this.radioUseVisioFiles);
-            this.pageSetup.Controls.Add(this.buttonBrowseVisioFiles);
-            this.pageSetup.Controls.Add(this.radioCreateNewVisioFiles);
-            this.pageSetup.Description = "Please select deployment options";
-            this.pageSetup.Location = new System.Drawing.Point(0, 0);
-            this.pageSetup.Name = "pageSetup";
-            this.pageSetup.Size = new System.Drawing.Size(644, 466);
-            this.pageSetup.TabIndex = 0;
-            this.pageSetup.Title = "Setup project";
-            // 
-            // checkEnableSetupUIDescription
-            // 
-            this.checkEnableSetupUIDescription.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.checkEnableSetupUIDescription.LinkArea = new System.Windows.Forms.LinkArea(56, 13);
-            this.checkEnableSetupUIDescription.LinkColor = System.Drawing.SystemColors.HotTrack;
-            this.checkEnableSetupUIDescription.Location = new System.Drawing.Point(59, 352);
-            this.checkEnableSetupUIDescription.Name = "checkEnableSetupUIDescription";
-            this.checkEnableSetupUIDescription.Size = new System.Drawing.Size(516, 17);
-            this.checkEnableSetupUIDescription.TabIndex = 15;
-            this.checkEnableSetupUIDescription.TabStop = true;
-            this.checkEnableSetupUIDescription.Text = "To learn more about user interface options, consult the documentation on the WiX " +
-    "website.";
-            this.checkEnableSetupUIDescription.UseCompatibleTextRendering = true;
-            this.checkEnableSetupUIDescription.VisitedLinkColor = System.Drawing.SystemColors.HotTrack;
-            this.checkEnableSetupUIDescription.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.checkEnableSetupUIDescription_LinkClicked);
-            // 
-            // comboSetupUI
-            // 
-            this.comboSetupUI.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboSetupUI.FormattingEnabled = true;
-            this.comboSetupUI.Items.AddRange(new object[] {
-            "WixUI_Minimal",
-            "WixUI_InstallDir",
-            "WixUI_InstallDirNoLicense",
-            "WixUI_Mondo",
-            "WixUI_Advanced"});
-            this.comboSetupUI.Location = new System.Drawing.Point(56, 372);
-            this.comboSetupUI.Name = "comboSetupUI";
-            this.comboSetupUI.Size = new System.Drawing.Size(262, 21);
-            this.comboSetupUI.TabIndex = 14;
-            // 
-            // checkEnableSetupUI
-            // 
-            this.checkEnableSetupUI.AutoSize = true;
-            this.checkEnableSetupUI.Location = new System.Drawing.Point(40, 332);
-            this.checkEnableSetupUI.Name = "checkEnableSetupUI";
-            this.checkEnableSetupUI.Size = new System.Drawing.Size(200, 17);
-            this.checkEnableSetupUI.TabIndex = 13;
-            this.checkEnableSetupUI.Text = "Provide user interface for the installer";
-            this.checkEnableSetupUI.UseVisualStyleBackColor = true;
-            this.checkEnableSetupUI.Click += new System.EventHandler(this.UpdateButtons);
-            // 
-            // radioUseVisioFilesDescription
-            // 
-            this.radioUseVisioFilesDescription.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.radioUseVisioFilesDescription.Location = new System.Drawing.Point(81, 240);
-            this.radioUseVisioFilesDescription.Name = "radioUseVisioFilesDescription";
-            this.radioUseVisioFilesDescription.Size = new System.Drawing.Size(427, 15);
-            this.radioUseVisioFilesDescription.TabIndex = 6;
-            this.radioUseVisioFilesDescription.Text = "Choose this if you already have Visio templates(s) or stencil(s) to include it in" +
-    " the project.";
-            // 
-            // checkAddVisioFiles
-            // 
-            this.checkAddVisioFiles.AutoSize = true;
-            this.checkAddVisioFiles.Location = new System.Drawing.Point(40, 156);
-            this.checkAddVisioFiles.Name = "checkAddVisioFiles";
-            this.checkAddVisioFiles.Size = new System.Drawing.Size(206, 17);
-            this.checkAddVisioFiles.TabIndex = 2;
-            this.checkAddVisioFiles.Text = "Include Visio stencil or template files(s)";
-            this.checkAddVisioFiles.UseVisualStyleBackColor = true;
-            this.checkAddVisioFiles.CheckedChanged += new System.EventHandler(this.UpdateButtons);
-            // 
-            // radioCreateNewVisioFilesDescription
-            // 
-            this.radioCreateNewVisioFilesDescription.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.radioCreateNewVisioFilesDescription.Location = new System.Drawing.Point(84, 199);
-            this.radioCreateNewVisioFilesDescription.Name = "radioCreateNewVisioFilesDescription";
-            this.radioCreateNewVisioFilesDescription.Size = new System.Drawing.Size(540, 15);
-            this.radioCreateNewVisioFilesDescription.TabIndex = 4;
-            this.radioCreateNewVisioFilesDescription.Text = "Creates a sample template and stencil in the project. You could use them as a sta" +
-    "rting point.";
-            // 
-            // checkWixSetupDescription
-            // 
-            this.checkWixSetupDescription.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.checkWixSetupDescription.LinkArea = new System.Windows.Forms.LinkArea(194, 21);
-            this.checkWixSetupDescription.LinkColor = System.Drawing.SystemColors.HotTrack;
-            this.checkWixSetupDescription.Location = new System.Drawing.Point(40, 112);
-            this.checkWixSetupDescription.Name = "checkWixSetupDescription";
-            this.checkWixSetupDescription.Size = new System.Drawing.Size(566, 34);
-            this.checkWixSetupDescription.TabIndex = 1;
-            this.checkWixSetupDescription.TabStop = true;
-            this.checkWixSetupDescription.Text = resources.GetString("checkWixSetupDescription.Text");
-            this.checkWixSetupDescription.UseCompatibleTextRendering = true;
-            this.checkWixSetupDescription.VisitedLinkColor = System.Drawing.SystemColors.HotTrack;
-            this.checkWixSetupDescription.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.checkWixSetupDescription_LinkClicked);
-            // 
-            // textBoxVisioFilesPath
-            // 
-            this.textBoxVisioFilesPath.Location = new System.Drawing.Point(84, 258);
-            this.textBoxVisioFilesPath.Name = "textBoxVisioFilesPath";
-            this.textBoxVisioFilesPath.ReadOnly = true;
-            this.textBoxVisioFilesPath.Size = new System.Drawing.Size(395, 20);
-            this.textBoxVisioFilesPath.TabIndex = 7;
-            // 
-            // checkWixSetup
-            // 
-            this.checkWixSetup.AutoSize = true;
-            this.checkWixSetup.Location = new System.Drawing.Point(24, 88);
-            this.checkWixSetup.Name = "checkWixSetup";
-            this.checkWixSetup.Size = new System.Drawing.Size(121, 17);
-            this.checkWixSetup.TabIndex = 0;
-            this.checkWixSetup.Text = "Create setup project";
-            this.checkWixSetup.UseVisualStyleBackColor = true;
-            this.checkWixSetup.Click += new System.EventHandler(this.UpdateButtons);
-            // 
-            // checkCopyVisioFiles
-            // 
-            this.checkCopyVisioFiles.AutoSize = true;
-            this.checkCopyVisioFiles.Location = new System.Drawing.Point(84, 284);
-            this.checkCopyVisioFiles.Name = "checkCopyVisioFiles";
-            this.checkCopyVisioFiles.Size = new System.Drawing.Size(185, 17);
-            this.checkCopyVisioFiles.TabIndex = 9;
-            this.checkCopyVisioFiles.Text = "Copy file(s) to the project directory";
-            this.checkCopyVisioFiles.UseVisualStyleBackColor = true;
-            // 
-            // radioUseVisioFiles
-            // 
-            this.radioUseVisioFiles.AutoSize = true;
-            this.radioUseVisioFiles.Location = new System.Drawing.Point(59, 220);
-            this.radioUseVisioFiles.Name = "radioUseVisioFiles";
-            this.radioUseVisioFiles.Size = new System.Drawing.Size(224, 17);
-            this.radioUseVisioFiles.TabIndex = 5;
-            this.radioUseVisioFiles.TabStop = true;
-            this.radioUseVisioFiles.Text = "Use already existing template/stencil file(s)";
-            this.radioUseVisioFiles.UseVisualStyleBackColor = true;
-            // 
-            // buttonBrowseVisioFiles
-            // 
-            this.buttonBrowseVisioFiles.Location = new System.Drawing.Point(485, 261);
-            this.buttonBrowseVisioFiles.Name = "buttonBrowseVisioFiles";
-            this.buttonBrowseVisioFiles.Size = new System.Drawing.Size(75, 23);
-            this.buttonBrowseVisioFiles.TabIndex = 8;
-            this.buttonBrowseVisioFiles.Text = "Browse...";
-            this.buttonBrowseVisioFiles.UseVisualStyleBackColor = true;
-            this.buttonBrowseVisioFiles.Click += new System.EventHandler(this.buttonBrowse_Click);
-            // 
-            // radioCreateNewVisioFiles
-            // 
-            this.radioCreateNewVisioFiles.AutoSize = true;
-            this.radioCreateNewVisioFiles.Location = new System.Drawing.Point(59, 179);
-            this.radioCreateNewVisioFiles.Name = "radioCreateNewVisioFiles";
-            this.radioCreateNewVisioFiles.Size = new System.Drawing.Size(243, 17);
-            this.radioCreateNewVisioFiles.TabIndex = 3;
-            this.radioCreateNewVisioFiles.TabStop = true;
-            this.radioCreateNewVisioFiles.Text = "Create a new (sample) template and stencil file";
-            this.radioCreateNewVisioFiles.UseVisualStyleBackColor = true;
-            this.radioCreateNewVisioFiles.CheckedChanged += new System.EventHandler(this.UpdateButtons);
             // 
             // WizardForm
             // 
@@ -766,12 +791,12 @@ namespace PanelAddinWizard
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Create New Visio Project";
             this.addinWizard.ResumeLayout(false);
+            this.pageSetup.ResumeLayout(false);
+            this.pageSetup.PerformLayout();
             this.pageAddinOptions.ResumeLayout(false);
             this.pageAddinOptions.PerformLayout();
             this.pageAddin.ResumeLayout(false);
             this.pageAddin.PerformLayout();
-            this.pageSetup.ResumeLayout(false);
-            this.pageSetup.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -812,7 +837,8 @@ namespace PanelAddinWizard
             radioAddinTypeCOMLabel.ForeColor = checkAddinProject.Checked ? SystemColors.GrayText : SystemColors.ControlDark;
 
             radioAddinTypeVSTO.Enabled = enableAddinVSTO;
-            radioAddinTypeVSTOLabel.ForeColor = enableAddinVSTO ? SystemColors.GrayText : SystemColors.ControlDark;
+            if (_host.IsVstoInstalled())
+                radioAddinTypeVSTOLabel.ForeColor = radioAddinTypeVSTO.Enabled ? SystemColors.GrayText : SystemColors.ControlDark;
 
             checkAddinProjectDescription.ForeColor = checkAddinProject.Checked ? SystemColors.GrayText : SystemColors.ControlDark;
 
@@ -847,12 +873,19 @@ namespace PanelAddinWizard
 
             checkEnableSetupUI.Enabled = checkWixSetup.Checked;
             checkEnableSetupUIDescription.ForeColor = checkWixSetup.Checked ? SystemColors.GrayText : SystemColors.ControlDark;
+            checkEnableSetupUIDescription.LinkColor = checkWixSetup.Checked ? SystemColors.HotTrack : Color.CornflowerBlue;
+
+            var isWixInstalled = _host.IsWixInstalled();
+            if (isWixInstalled)
+                checkWixSetupDescription.ForeColor = checkWixSetup.Checked ? SystemColors.GrayText : SystemColors.ControlDark;
 
             comboSetupUI.Enabled = checkWixSetup.Checked && checkEnableSetupUI.Checked;
 
-            var enableLocalReferences = checkAddinProject.Checked && GetInteropVersion() > 0;
+            var visioInteropVersion = GetVisioInteropVersion();
+            var enableLocalReferences = checkAddinProject.Checked && visioInteropVersion > 0;
             checkLocalReferences.Enabled = enableLocalReferences;
-            checkLocalReferencesLabel.ForeColor = enableLocalReferences ? SystemColors.GrayText : SystemColors.ControlDark;
+            if (visioInteropVersion > 0)
+                checkLocalReferencesLabel.ForeColor = enableLocalReferences ? SystemColors.GrayText : SystemColors.ControlDark;
 
             addinWizard.NextEnabled =
                 !(checkWixSetup.Checked && checkAddVisioFiles.Checked && radioUseVisioFiles.Checked && textBoxVisioFilesPath.Text.Length == 0);
