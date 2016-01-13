@@ -237,7 +237,7 @@ BOOL RegKeyIsEmpty(HKEY hKeyRoot, REG_KEY_BITNESS iBitness, LPCWSTR strPath)
 	LPWSTR wszKeyName = NULL;
 	
 	HRESULT hr = RegOpen(hKeyRoot, strPath, GetSAM(KEY_READ, iBitness), &hKey);
-	ExitOnFailure(hr, "Unable to determin if key has sub-keys");
+	ExitOnFailure(hr, "Unable to determine if key has sub-keys");
 
     hr = RegKeyEnum(hKey, 0, &wszKeyName);
     

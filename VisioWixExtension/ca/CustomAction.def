@@ -5,8 +5,7 @@ EXPORTS
 UpdateVisioConfigChangeID32
 UpdateVisioConfigChangeID64
 
-SchedAddinRegistrationInstall
-SchedAddinRegistrationUninstall
+SchedAddinRegistration
 ExecAddinRegistration
 
 CreateOfficeRegistryKey

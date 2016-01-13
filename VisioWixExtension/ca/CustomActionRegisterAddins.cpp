@@ -31,7 +31,7 @@ enum eRegisterAddinsQuery
 	arqLoadBehavior, 
 	arqAddinType,
 	arqClassId,
-	arqClass,
+	arqType,
 	arqAssembly,
 	arqVersion,
 	arqRuntimeVersion,
@@ -46,11 +46,10 @@ const UINT COST_REGISTER_ADDIN = 100;
  SchedAddinRegistration - entry point for AddinRegistration Custom Action
 
 ********************************************************************/
-HRESULT SchedAddinRegistration(MSIHANDLE hInstall, BOOL fInstall)
+
+UINT __stdcall  SchedAddinRegistration(MSIHANDLE hInstall)
 {
     // AssertSz(FALSE, "debug SchedRegisterAddins");
-
-    HRESULT hr = S_OK;
 
     LPWSTR pwzCustomActionData = NULL;
 
@@ -67,7 +66,7 @@ HRESULT SchedAddinRegistration(MSIHANDLE hInstall, BOOL fInstall)
 	LPWSTR pwzDescription = NULL;
 
     LPWSTR wszClassId = NULL;
-    LPWSTR wszClass = NULL;
+    LPWSTR wszType = NULL;
     LPWSTR wszAssembly = NULL;
     LPWSTR wszVersion = NULL;
 	LPWSTR wszRuntimeVersion = NULL;
@@ -80,6 +79,11 @@ HRESULT SchedAddinRegistration(MSIHANDLE hInstall, BOOL fInstall)
 	LPWSTR pwzAllUsers = NULL;
 
     int nAddins = 0;
+
+	HRESULT hr = WcaInitialize(hInstall, "SchedRegisterAddinsUninstall");
+	ExitOnFailure(hr, "Failed to initialize");
+
+	WcaLog(LOGMSG_STANDARD, "Sheduling addin registration.");
 
 	hr = WcaGetProperty(L"ALLUSERS", &pwzAllUsers);
 	ExitOnFailure(hr, "failed to read value of ALLUSERS property");
@@ -131,7 +135,7 @@ HRESULT SchedAddinRegistration(MSIHANDLE hInstall, BOOL fInstall)
         hr = WcaGetRecordString(hRec, arqClassId, &wszClassId);
         ExitOnFailure1(hr, "failed to get AddinRegistration.Class for record: %ls", wszProgId);
         // Get Class
-        hr = WcaGetRecordString(hRec, arqClass, &wszClass);
+        hr = WcaGetRecordString(hRec, arqType, &wszType);
         ExitOnFailure1(hr, "failed to get AddinRegistration.Class for record: %ls", wszProgId);
         // Get Assembly
         hr = WcaGetRecordString(hRec, arqAssembly, &wszAssembly);
@@ -150,18 +154,6 @@ HRESULT SchedAddinRegistration(MSIHANDLE hInstall, BOOL fInstall)
 
         // we need to know if the component's being installed, uninstalled, or reinstalled
         WCA_TODO todo = WcaGetComponentToDo(pwzComponent);
-
-        // skip this entry if this is the install CA and we are uninstalling the component
-        if (fInstall && WCA_TODO_UNINSTALL == todo)
-        {
-            continue;
-        }
-
-        // skip this entry if this is an uninstall CA and we are not uninstalling the component
-        if (!fInstall && WCA_TODO_UNINSTALL != todo)
-        {
-            continue;
-        }
 
         // write custom action data: operation, instance guid, path, directory
         hr = WcaWriteIntegerToCaData(todo, &pwzCustomActionData);
@@ -196,7 +188,7 @@ HRESULT SchedAddinRegistration(MSIHANDLE hInstall, BOOL fInstall)
 
 		hr = WcaWriteStringToCaData(wszClassId, &pwzCustomActionData);
 		ExitOnFailure(hr,  "failed to write ClassId property to custom action data for instance id: %ls", wszProgId);
-		hr = WcaWriteStringToCaData(wszClass, &pwzCustomActionData);
+		hr = WcaWriteStringToCaData(wszType, &pwzCustomActionData);
 		ExitOnFailure(hr,  "failed to write Class property to custom action data for instance id: %ls", wszProgId);
 		hr = WcaWriteStringToCaData(wszAssembly, &pwzCustomActionData);
 		ExitOnFailure(hr,  "failed to write Assembly property to custom action data for instance id: %ls", wszProgId);
@@ -236,35 +228,11 @@ LExit:
 	ReleaseStr(pwzDescription);
 
     ReleaseStr(wszClassId);
-	ReleaseStr(wszClass);
+	ReleaseStr(wszType);
     ReleaseStr(wszAssembly);
     ReleaseStr(wszVersion);
 	ReleaseStr(wszRuntimeVersion);
 
-    return hr;
-}
-
-UINT __stdcall SchedAddinRegistrationInstall(MSIHANDLE hInstall)
-{
-	HRESULT hr = WcaInitialize(hInstall, "SchedRegisterAddinsInstall");
-	ExitOnFailure(hr, "Failed to initialize");
-
-	WcaLog(LOGMSG_STANDARD, "Started addin registration.");
-	hr = SchedAddinRegistration(hInstall, TRUE);
-
-LExit:
-	return WcaFinalize(SUCCEEDED(hr) ? ERROR_SUCCESS : ERROR_INSTALL_FAILURE);
-}
-
-UINT __stdcall SchedAddinRegistrationUninstall(MSIHANDLE hInstall)
-{
-	HRESULT hr = WcaInitialize(hInstall, "SchedRegisterAddinsUninstall");
-	ExitOnFailure(hr, "Failed to initialize");
-
-	WcaLog(LOGMSG_STANDARD, "Started addin registration removal.");
-	hr = SchedAddinRegistration(hInstall, FALSE);
-
-LExit:
 	return WcaFinalize(SUCCEEDED(hr) ? ERROR_SUCCESS : ERROR_INSTALL_FAILURE);
 }
 
@@ -292,7 +260,7 @@ UINT __stdcall ExecAddinRegistration(MSIHANDLE hInstall)
 	int iAddinType = 0;
 
     LPWSTR wszClassId = NULL;
-	LPWSTR wszClass = NULL;
+	LPWSTR wszType = NULL;
     LPWSTR wszAssembly = NULL;
     LPWSTR wszVersion = NULL;
 	LPWSTR wszRuntimeVersion = NULL;
@@ -345,7 +313,7 @@ UINT __stdcall ExecAddinRegistration(MSIHANDLE hInstall)
 
 		hr = WcaReadStringFromCaData(&pwz, &wszClassId);
 		ExitOnFailure(hr,  "failed to read ClassId property from custom action data");
-		hr = WcaReadStringFromCaData(&pwz, &wszClass);
+		hr = WcaReadStringFromCaData(&pwz, &wszType);
 		ExitOnFailure(hr,  "failed to read Class property from custom action data");
 		hr = WcaReadStringFromCaData(&pwz, &wszAssembly);
 		ExitOnFailure(hr,  "failed to read Assembly property from custom action data");
@@ -376,7 +344,7 @@ UINT __stdcall ExecAddinRegistration(MSIHANDLE hInstall)
 
 			if (iAddinType == ADDIN_TYPE_COM)
 			{
-				hr = RegisterCOM(wszClassId, pwzProgId, wszClass, wszAssembly, wszVersion, pwzFile, wszRuntimeVersion, fPerUserInstall, iBitness);
+				hr = RegisterCOM(wszClassId, pwzProgId, wszType, wszAssembly, wszVersion, pwzFile, wszRuntimeVersion, fPerUserInstall, iBitness);
 				ExitOnFailure1(hr, "failed to register addin %ls", pwzProgId);
 			}
 
@@ -388,12 +356,15 @@ UINT __stdcall ExecAddinRegistration(MSIHANDLE hInstall)
 
 			if (iAddinType == ADDIN_TYPE_COM)
 			{
-				hr = UnregisterCOM(wszClass, pwzProgId, wszVersion, fPerUserInstall, iBitness);
-				ExitOnFailure1(hr, "failed to unregister addin %ls", pwzProgId);
+				hr = UnregisterCOM(wszClassId, pwzProgId, wszVersion, fPerUserInstall, iBitness);
+				if (FAILED(hr)) 
+					WcaLogError(hr, "failed to unregister addin %ls", pwzProgId);
 			}
 
 			hr = DeleteOfficeRegistryKey(pwzProgId, fPerUserInstall, iBitness);
-			ExitOnFailure1(hr, "failed to unregister addin %ls", pwzProgId);
+			if (FAILED(hr)) 
+				WcaLogError(hr, "failed to unregister addin %ls", pwzProgId);
+
             break;
         }
 
@@ -414,7 +385,7 @@ LExit:
 	ReleaseStr(pwzDescription);
 
     ReleaseStr(wszClassId);
-	ReleaseStr(wszClass);
+	ReleaseStr(wszType);
     ReleaseStr(wszAssembly);
     ReleaseStr(wszVersion);
 	ReleaseStr(wszRuntimeVersion);

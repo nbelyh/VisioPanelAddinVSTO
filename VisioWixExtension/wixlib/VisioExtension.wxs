@@ -18,14 +18,12 @@
 
 
   <Fragment>
-    <CustomAction Id="SchedAddinRegistration" BinaryKey="VisioCustomActions" DllEntry="SchedAddinRegistrationInstall" Execute="immediate" Return="check" SuppressModularization="yes" Impersonate="yes" />
-    <CustomAction Id="SchedAddinRegistrationUninstall" BinaryKey="VisioCustomActions" DllEntry="SchedAddinRegistrationUninstall" Execute="immediate" Return="check" SuppressModularization="yes" Impersonate="yes" />
+    <CustomAction Id="SchedAddinRegistration" BinaryKey="VisioCustomActions" DllEntry="SchedAddinRegistration" Execute="immediate" Return="check" SuppressModularization="yes" Impersonate="yes" />
     <CustomAction Id="ExecAddinRegistration" BinaryKey="VisioCustomActions" DllEntry="ExecAddinRegistration" Execute="deferred" Impersonate="no" Return="ignore" SuppressModularization="yes" />
     <CustomAction Id="RollbackAddinRegistration" BinaryKey="VisioCustomActions" DllEntry="ExecAddinRegistration" Execute="rollback" Impersonate="no" Return="ignore" SuppressModularization="yes" />
 
     <InstallExecuteSequence>
-      <Custom Action="SchedAddinRegistrationUninstall" Before="RemoveFiles" Overridable="yes" />
-      <Custom Action="SchedAddinRegistration" After="InstallFiles" Overridable="yes" />
+      <Custom Action="SchedAddinRegistration" Before="RemoveFiles" Overridable="yes" />
     </InstallExecuteSequence>
   </Fragment>
 
