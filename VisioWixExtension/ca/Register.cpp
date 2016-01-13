@@ -72,23 +72,33 @@ LExit:
 }
 
 HRESULT DeleteOfficeRegistryKeyAtRoot(
-	LPCWSTR pwzId, 
+	LPCWSTR pwzProgId, 
 	HKEY hKeyRoot, 
 	REG_KEY_BITNESS iBitness)
 {
 	HRESULT hr = S_OK;
 
-    WcaLog(LOGMSG_VERBOSE, "DeleteOfficeRegistryKey: Bitness:%ld, Id=%ls", 
-		iBitness, pwzId);
+	LPWSTR wszRegPathAddinProgId = NULL;
+	LPWSTR wszRegPathAddins = NULL;
 
-	LPWSTR wszRegPath = NULL;
-    hr = StrAllocFormatted(&wszRegPath, L"Software\\Microsoft\\Visio\\Addins\\%ls", pwzId);
+    WcaLog(LOGMSG_VERBOSE, "DeleteOfficeRegistryKey: Bitness:%ld, Id=%ls", 
+		iBitness, pwzProgId);
+
+    hr = StrAllocFormatted(&wszRegPathAddinProgId, L"Software\\Microsoft\\Visio\\Addins\\%ls", pwzProgId);
     ExitOnFailure(hr, "Failed to allocate registry path.");
 
-	hr = RegDelete(hKeyRoot, wszRegPath, iBitness, FALSE);
-	WcaLogError(hr, "Failed to delete the registry key: %ls.", wszRegPath);
+	hr = RegDelete(hKeyRoot, wszRegPathAddinProgId, iBitness, FALSE);
+	WcaLogError(hr, "Failed to delete the registry key: %ls.", wszRegPathAddinProgId);
+
+    hr = StrAllocFormatted(&wszRegPathAddins, L"Software\\Microsoft\\Visio\\Addins");
+    ExitOnFailure(hr, "Failed to allocate registry path.");
+
+	hr = RegDelete(hKeyRoot, wszRegPathAddins, iBitness, FALSE);
+	WcaLogError(hr, "Failed to delete the registry key: %ls.", wszRegPathAddins);
 
 LExit:
+	ReleaseStr(wszRegPathAddinProgId);
+	ReleaseStr(wszRegPathAddins);
 	return hr;
 }
 
