@@ -457,10 +457,10 @@ namespace PanelAddinWizard
             // 
             // textBoxVisioFilesPath
             // 
-            this.textBoxVisioFilesPath.Location = new System.Drawing.Point(84, 272);
+            this.textBoxVisioFilesPath.Location = new System.Drawing.Point(84, 274);
             this.textBoxVisioFilesPath.Name = "textBoxVisioFilesPath";
             this.textBoxVisioFilesPath.ReadOnly = true;
-            this.textBoxVisioFilesPath.Size = new System.Drawing.Size(395, 20);
+            this.textBoxVisioFilesPath.Size = new System.Drawing.Size(441, 20);
             this.textBoxVisioFilesPath.TabIndex = 7;
             // 
             // checkWixSetup
@@ -477,7 +477,7 @@ namespace PanelAddinWizard
             // checkCopyVisioFiles
             // 
             this.checkCopyVisioFiles.AutoSize = true;
-            this.checkCopyVisioFiles.Location = new System.Drawing.Point(84, 298);
+            this.checkCopyVisioFiles.Location = new System.Drawing.Point(84, 300);
             this.checkCopyVisioFiles.Name = "checkCopyVisioFiles";
             this.checkCopyVisioFiles.Size = new System.Drawing.Size(185, 17);
             this.checkCopyVisioFiles.TabIndex = 9;
@@ -497,7 +497,7 @@ namespace PanelAddinWizard
             // 
             // buttonBrowseVisioFiles
             // 
-            this.buttonBrowseVisioFiles.Location = new System.Drawing.Point(485, 261);
+            this.buttonBrowseVisioFiles.Location = new System.Drawing.Point(531, 272);
             this.buttonBrowseVisioFiles.Name = "buttonBrowseVisioFiles";
             this.buttonBrowseVisioFiles.Size = new System.Drawing.Size(75, 23);
             this.buttonBrowseVisioFiles.TabIndex = 8;
