@@ -39,11 +39,17 @@
 
     $if$ ($EnableWixUI$ == true)<!-- UI settings -->
     <UI>
-      <UIRef Id="$WixUI$"/>
-      $endif$$if$ ($WixUI$ == WixUI_InstallDir)<!-- WixUI_InstallDir settings -->
+      $endif$$if$ ($WixUI$ == WixUI_Minimal)
+      <UIRef Id="WixUI_Minimal"/>
+      $endif$$if$ ($WixUI$ == WixUI_Mondo)
+      <UIRef Id="WixUI_Mondo"/>
+      $endif$$if$ ($WixUI$ == WixUI_InstallDir)
+      <UIRef Id="WixUI_InstallDir"/>
       <Property Id="WIXUI_INSTALLDIR" Value="APPLICATIONFOLDER" />
-      $endif$$if$ ($WixUI$ == WixUI_InstallDirNoLicense)<!-- Skip license dialog -->
+      $endif$$if$ ($WixUI$ == WixUI_InstallDirNoLicense)
+      <UIRef Id="WixUI_InstallDir"/>
       <Property Id="WIXUI_INSTALLDIR" Value="APPLICATIONFOLDER" />
+      <!-- Skip license dialog -->
       <Publish Dialog="WelcomeDlg"
                Control="Next"
                Event="NewDialog"
@@ -62,8 +68,8 @@
 
       <Publish Dialog="InstallScopeDlg" Control="Next" Property="MSIINSTALLPERUSER" Value="1" >WixAppFolder = "WixPerUserFolder"</Publish>
       <Publish Dialog="InstallScopeDlg" Control="Next" Property="MSIINSTALLPERUSER" Value="{}" >WixAppFolder = "WixPerMachineFolder"</Publish>
+    $endif$$if$ ($EnableWixUI$ == true)</UI>
     $endif$
-    </UI>
   </Product>
 
   <!-- Define default directory structure -->

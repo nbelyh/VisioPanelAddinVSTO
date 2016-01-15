@@ -27,11 +27,27 @@ namespace PanelAddinWizard
         public static Dictionary<string, string> GlobalDictionary =
             new Dictionary<string, string>();
 
-        public static WixSetupOptions SetupOptions;
+        public static IWizardOptions WizardOptions;
 
         private DTE2 _dte;
 
         protected abstract Image HeaderImage { get; }
+
+        IWizardOptions ConfigureOptionsSource()
+        {
+            if (XmlWizardOptionsManager.IsPanelAddinWizardTestAppStarted())
+                return XmlWizardOptionsManager.Read();
+
+            var form = new WizardForm(this)
+            {
+                HeaderImage = HeaderImage
+            };
+
+            if (form.ShowDialog() == DialogResult.Cancel)
+                throw new WizardBackoutException();
+
+            return form;
+        }
 
         // Add global replacement parameters
         public void RunStarted(object automationObject,
@@ -40,13 +56,7 @@ namespace PanelAddinWizard
         {
             _dte = automationObject as DTE2;
 
-            var wizardForm = new WizardForm(this)
-            {
-                HeaderImage = HeaderImage
-            };
-
-            if (wizardForm.ShowDialog() == DialogResult.Cancel)
-                throw new WizardBackoutException();
+            WizardOptions = ConfigureOptionsSource();
 
             GlobalDictionary["$csprojectname$"] = replacementsDictionary["$safeprojectname$"];
             GlobalDictionary["$progid$"] = replacementsDictionary["$safeprojectname$"] + ".Addin";
@@ -56,53 +66,52 @@ namespace PanelAddinWizard
 
             GlobalDictionary["$mergeguid$"] = replacementsDictionary["$guid4$"];
 
-            var ribbon = wizardForm.RibbonXml || wizardForm.RibbonComponent;
+            var ribbon = WizardOptions.RibbonXml || WizardOptions.RibbonComponent;
 
             GlobalDictionary["$ribbon$"] = ribbon ? "true" : "false";
-            GlobalDictionary["$ribbonXml$"] = wizardForm.RibbonXml ? "true" : "false";
-            GlobalDictionary["$ribbonComponent$"] = wizardForm.RibbonComponent ? "true" : "false";
+            GlobalDictionary["$ribbonXml$"] = WizardOptions.RibbonXml ? "true" : "false";
+            GlobalDictionary["$ribbonComponent$"] = WizardOptions.RibbonComponent ? "true" : "false";
 
-            GlobalDictionary["$commandbars$"] = wizardForm.CommandBars ? "true" : "false";
+            GlobalDictionary["$commandbars$"] = WizardOptions.CommandBars ? "true" : "false";
 
-            GlobalDictionary["$ribbonANDcommandbars$"] = ribbon  && wizardForm.CommandBars ? "true" : "false";
-            GlobalDictionary["$commandbarsANDtaskpane$"] = wizardForm.CommandBars && wizardForm.TaskPane ? "true" : "false";
-            GlobalDictionary["$taskpane$"] = wizardForm.TaskPane ? "true" : "false";
+            GlobalDictionary["$ribbonANDcommandbars$"] = ribbon  && WizardOptions.CommandBars ? "true" : "false";
+            GlobalDictionary["$commandbarsANDtaskpane$"] = WizardOptions.CommandBars && WizardOptions.TaskPane ? "true" : "false";
+            GlobalDictionary["$taskpane$"] = WizardOptions.TaskPane ? "true" : "false";
 
-            var ui = (wizardForm.CommandBars || ribbon);
+            var ui = (WizardOptions.CommandBars || ribbon);
             GlobalDictionary["$ui$"] = ui ? "true" : "false";
-            GlobalDictionary["$taskpaneANDui$"] = (wizardForm.TaskPane && ui) ? "true" : "false";
-            GlobalDictionary["$taskpaneORui$"] = (wizardForm.TaskPane || ui) ? "true" : "false";
+            GlobalDictionary["$taskpaneANDui$"] = (WizardOptions.TaskPane && ui) ? "true" : "false";
+            GlobalDictionary["$taskpaneORui$"] = (WizardOptions.TaskPane || ui) ? "true" : "false";
 
-            var uiCallbacks = (wizardForm.CommandBars || wizardForm.RibbonXml);
+            var uiCallbacks = (WizardOptions.CommandBars || WizardOptions.RibbonXml);
             GlobalDictionary["$uiCallbacks$"] = uiCallbacks ? "true" : "false";
-            GlobalDictionary["$taskpaneANDuiCallbacks$"] = (wizardForm.TaskPane && uiCallbacks) ? "true" : "false";
+            GlobalDictionary["$taskpaneANDuiCallbacks$"] = (WizardOptions.TaskPane && uiCallbacks) ? "true" : "false";
 
-            GlobalDictionary["$addinProject$"] = wizardForm.AddinEnabled ? "true" : "false";
+            GlobalDictionary["$addinProject$"] = WizardOptions.AddinEnabled ? "true" : "false";
             GlobalDictionary["$office$"] = GetOfficeVersion();
-            GlobalDictionary["$wixSetup$"] = wizardForm.WixSetup ? "true" : "false";
+            GlobalDictionary["$wixSetup$"] = WizardOptions.EnableWixSetup ? "true" : "false";
 
-            SetupOptions = wizardForm.GetSetupOptions();
-            GetFiles(SetupOptions);
+            GetFiles();
 
-            GlobalDictionary["$EnableWixUI$"] = SetupOptions.EnableWixUI ? "true" : "false";
-            GlobalDictionary["$WixUI$"] = SetupOptions.EnableWixUI ? SetupOptions.WixUI : "";
-            GlobalDictionary["$addVisioFiles$"] = SetupOptions.EnableWixSetup && SetupOptions.AddVisioFiles ? "true" : "false";
-            GlobalDictionary["$defaultVisioFiles$"] = SetupOptions.EnableWixSetup && SetupOptions.CreateNewVisioFiles ? "true" : "false";
+            GlobalDictionary["$EnableWixUI$"] = WizardOptions.EnableWixUI ? "true" : "false";
+            GlobalDictionary["$WixUI$"] = WizardOptions.EnableWixUI ? WizardOptions.WixUI : "";
+            GlobalDictionary["$addVisioFiles$"] = WizardOptions.EnableWixSetup && WizardOptions.AddVisioFiles ? "true" : "false";
+            GlobalDictionary["$defaultVisioFiles$"] = WizardOptions.EnableWixSetup && WizardOptions.CreateNewVisioFiles ? "true" : "false";
 
-            GlobalDictionary["$vstoAddin$"] = wizardForm.AddinEnabled && wizardForm.AddinTypeVSTO ? "true" : "false";
-            GlobalDictionary["$comAddin$"] = wizardForm.AddinEnabled && wizardForm.AddinTypeCOM ? "true" : "false";
-            GlobalDictionary["$registerForComInterop$"] = wizardForm.AddinTypeCOM ? "true" : "false";
+            GlobalDictionary["$vstoAddin$"] = WizardOptions.AddinTypeVSTO ? "true" : "false";
+            GlobalDictionary["$comAddin$"] = WizardOptions.AddinTypeCOM ? "true" : "false";
+            GlobalDictionary["$registerForComInterop$"] = WizardOptions.AddinTypeCOM ? "true" : "false";
 
-            GlobalDictionary["$ribbonXmlVSTO$"] = wizardForm.RibbonXml && wizardForm.AddinTypeVSTO ? "true" : "false";
-            GlobalDictionary["$thisAddIn$"] = wizardForm.AddinTypeVSTO ? "Globals.ThisAddIn." : "";
-            GlobalDictionary["$thisAddInUI$"] = wizardForm.AddinTypeVSTO ? "AddinUI." : "";
-            GlobalDictionary["$uiCallbacksVSTO$"] = wizardForm.AddinTypeVSTO && uiCallbacks ? "true" : "";
+            GlobalDictionary["$ribbonXmlVSTO$"] = WizardOptions.RibbonXml && WizardOptions.AddinTypeVSTO ? "true" : "false";
+            GlobalDictionary["$thisAddIn$"] = WizardOptions.AddinTypeVSTO ? "Globals.ThisAddIn." : "";
+            GlobalDictionary["$thisAddInUI$"] = WizardOptions.AddinTypeVSTO ? "AddinUI." : "";
+            GlobalDictionary["$uiCallbacksVSTO$"] = WizardOptions.AddinTypeVSTO && uiCallbacks ? "true" : "";
 
-            GlobalDictionary["$installExtensibilityInterop$"] = wizardForm.InstallExtensibilityInterop ? "true" : "false";
-            GlobalDictionary["$installVisioInterops$"] = wizardForm.InstallVisioInterops ? "true" : "false";
+            GlobalDictionary["$installExtensibilityInterop$"] = WizardOptions.InstallExtensibilityInterop ? "true" : "false";
+            GlobalDictionary["$installVisioInterops$"] = WizardOptions.InstallVisioInterops ? "true" : "false";
 
-            GlobalDictionary["$AddinFriendlyName$"] = wizardForm.AddinName;
-            GlobalDictionary["$AddinDescription$"] = wizardForm.AddinDescription;
+            GlobalDictionary["$AddinFriendlyName$"] = WizardOptions.AddinName;
+            GlobalDictionary["$AddinDescription$"] = WizardOptions.AddinDescription;
         }
 
         private static string BeautifyXml(XmlDocument doc)
@@ -130,7 +139,15 @@ namespace PanelAddinWizard
             }
         }
 
-        void GetFiles(WixSetupOptions options)
+        public static bool HaveVisioFiles 
+        {
+            get
+            {
+                return WizardOptions.EnableWixSetup && !WizardOptions.CreateNewVisioFiles && WizardOptions.VisioFilePaths != null && WizardOptions.VisioFilePaths.Length > 0;
+            } 
+        }
+
+        void GetFiles()
         {
             var docWxs = new XmlDocument();
             var nodeWxs = docWxs.CreateElement("root");
@@ -146,9 +163,9 @@ namespace PanelAddinWizard
             var wxs = "";
             var wixProj = "";
 
-            if (options.HaveVisioFiles)
+            if (HaveVisioFiles)
             {
-                foreach (var path in options.VisioFilePaths)
+                foreach (var path in WizardOptions.VisioFilePaths)
                 {
                     var nodeComponent = docWxs.CreateElement("Component");
                     nodeWxs.AppendChild(nodeComponent);
@@ -160,7 +177,7 @@ namespace PanelAddinWizard
                     var nodeFile = docWxs.CreateElement("File");
                     nodeFile.SetAttribute("Name", Path.GetFileName(path));
 
-                    if (!options.DuplicateExistingVisioFiles)
+                    if (!WizardOptions.DuplicateExistingVisioFiles)
                         nodeFile.SetAttribute("Source", path);
 
                     nodeComponent.AppendChild(nodeFile);

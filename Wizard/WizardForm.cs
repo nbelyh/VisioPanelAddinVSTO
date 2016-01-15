@@ -28,11 +28,11 @@ using PanelAddinWizard.Properties;
 
 namespace PanelAddinWizard
 {
-	/// <summary>
+    /// <summary>
 	/// Summary description for WizardForm.
 	/// </summary>
-	public class WizardForm : Form
-	{
+	public class WizardForm : Form, IWizardOptions
+    {
 	    private readonly IWizardFormHost _host;
 
         /// <summary>
@@ -184,13 +184,21 @@ namespace PanelAddinWizard
         public bool RibbonXml { get { return checkSupportRibbon.Checked && radioSupportRibbonXml.Checked; } }
         public bool RibbonComponent { get { return checkSupportRibbon.Checked && radioSupportRibbonDesigner.Checked; } }
 
-        public bool WixSetup { get { return checkWixSetup.Checked; } }
-
-        public bool AddinTypeCOM { get { return radioAddinTypeCOM.Checked;  } }
-        public bool AddinTypeVSTO { get { return radioAddinTypeVSTO.Checked; } }
+        public bool AddinTypeCOM { get { return checkAddinProject.Checked && radioAddinTypeCOM.Checked;  } }
+        public bool AddinTypeVSTO { get { return checkAddinProject.Checked && radioAddinTypeVSTO.Checked; } }
 
         public string AddinName { get { return addinName.Text; } }
         public string AddinDescription { get { return addinDescription.Text; } }
+
+	    public bool EnableWixSetup { get { return checkWixSetup.Checked; } }
+
+        public bool AddVisioFiles { get { return checkWixSetup.Checked && checkAddVisioFiles.Checked; } }
+        public bool CreateNewVisioFiles { get { return checkAddVisioFiles.Checked && radioCreateNewVisioFiles.Checked; } }
+        public bool DuplicateExistingVisioFiles { get {return checkAddVisioFiles.Checked && checkCopyVisioFiles.Checked; } }
+        public string[] VisioFilePaths { get { return visioFileDialog.FileNames; } }
+
+        public bool EnableWixUI { get { return checkWixSetup.Checked && checkEnableSetupUI.Checked; } }
+        public string WixUI { get { return comboSetupUI.Text; } }
 
         private Label radioUseVisioFilesDescription;
         private CheckBox checkAddVisioFiles;
@@ -229,20 +237,6 @@ namespace PanelAddinWizard
         private Label checkAddinProjectDescription;
 
         private OpenFileDialog visioFileDialog;
-
-        public WixSetupOptions GetSetupOptions()
-        {
-            return new WixSetupOptions
-            {
-                EnableWixSetup = checkWixSetup.Checked,
-                AddVisioFiles = checkWixSetup.Checked && checkAddVisioFiles.Checked,
-                CreateNewVisioFiles = checkAddVisioFiles.Checked && radioCreateNewVisioFiles.Checked,
-                DuplicateExistingVisioFiles = checkAddVisioFiles.Checked && checkCopyVisioFiles.Checked,
-                VisioFilePaths = visioFileDialog.FileNames,
-                EnableWixUI = checkWixSetup.Checked && checkEnableSetupUI.Checked,
-                WixUI = comboSetupUI.Text
-            };
-        }
 
         public Image HeaderImage
 	    {

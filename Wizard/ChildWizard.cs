@@ -53,20 +53,20 @@ namespace PanelAddinWizard
             {
                 var projectPath = Path.GetDirectoryName(project.FullName);
 
-                GenerateVisioFiles(projectPath, RootWizard.SetupOptions);
+                GenerateVisioFiles(projectPath);
             }
         }
 
-        void GenerateVisioFiles(string projectPath, WixSetupOptions options)
+        void GenerateVisioFiles(string projectPath)
         {
-            if (!options.HaveVisioFiles)
+            if (!RootWizard.HaveVisioFiles)
                 return;
 
-            foreach (var path in options.VisioFilePaths)
-            {
-                if (options.DuplicateExistingVisioFiles)
-                    File.Copy(path, Path.Combine(projectPath, Path.GetFileName(path)));
-            }
+            if (!RootWizard.WizardOptions.DuplicateExistingVisioFiles)
+                return;
+
+            foreach (var path in RootWizard.WizardOptions.VisioFilePaths)
+                File.Copy(path, Path.Combine(projectPath, Path.GetFileName(path)));
         }
 
         private void SetStartupAction(Project project)
