@@ -2,9 +2,9 @@
 $if$ ($uiCallbacks$ == true)using System.Drawing;
 $endif$$if$ ($ribbonANDcommandbars$ == true)using System.Globalization;
 $endif$$if$ ($ui$ == true)using System.Windows.Forms;
+$endif$$if$ ($ribbonXmlVSTO$ == true)using Office = Microsoft.Office.Core;
 $endif$$if$ ($uiCallbacks$ == true)using $csprojectname$.Properties;
 $endif$$if$ ($comAddin$ == true)using System.Runtime.InteropServices;
-$endif$$if$ ($ribbonXmlVSTO$ == true)using Office = Microsoft.Office.Core;
 $endif$using Visio = Microsoft.Office.Interop.Visio;
 
 namespace $csprojectname$

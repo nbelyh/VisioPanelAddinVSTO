@@ -173,7 +173,7 @@ namespace PanelAddinWizardTestApp
 
                 var sln = (Solution2)DTE.Solution;
 
-                var templatePath = sln.GetProjectTemplate("Template.zip", "CSharp");
+                var templatePath = sln.GetProjectTemplate("Template.zip", "VisualBasic");
 
                 var path = Path.Combine(@"C:\Projects\ZZ", name);
                 sln.AddFromTemplate(templatePath, string.Format(path), name);
@@ -224,12 +224,16 @@ namespace PanelAddinWizardTestApp
             options.AddinName = "_Name";
             options.AddinDescription = "_Description";
 
-            //options.AddinEnabled = true;
-            //TestAddin(options);
+            options.AddinEnabled = true;
+            TestAddin(options);
 
             options.EnableWixSetup = true;
-            //TestSetup(options);
+            TestSetup(options);
 
+            options.AddinTypeCOM = false;
+            options.AddinTypeVSTO = false;
+
+            options.EnableWixSetup = true;
             options.AddinEnabled = false;
             TestVisioFiles(options);
 

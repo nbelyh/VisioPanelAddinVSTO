@@ -2,9 +2,9 @@
 $endif$$if$ ($ribbonANDcommandbars$ == true)Imports System.Globalization
 $endif$$if$ ($ui$ == true)Imports System.Windows.Forms
 $endif$$if$ ($ribbonXmlVSTO$ == true)Imports Office = Microsoft.Office.Core
-$endif$$if$ ($ui$ == true)Imports Visio = Microsoft.Office.Interop.Visio
 $endif$$if$ ($comAddin$ == true)Imports System.Runtime.InteropServices
-$endif$
+$endif$$if$ ($comAddin$ == true)Imports Extensibility
+$endif$Imports Visio = Microsoft.Office.Interop.Visio
 $if$ ($comAddin$ == true)
 <ComVisible(True)>
 <Guid("$clsid$")>
@@ -159,11 +159,11 @@ $if$ ($comAddin$ == true)
 
     Public Sub OnConnection(app As Object, connectMode As ext_ConnectMode, addInInst As Object, ByRef [custom] As Array) Implements IDTExtensibility2.OnConnection
         Application = app
-        Startup()
+        ThisAddIn_Startup()
     End Sub
 
     Public Sub OnDisconnection(disconnectMode As ext_DisconnectMode, ByRef custom As Array) Implements IDTExtensibility2.OnDisconnection
-        Shutdown()
+        ThisAddIn_Shutdown()
     End Sub
 
     Public Sub OnAddInsUpdate(ByRef custom As Array) Implements IDTExtensibility2.OnAddInsUpdate
