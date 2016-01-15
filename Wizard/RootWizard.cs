@@ -35,9 +35,10 @@ namespace PanelAddinWizard
 
         IWizardOptions ConfigureOptionsSource()
         {
+#if DEBUG
             if (XmlWizardOptionsManager.IsPanelAddinWizardTestAppStarted())
                 return XmlWizardOptionsManager.Read();
-
+#endif
             var form = new WizardForm(this)
             {
                 HeaderImage = HeaderImage
