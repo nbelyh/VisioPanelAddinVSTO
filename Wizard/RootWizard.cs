@@ -1,9 +1,12 @@
 ﻿
 using System;
+using System.CodeDom;
+using System.CodeDom.Compiler;
 using System.IO;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Security;
 using System.Xml;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
@@ -60,6 +63,15 @@ namespace PanelAddinWizard
             WizardOptions = ConfigureOptionsSource();
 
             GlobalDictionary["$csprojectname$"] = replacementsDictionary["$safeprojectname$"];
+
+            var productName = WizardOptions.AddinName;
+            if (string.IsNullOrEmpty(productName))
+                productName = replacementsDictionary["$safeprojectname$"];
+
+            GlobalDictionary["$productNameXML$"] = EncodeXML(productName);
+            GlobalDictionary["$productNameCS$"] = EncodeForCS(productName);
+            GlobalDictionary["$productNameVB$"] = EncodeForVB(productName);
+
             GlobalDictionary["$progid$"] = replacementsDictionary["$safeprojectname$"] + ".Addin";
             GlobalDictionary["$clsid$"] = replacementsDictionary["$guid1$"];
             GlobalDictionary["$wixproject$"] = replacementsDictionary["$guid2$"];
@@ -111,8 +123,38 @@ namespace PanelAddinWizard
             GlobalDictionary["$installExtensibilityInterop$"] = WizardOptions.InstallExtensibilityInterop ? "true" : "false";
             GlobalDictionary["$installVisioInterops$"] = WizardOptions.InstallVisioInterops ? "true" : "false";
 
-            GlobalDictionary["$AddinFriendlyName$"] = WizardOptions.AddinName;
-            GlobalDictionary["$AddinDescription$"] = WizardOptions.AddinDescription;
+            GlobalDictionary["$AddinFriendlyNameVB$"] = EncodeForVB(WizardOptions.AddinName);
+            GlobalDictionary["$AddinFriendlyNameCS$"] = EncodeForCS(WizardOptions.AddinName);
+
+            GlobalDictionary["$AddinDescriptionVB$"] = EncodeForVB(WizardOptions.AddinDescription);
+            GlobalDictionary["$AddinDescriptionCS$"] = EncodeForCS(WizardOptions.AddinDescription);
+        }
+
+        private static string EncodeForCS(string input)
+        {
+            return EncodeForCode(input, "CSharp");
+        }
+
+        private static string EncodeForVB(string input)
+        {
+            return EncodeForCode(input, "VisualBasic");
+        }
+
+        private static string EncodeForCode(string input, string providerName)
+        {
+            using (var writer = new StringWriter())
+            {
+                using (var provider = CodeDomProvider.CreateProvider(providerName))
+                {
+                    provider.GenerateCodeFromExpression(new CodePrimitiveExpression(input), writer, null);
+                    return writer.ToString();
+                }
+            }
+        }
+
+        private static string EncodeXML(string productName)
+        {
+            return SecurityElement.Escape(productName);
         }
 
         private static string BeautifyXml(XmlDocument doc)
