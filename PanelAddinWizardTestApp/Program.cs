@@ -8,23 +8,23 @@ namespace PanelAddinWizardTestApp
 {
     class Program
     {
-        //class TestHost : IWizardFormHost
-        //{
-        //    public bool IsWixInstalled()
-        //    {
-        //        return true;
-        //    }
+        class TestHost : IWizardFormHost
+        {
+            public bool IsWixInstalled()
+            {
+                return true;
+            }
 
-        //    public bool IsVstoInstalled()
-        //    {
-        //        return true;
-        //    }
+            public bool IsVstoInstalled()
+            {
+                return true;
+            }
 
-        //    public int GetVisualStudioVersion()
-        //    {
-        //        return 12;
-        //    }
-        //}
+            public int GetVisualStudioVersion()
+            {
+                return 12;
+            }
+        }
 
         static void TestAddin(XmlWizardOptions options)
         {
@@ -244,10 +244,10 @@ namespace PanelAddinWizardTestApp
         [STAThread]
         static void Main(string[] args)
         {
-            // var wizardForm = new WizardForm(new TestHost());
-            // wizardForm.ShowDialog();
+            var wizardForm = new WizardForm(new TestHost());
+            wizardForm.ShowDialog();
 
-            XmlWizardOptionsManager.PanelAddinWizardTestApp(DoTests);
+            // XmlWizardOptionsManager.PanelAddinWizardTestApp(DoTests);
        }
     }
 }

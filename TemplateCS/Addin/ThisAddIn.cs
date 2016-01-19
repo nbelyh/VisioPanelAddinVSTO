@@ -30,7 +30,7 @@ namespace $csprojectname$
         {
             MessageBox.Show(
                 "Hello from command 1!", 
-                "$csprojectname$");
+                $productNameCS$);
         }
         $endif$$if$ ($uiCallbacks$ == true)
         /// <summary>
@@ -44,7 +44,7 @@ namespace $csprojectname$
 
             MessageBox.Show(
                 string.Format("Hello from (conditional) command 2! You have {0} shapes selected.", Application.ActiveWindow.Selection.Count),
-                "$csprojectname$");
+                $productNameCS$);
         }
         $endif$$if$ ($uiCallbacks$ == true)
         /// <summary>
@@ -160,7 +160,7 @@ namespace $csprojectname$
             $if$ ($taskpane$ == true)_panelManager = new PanelManager(this);
             $endif$$if$ ($ribbonANDcommandbars$ == true)var version = int.Parse(Application.Version, NumberStyles.AllowDecimalPoint);
             if (version < 14)
-                $endif$$if$ ($commandbars$ == true)$thisAddInUI$StartupCommandBars("$csprojectname$", new[] { "Command1", "Command2" $endif$$if$ ($commandbarsANDtaskpane$ == true) , "TogglePanel"$endif$$if$ ($commandbars$ == true)});
+                $endif$$if$ ($commandbars$ == true)$thisAddInUI$StartupCommandBars($productNameCS$, new[] { "Command1", "Command2" $endif$$if$ ($commandbarsANDtaskpane$ == true) , "TogglePanel"$endif$$if$ ($commandbars$ == true)});
             $endif$$if$ ($uiCallbacks$ == true)Application.SelectionChanged += Application_SelectionChanged;
             $endif$
         }

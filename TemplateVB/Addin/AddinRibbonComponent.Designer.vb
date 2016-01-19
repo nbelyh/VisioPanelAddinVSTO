@@ -60,7 +60,7 @@
         '
         Me.Group1.Items.Add(Me.Command1)
         $if$ ($taskpane$ == true)Me.Group1.Items.Add(Me.TogglePanel)
-        $endif$Me.Group1.Label = "Group1"
+        $endif$Me.Group1.Label = $productNameVB$
         Me.Group1.Name = "Group1"
         '
         'Command1

@@ -3,7 +3,7 @@
   <ribbon>
     <tabs>
       <tab idMso="TabHome">
-        <group id="Group1" label="$csprojectname$">
+        <group id="Group1" label="$productNameXML$">
 
           <button id="Command1" size="large" getLabel="OnGetRibbonLabel" onAction="OnRibbonButtonClick" getEnabled="IsRibbonCommandEnabled" getImage="GetRibbonImage" />
           <button id="Command2" size="large" getLabel="OnGetRibbonLabel" onAction="OnRibbonButtonClick" getEnabled="IsRibbonCommandEnabled" getImage="GetRibbonImage" />

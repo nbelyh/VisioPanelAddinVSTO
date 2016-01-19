@@ -9,7 +9,7 @@
   <?define ProductCode = "{$guid7$}" ?>
   <?define UpgradeCode = "{$guid5$}" ?>
 
-  <Product Id="$(var.ProductCode)" Name="$csprojectname$ Setup" Language="1033" Version="$(var.Version)" Manufacturer="UnmanagedVisio" UpgradeCode="$(var.UpgradeCode)">
+  <Product Id="$(var.ProductCode)" Name="$productNameXML$ Setup" Language="1033" Version="$(var.Version)" Manufacturer="UnmanagedVisio" UpgradeCode="$(var.UpgradeCode)">
     <Package InstallerVersion="200" Compressed="yes" />
 
     <!-- check taht .NET 4 (client profile at least) is installed -->
@@ -88,13 +88,13 @@
       $endif$$visioFilesWxs$$if$ ($defaultVisioFiles$ == true)<!-- Sample template file. Feel free to modify the optional parameters -->
       <Component>
         <File Name="Stencil_1_M.vss">
-          <visio:PublishStencil MenuPath="$csprojectname$\Stencil 1" />
+          <visio:PublishStencil MenuPath="$productNameXML$\Stencil 1" />
         </File>
       </Component>
       <!-- Sample template file. Feel free to modify the optional parameters -->
       <Component>
         <File Name="Template_1_M.vst">
-          <visio:PublishTemplate MenuPath="$csprojectname$\Template 1" />
+          <visio:PublishTemplate MenuPath="$productNameXML$\Template 1" />
         </File>
       </Component>
     $endif$$if$ ($addVisioFiles$ == true)</ComponentGroup>

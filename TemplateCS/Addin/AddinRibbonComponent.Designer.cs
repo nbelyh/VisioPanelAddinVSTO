@@ -53,7 +53,7 @@
             // 
             this.Group1.Items.Add(this.Command1);
             $if$ ($taskpane$ == true)this.Group1.Items.Add(this.TogglePanel);
-            $endif$this.Group1.Label = "Group1";
+            $endif$this.Group1.Label = $productNameCS$;
             this.Group1.Name = "Group1";
             // 
             // Command1

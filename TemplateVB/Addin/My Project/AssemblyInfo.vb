@@ -8,11 +8,11 @@ Imports System.Runtime.InteropServices
 
 ' Review the values of the assembly attributes
 
-<Assembly: AssemblyTitle("$AddinFriendlyName$")> 
-<Assembly: AssemblyDescription("$AddinDescription$")> 
+<Assembly: AssemblyTitle($AddinFriendlyNameVB$)> 
+<Assembly: AssemblyDescription($AddinDescriptionVB$)> 
 <Assembly: AssemblyCompany("")> 
 <Assembly: AssemblyProduct("")> 
-<Assembly: AssemblyCopyright("Copyright ©  2015")> 
+<Assembly: AssemblyCopyright("Copyright ©  2016")> 
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>

@@ -147,17 +147,6 @@ Namespace My.Resources
             End Get
         End Property
   		$endif$ $if$ ($ribbonXml$ == true)
-        '''<summary>
-        '''  Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-        '''&lt;customUI xmlns=&quot;http://schemas.microsoft.com/office/2009/07/customui&quot; onLoad=&quot;OnRibbonLoad&quot;&gt;
-        '''  &lt;ribbon&gt;
-        '''    &lt;tabs&gt;
-        '''      &lt;tab idMso=&quot;TabHome&quot;&gt;
-        '''        &lt;group id=&quot;Group1&quot; label=&quot;$csprojectname$&quot;&gt;
-        '''
-        '''          &lt;button id=&quot;Command1&quot; size=&quot;large&quot; getLabel=&quot;OnGetRibbonLabel&quot; onAction=&quot;OnRibbonButtonClick&quot; getEnabled=&quot;IsRibbonCommandEnabled&quot; getImage=&quot;GetRibbonImage&quot; /&gt;
-        '''          &lt;button id=&quot;Command2&quot; size=&quot;large&quot; getLabel=&quot;OnGetRibbonLabel&quot; onAction=&quot;OnRibbonButtonC [rest of string was truncated]&quot;;.
-        '''</summary>
         Friend ReadOnly Property Ribbon() As String
             Get
                 Return ResourceManager.GetString("Ribbon", resourceCulture)

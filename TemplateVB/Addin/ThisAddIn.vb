@@ -24,7 +24,7 @@ $endif$Partial Public Class ThisAddIn
     Public Sub Command1()
         MessageBox.Show(
             "Hello from command 1!",
-            "$csprojectname$")
+            $productNameVB$)
     End Sub
     $endif$$if$ ($uiCallbacks$ == true)
     ''' 
@@ -36,7 +36,7 @@ $endif$Partial Public Class ThisAddIn
 
         MessageBox.Show(
             String.Format("Hello from (conditional) command 2! You have {0} shapes selected.", Application.ActiveWindow.Selection.Count),
-            "$csprojectname$")
+            $productNameVB$)
     End Sub
     $endif$$if$ ($uiCallbacks$ == true)
     ''' 
@@ -142,7 +142,7 @@ $endif$Partial Public Class ThisAddIn
         $if$ ($taskpane$ == true)_panelManager = New PanelManager(Me)
 		$endif$$if$ ($ribbonANDcommandbars$ == true)Dim version = Integer.Parse(Application.Version, NumberStyles.AllowDecimalPoint)
         If (version < 14) Then
-			$endif$$if$ ($commandbars$ == true)$thisAddInUI$StartupCommandBars("$csprojectname$", New String() {"Command1", "Command2"$endif$$if$ ($commandbarsANDtaskpane$ == true), "TogglePanel"$endif$$if$ ($commandbars$ == true)})
+			$endif$$if$ ($commandbars$ == true)$thisAddInUI$StartupCommandBars($productNameVB$, New String() {"Command1", "Command2"$endif$$if$ ($commandbarsANDtaskpane$ == true), "TogglePanel"$endif$$if$ ($commandbars$ == true)})
         $endif$$if$ ($ribbonANDcommandbars$ == true)End If
         $endif$$if$ ($uiCallbacks$ == true)AddHandler Application.SelectionChanged, AddressOf Application_SelectionChanged
         $endif$
