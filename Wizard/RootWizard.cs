@@ -101,7 +101,6 @@ namespace PanelAddinWizard
             GlobalDictionary["$taskpaneANDuiCallbacks$"] = (WizardOptions.TaskPane && uiCallbacks) ? "true" : "false";
 
             GlobalDictionary["$addinProject$"] = WizardOptions.AddinEnabled ? "true" : "false";
-            GlobalDictionary["$office$"] = GetOfficeVersion();
             GlobalDictionary["$wixSetup$"] = WizardOptions.EnableWixSetup ? "true" : "false";
 
             GetFiles();
@@ -128,6 +127,51 @@ namespace PanelAddinWizard
 
             GlobalDictionary["$AddinDescriptionVB$"] = EncodeForVB(WizardOptions.AddinDescription);
             GlobalDictionary["$AddinDescriptionCS$"] = EncodeForCS(WizardOptions.AddinDescription);
+
+            GlobalDictionary["$vstoHostPackageGuid$"] = GetVstoHostPackageGuid();
+            GlobalDictionary["$vstoTargetOfficeVersion$"] = GetTargetVstoOfficeVersion();
+            GlobalDictionary["$vstoTargetExeVersion$"] = GetTargetVstoExeVersion();
+
+            GlobalDictionary["$vsToolsVersion$"] = GetVsToolsVersion();
+        }
+
+        string GetVstoHostPackageGuid()
+        {
+            return GetVisualStudioVersion() < 12
+                ? "{20A848B8-E01F-4801-962E-25DB0FF57389}"
+                : "{29A7B9D7-A7F1-4328-8EF0-6B2D1A56B2C1}";
+        }
+
+        string GetTargetVstoOfficeVersion()
+        {
+            return GetVisualStudioVersion() < 12
+                ? "14.0"
+                : "15.0";
+        }
+
+        string GetTargetVstoExeVersion()
+        {
+            foreach (var item in new[] { "16.0", "15.0", "14.0", "12.0", "11.0" })
+            {
+                var keyPath = string.Format(@"HKEY_LOCAL_MACHINE\Software\Microsoft\Office\{0}\Visio\InstallRoot", item);
+                if (Registry.GetValue(keyPath, "Path", null) != null)
+                    return item;
+            }
+
+            return GetTargetVstoOfficeVersion();
+        }
+
+        string GetVsToolsVersion()
+        {
+            switch (GetVisualStudioVersion())
+            {
+                case 12:
+                    return "12.0";
+                case 14:
+                    return "14.0";
+                default:
+                    return "4.0";
+            }
         }
 
         private static string EncodeForCS(string input)
@@ -311,13 +355,6 @@ namespace PanelAddinWizard
             foreach (var item in new[] { "14.0", "15.0", "16.0" })
                 GetVisioPath(key, item, ref path);
             return path;
-        }
-
-        // Don't return the latest version, even if it is installed, because it will cause problems by auto-upgrade
-        static string GetOfficeVersion()
-        {
-            return Registry.GetValue(@"HKEY_LOCAL_MACHINE\Software\Microsoft\Office\14.0\Visio\InstallRoot", "Path", null) != null
-                ? "14.0" : "12.0";
         }
 
         void SetActiveConfiguration()

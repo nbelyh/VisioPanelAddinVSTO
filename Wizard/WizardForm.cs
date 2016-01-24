@@ -45,7 +45,7 @@ namespace PanelAddinWizard
             // required for designer support
             InitializeComponent();
 
-            InstallExtensibilityInterop = GacUtil.GetInstalledVersion("Extensibility") > 0;
+            InstallExtensibilityInterop = GacUtil.GetInstalledVersion("Extensibility") == 0;
 
             checkWixSetup.Checked = true;
 

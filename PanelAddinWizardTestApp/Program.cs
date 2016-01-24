@@ -175,7 +175,7 @@ namespace PanelAddinWizardTestApp
 
                 var templatePath = sln.GetProjectTemplate("Template.zip", "VisualBasic");
 
-                var path = Path.Combine(@"C:\Projects\ZZ", name);
+                var path = Path.Combine(TestPath, name);
                 sln.AddFromTemplate(templatePath, string.Format(path), name);
 
                 foreach (SolutionConfiguration2 sc2 in sln.SolutionBuild.SolutionConfigurations)
@@ -210,11 +210,16 @@ namespace PanelAddinWizardTestApp
         }
 
         private static DTE2 DTE;
+        private static string TestPath;
 
-        private static void DoTests()
+        private static void DoTests(string vs)
         {
-            var type = Type.GetTypeFromProgID("VisualStudio.DTE.10.0");
+            var type = Type.GetTypeFromProgID(vs);
             DTE = (DTE2)Activator.CreateInstance(type);
+
+            TestPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, vs);
+            if (!Directory.Exists(TestPath))
+                Directory.CreateDirectory(TestPath);
 
             MessageFilter.Register();
 
@@ -244,10 +249,14 @@ namespace PanelAddinWizardTestApp
         [STAThread]
         static void Main(string[] args)
         {
-            var wizardForm = new WizardForm(new TestHost());
-            wizardForm.ShowDialog();
+            // var wizardForm = new WizardForm(new TestHost());
+            // wizardForm.ShowDialog();
 
-            // XmlWizardOptionsManager.PanelAddinWizardTestApp(DoTests);
+            XmlWizardOptionsManager.PanelAddinWizardTestApp(() => DoTests("VisualStudio.DTE.10.0"));
+
+            XmlWizardOptionsManager.PanelAddinWizardTestApp(() => DoTests("VisualStudio.DTE.12.0"));
+
+            XmlWizardOptionsManager.PanelAddinWizardTestApp(() => DoTests("VisualStudio.DTE.14.0"));
        }
     }
 }

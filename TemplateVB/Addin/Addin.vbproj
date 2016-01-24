@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="$vsToolsVersion$" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
 	$if$ ($vstoAddin$ == true)
     <ProjectTypeGuids>{BAA0C2D2-18E2-41B9-852F-F413020CAA33};{F184B08F-C81C-45F6-A57F-5ABD9991F28F}</ProjectTypeGuids>
@@ -221,11 +221,15 @@
   $endif$
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   $if$ ($vstoAddin$ == true)
-  <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v10.0\OfficeTools\Microsoft.VisualStudio.Tools.Office.targets" />
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(VSToolsPath)\OfficeTools\Microsoft.VisualStudio.Tools.Office.targets" Condition="'$(VSToolsPath)' != ''" />
   <ProjectExtensions>
     <VisualStudio>
       <FlavorProperties GUID="{BAA0C2D2-18E2-41B9-852F-F413020CAA33}">
-        <ProjectProperties HostName="Visio" HostPackage="{20A848B8-E01F-4801-962E-25DB0FF57389}" OfficeVersion="$office$" VstxVersion="4.0" ApplicationType="Visio" Language="vb" TemplatesPath="" DebugInfoExeName="#Software\Microsoft\Office\$office$\Visio\InstallRoot\Path#visio.exe" AddItemTemplatesGuid="{DCFE8D25-4715-4C33-9EAB-A34A9EBC9544}" />
+        <ProjectProperties HostName="Visio" HostPackage="$vstoHostPackageGuid$" OfficeVersion="$vstoTargetOfficeVersion$" VstxVersion="4.0" ApplicationType="Visio" Language="vb" TemplatesPath="" DebugInfoExeName="#Software\Microsoft\Office\$vstoTargetExeVersion$\Visio\InstallRoot\Path#visio.exe" AddItemTemplatesGuid="{DCFE8D25-4715-4C33-9EAB-A34A9EBC9544}" />
         <Host Name="Visio" IconIndex="0">
           <HostItem Name="ThisAddIn" Code="ThisAddIn.vb" CanonicalName="ThisAddIn" CanActivate="false" IconIndex="1" Blueprint="ThisAddIn.Designer.xml" GeneratedCode="ThisAddIn.Designer.vb" />
         </Host>
