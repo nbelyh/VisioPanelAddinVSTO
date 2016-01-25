@@ -92,6 +92,8 @@ namespace PanelAddinWizard
                 checkLocalReferences.Checked = true;
             }
 
+            radioSupportRibbonDesigner.Checked = radioAddinTypeVSTO.Checked;
+
             checkAddVisioFiles.Checked = false;
             radioCreateNewVisioFiles.Checked = true;
             checkCopyVisioFiles.Checked = true;
@@ -880,6 +882,12 @@ namespace PanelAddinWizard
             checkLocalReferences.Enabled = enableLocalReferences;
             if (visioInteropVersion > 0)
                 checkLocalReferencesLabel.ForeColor = enableLocalReferences ? SystemColors.GrayText : SystemColors.ControlDark;
+
+            if (radioAddinTypeCOM.Checked)
+            {
+                radioSupportRibbonDesigner.Checked = false;
+                radioSupportRibbonXml.Checked = true;
+            }
 
             addinWizard.NextEnabled =
                 !(checkWixSetup.Checked && checkAddVisioFiles.Checked && radioUseVisioFiles.Checked && textBoxVisioFilesPath.Text.Length == 0);
