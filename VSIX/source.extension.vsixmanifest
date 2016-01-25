@@ -3,7 +3,7 @@
   <Identifier Id="VisioPanelAddinVSTO.UnmanagedVisio">
     <Name>Extended Visio Addin Project</Name>
     <Author>Nikolay Belykh</Author>
-    <Version>1.0.5</Version>
+    <Version>1.0.6</Version>
     <Description xml:space="preserve">Creates a Microsoft Visio Add-in for Microsoft Visio which provides some user interface to start with, including toolbar and docking panel</Description>
     <Locale>1033</Locale>
     <License>license.rtf</License>
