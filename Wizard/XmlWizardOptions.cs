@@ -64,8 +64,11 @@ namespace PanelAddinWizard
         public bool EnableWixUI { get; set; }
 
         public string AddinName { get; set; }
+        public string AddinManufacturer { get; set; }
         public string AddinDescription { get; set; }
         public string WixUI { get; set; }
+        public string SetupLanguage { get; set; }
+        public bool UseSetupLanguage { get; set; }
 
         public string[] VisioFilePaths { get; set; }
     }

@@ -227,6 +227,7 @@ namespace PanelAddinWizardTestApp
 
             var options = new XmlWizardOptions();
             options.AddinName = "_Name";
+            options.AddinManufacturer = "_AddinManufacturer";
             options.AddinDescription = "_Description";
 
             options.AddinEnabled = true;
@@ -249,8 +250,9 @@ namespace PanelAddinWizardTestApp
         [STAThread]
         static void Main(string[] args)
         {
-            // var wizardForm = new WizardForm(new TestHost());
-            // wizardForm.ShowDialog();
+            var wizardForm = new WizardForm(new TestHost(), "TestAddIn");
+            wizardForm.ShowDialog();
+            return;
 
             XmlWizardOptionsManager.PanelAddinWizardTestApp(() => DoTests("VisualStudio.DTE.10.0"));
 

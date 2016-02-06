@@ -10,7 +10,7 @@ Imports System.Runtime.InteropServices
 
 <Assembly: AssemblyTitle($AddinFriendlyNameVB$)> 
 <Assembly: AssemblyDescription($AddinDescriptionVB$)> 
-<Assembly: AssemblyCompany("")> 
+<Assembly: AssemblyCompany($AddinManufactorerVB$)> 
 <Assembly: AssemblyProduct("")> 
 <Assembly: AssemblyCopyright("Copyright ©  2016")> 
 <Assembly: AssemblyTrademark("")> 

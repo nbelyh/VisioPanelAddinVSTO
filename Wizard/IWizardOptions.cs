@@ -16,6 +16,7 @@
         bool AddinTypeVSTO { get; }
 
         string AddinName { get; }
+        string AddinManufacturer  { get; }
         string AddinDescription { get; }
 
         bool EnableWixSetup { get; }
@@ -25,5 +26,8 @@
         string[] VisioFilePaths { get; }
         bool EnableWixUI { get; }
         string WixUI { get; }
+
+        bool UseSetupLanguage { get; }
+        string SetupLanguage { get; }
     }
 }

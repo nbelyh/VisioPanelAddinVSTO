@@ -36,13 +36,13 @@ namespace PanelAddinWizard
 
         protected abstract Image HeaderImage { get; }
 
-        IWizardOptions ConfigureOptionsSource()
+        IWizardOptions ConfigureOptionsSource(string projectName)
         {
 #if DEBUG
             if (XmlWizardOptionsManager.IsPanelAddinWizardTestAppStarted())
                 return XmlWizardOptionsManager.Read();
 #endif
-            var form = new WizardForm(this)
+            var form = new WizardForm(this, projectName)
             {
                 HeaderImage = HeaderImage
             };
@@ -60,9 +60,15 @@ namespace PanelAddinWizard
         {
             _dte = automationObject as DTE2;
 
-            WizardOptions = ConfigureOptionsSource();
+            WizardOptions = ConfigureOptionsSource(replacementsDictionary["$safeprojectname$"]);
 
             GlobalDictionary["$csprojectname$"] = replacementsDictionary["$safeprojectname$"];
+
+            var addinManufacturer = WizardOptions.AddinManufacturer;
+            if (string.IsNullOrEmpty(addinManufacturer))
+                addinManufacturer = Environment.UserName;
+
+            GlobalDictionary["$addinManufacturerXML$"] = EncodeXML(addinManufacturer);
 
             var productName = WizardOptions.AddinName;
             if (string.IsNullOrEmpty(productName))
@@ -125,12 +131,17 @@ namespace PanelAddinWizard
             GlobalDictionary["$AddinFriendlyNameVB$"] = EncodeForVB(WizardOptions.AddinName);
             GlobalDictionary["$AddinFriendlyNameCS$"] = EncodeForCS(WizardOptions.AddinName);
 
+            GlobalDictionary["$AddinManufactorerVB$"] = EncodeForVB(WizardOptions.AddinManufacturer);
+            GlobalDictionary["$AddinManufactorerCS$"] = EncodeForCS(WizardOptions.AddinManufacturer);
+
             GlobalDictionary["$AddinDescriptionVB$"] = EncodeForVB(WizardOptions.AddinDescription);
             GlobalDictionary["$AddinDescriptionCS$"] = EncodeForCS(WizardOptions.AddinDescription);
 
             GlobalDictionary["$vstoHostPackageGuid$"] = GetVstoHostPackageGuid();
             GlobalDictionary["$vstoTargetOfficeVersion$"] = GetTargetVstoOfficeVersion();
             GlobalDictionary["$vstoTargetExeVersion$"] = GetTargetVstoExeVersion();
+
+            GlobalDictionary["$SetupLanguage$"] = WizardOptions.UseSetupLanguage ? WizardOptions.SetupLanguage : "";
 
             GlobalDictionary["$vsToolsVersion$"] = GetVsToolsVersion();
         }
