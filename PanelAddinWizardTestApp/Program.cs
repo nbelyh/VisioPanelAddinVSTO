@@ -3,6 +3,8 @@ using System.IO;
 using EnvDTE;
 using EnvDTE80;
 using PanelAddinWizard;
+using System.Xml.Serialization;
+using System.Xml;
 
 namespace PanelAddinWizardTestApp
 {
@@ -152,7 +154,7 @@ namespace PanelAddinWizardTestApp
             ExecuteInstall(options);
 
             options.CreateNewVisioFiles = false;
-            options.VisioFilePaths = new []
+            options.VisioFilePaths = new[]
             {
                 @"C:\Projects\github\VisioPanelAddinVSTO\PanelAddinWizardTestApp\Data\X1_M.vss",
                 @"C:\Projects\github\VisioPanelAddinVSTO\PanelAddinWizardTestApp\Data\X1_M.vst",
@@ -182,6 +184,7 @@ namespace PanelAddinWizardTestApp
 
             options.UseSetupLanguage = false;
             options.SetupLanguage = "";
+            options.VisioFilePaths = null;
         }
 
         static void ExecuteInstall(XmlWizardOptions options)
@@ -195,11 +198,18 @@ namespace PanelAddinWizardTestApp
                 var templatePath = sln.GetProjectTemplate("Template.zip", "VisualBasic");
 
                 var path = Path.Combine(TestPath, name);
-                sln.AddFromTemplate(templatePath, string.Format(path), name);
+                sln.AddFromTemplate(templatePath, path, name);
+
+                var serializer = new XmlSerializer(typeof(XmlWizardOptions));
+                using (var streamWriter = new StreamWriter(Path.Combine(path, "settings.xml")))
+                using (var xmlWriter = XmlWriter.Create(streamWriter, new XmlWriterSettings { Indent = true}))
+                {
+                    serializer.Serialize(xmlWriter, options);
+                }
 
                 foreach (SolutionConfiguration2 sc2 in sln.SolutionBuild.SolutionConfigurations)
-                foreach (SolutionContext sc in sc2.SolutionContexts)
-                    sc.ShouldBuild = true;
+                    foreach (SolutionContext sc in sc2.SolutionContexts)
+                        sc.ShouldBuild = true;
 
                 DTE.ExecuteCommand("Build.BuildSolution");
 
@@ -224,7 +234,7 @@ namespace PanelAddinWizardTestApp
                         }
                     }
                 }
-                    
+
             });
         }
 
@@ -269,15 +279,14 @@ namespace PanelAddinWizardTestApp
         [STAThread]
         static void Main(string[] args)
         {
-            var wizardForm = new WizardForm(new TestHost(), "TestAddIn");
-            wizardForm.ShowDialog();
-            return;
+            //var wizardForm = new WizardForm(new TestHost(), "TestAddIn");
+            //wizardForm.ShowDialog();
 
             XmlWizardOptionsManager.PanelAddinWizardTestApp(() => DoTests("VisualStudio.DTE.10.0"));
 
             XmlWizardOptionsManager.PanelAddinWizardTestApp(() => DoTests("VisualStudio.DTE.12.0"));
 
             XmlWizardOptionsManager.PanelAddinWizardTestApp(() => DoTests("VisualStudio.DTE.14.0"));
-       }
+        }
     }
 }
