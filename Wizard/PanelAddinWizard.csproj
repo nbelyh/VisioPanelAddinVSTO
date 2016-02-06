@@ -69,6 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChildWizard.cs" />
+    <Compile Include="Transliterate.cs" />
     <Compile Include="XmlWizardOptions.cs" />
     <Compile Include="GacUtil.cs" />
     <Compile Include="IWizardFormHost.cs" />

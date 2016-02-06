@@ -146,6 +146,7 @@ namespace PanelAddinWizardTestApp
         static void TestVisioFiles(XmlWizardOptions options)
         {
             options.AddVisioFiles = true;
+            options.DuplicateExistingVisioFiles = false;
 
             options.CreateNewVisioFiles = true;
             ExecuteInstall(options);
@@ -158,11 +159,29 @@ namespace PanelAddinWizardTestApp
                 @"C:\Projects\github\VisioPanelAddinVSTO\PanelAddinWizardTestApp\Data\X2_M.vss",
                 @"C:\Projects\github\VisioPanelAddinVSTO\PanelAddinWizardTestApp\Data\X2_M.vst"
             };
-
             ExecuteInstall(options);
+
+            TestLanguage(options);
 
             options.DuplicateExistingVisioFiles = true;
             ExecuteInstall(options);
+        }
+
+        static void TestLanguage(XmlWizardOptions options)
+        {
+            options.UseSetupLanguage = true;
+            options.SetupLanguage = "ru-RU";
+            options.VisioFilePaths = new[]
+            {
+                @"C:\Projects\github\VisioPanelAddinVSTO\PanelAddinWizardTestApp\Data\фыва.vss",
+                @"C:\Projects\github\VisioPanelAddinVSTO\PanelAddinWizardTestApp\Data\фыва.vst",
+                @"C:\Projects\github\VisioPanelAddinVSTO\PanelAddinWizardTestApp\Data\йцук.vss",
+                @"C:\Projects\github\VisioPanelAddinVSTO\PanelAddinWizardTestApp\Data\йцук.vst"
+            };
+            ExecuteInstall(options);
+
+            options.UseSetupLanguage = false;
+            options.SetupLanguage = "";
         }
 
         static void ExecuteInstall(XmlWizardOptions options)

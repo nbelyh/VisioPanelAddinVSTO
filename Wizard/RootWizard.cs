@@ -273,7 +273,18 @@ namespace PanelAddinWizard
                     nodeWixProj.AppendChild(nodeContent);
 
                     var nodeFile = docWxs.CreateElement("File");
-                    nodeFile.SetAttribute("Name", Path.GetFileName(path));
+
+                    var fileName = Path.GetFileName(path);
+
+                    nodeFile.SetAttribute("Name", fileName);
+
+                    // for non-english, take care about Id
+                    if (WizardOptions.UseSetupLanguage)
+                    {
+                        var id = Translit.MakeIdentifierFromString(fileName);
+                        if (id != fileName)
+                            nodeFile.SetAttribute("Id", id);
+                    }
 
                     if (!WizardOptions.DuplicateExistingVisioFiles)
                         nodeFile.SetAttribute("Source", path);
@@ -295,7 +306,7 @@ namespace PanelAddinWizard
                         var nodePublish = docWxs.CreateElement(elementName);
 
                         nodePublish.SetAttribute("MenuPath", string.Format("{0}\\{1}",
-                            GlobalDictionary["$csprojectname$"], Path.GetFileNameWithoutExtension(path)));
+                            WizardOptions.AddinName, Path.GetFileNameWithoutExtension(path)));
 
                         nodeFile.AppendChild(nodePublish);
                     }
