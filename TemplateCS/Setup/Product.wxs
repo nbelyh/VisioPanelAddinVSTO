@@ -12,16 +12,40 @@
   <Product Id="$(var.ProductCode)" Name="$productNameXML$" Language="1033" Version="$(var.Version)" Manufacturer="$addinManufacturerXML$" UpgradeCode="$(var.UpgradeCode)">
     <Package InstallerVersion="200" Compressed="yes" />
 
+    $if$ ($addinProject$ == true)
     <!-- check taht .NET 4 (client profile at least) is installed -->
     <PropertyRef Id="NETFRAMEWORK40CLIENT" />
     <PropertyRef Id="NETFRAMEWORK40FULL" />
     <PropertyRef Id="NETFRAMEWORK45" />
-    
+
     <Condition Message="This application requires .NET Framework 4.0. Please install the .NET Framework then run this installer again.">
       <![CDATA[Installed OR NETFRAMEWORK40CLIENT OR NETFRAMEWORK40 OR NETFRAMEWORK45]]>
     </Condition>
+    $endif$$if$ ($vstoAddin$ == true)
+    <!-- Visio 2007 VSTO addin support - remove this block if Visio 2007 support is not required -->
+    <Property Id="VISIO2007">
+      <RegistrySearch Id="Visio2007_Installed" Root="HKLM" Key="Software\Microsoft\Office\12.0\Visio\InstallRoot" Name="Path" Type="raw" />
+    </Property>
 
-    $if$ ($EnableWixUI$ == true)<!-- override default license -->
+    <Property Id="VISIO2007SP3">
+      <DirectorySearch Id="Visio2007_Version" Path="[VISIO2007]">
+        <FileSearch Id="Visio2007_VisLib" Name="VisLib.dll" MinVersion="12.0.6606"></FileSearch>
+      </DirectorySearch>
+    </Property>
+
+    <Property Id="VSTOR40">
+      <RegistrySearch Id="VSTOR_Installed" Root="HKLM" Key="SOFTWARE\Microsoft\VSTO Runtime Setup\v4R" Name="VSTORFeature_CLR40" Type="raw" />
+    </Property>
+    
+    <Condition Message="This addin requires the VSTO 4.0 Runtime to run on Visio 2007. Please install the VSTO runtime then run this installer again.">
+      <![CDATA[Installed OR (VSTOR40 OR NOT VISIO2007)]]>
+    </Condition>
+    
+    <Condition Message="This addin requires Visio Service Pack 3 to be installed to run on Visio 2007. Please install the Service Pack 3 then run this installer again.">
+      <![CDATA[Installed OR (VISIO2007SP3 OR NOT VISIO2007)]]>
+    </Condition>
+	  <!-- Visio 2007 support -->
+    $endif$$if$ ($EnableWixUI$ == true)<!-- override default license -->
     <WixVariable Id="WixUILicenseRtf" Value="License.rtf" />
     $endif$
     <!-- allow major upgrades -->
@@ -125,6 +149,15 @@
           <visio:PublishAddin />
         </File>
       </Component>
+
+      <!-- Visio 2007 VSTO addin support - remove this block if Visio 2007 support is not required -->
+      <Component Id="EnableLocalMachineVSTO" Permanent="yes">
+        <Condition><![CDATA[VISIO2007 AND ALLUSERS=1]]></Condition>
+        <RegistryKey Root="HKLM" Key="Software\Microsoft\Office\12.0\Common\General">
+          <RegistryValue Name="EnableLocalMachineVSTO" Value="1" Type="integer" KeyPath="yes" />
+        </RegistryKey>
+      </Component>
+      <!-- Visio 2007 support -->
       $endif$$if$ ($addinProject$ == true)
     </ComponentGroup>
     $endif$
