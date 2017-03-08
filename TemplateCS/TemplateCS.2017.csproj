@@ -1,0 +1,137 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectTypeGuids>{82b43b9b-a64c-4715-b499-d71e9ca2bd60};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ProjectGuid>{5133DED2-2448-4536-8F18-8FD6E50EAD4D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TemplateCS</RootNamespace>
+    <AssemblyName>TemplateCS</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <GeneratePkgDefFile>false</GeneratePkgDefFile>
+    <IncludeAssemblyInVSIXContainer>false</IncludeAssemblyInVSIXContainer>
+    <IncludeDebugSymbolsInVSIXContainer>false</IncludeDebugSymbolsInVSIXContainer>
+    <IncludeDebugSymbolsInLocalVSIXDeployment>false</IncludeDebugSymbolsInLocalVSIXDeployment>
+    <CreateVsixContainer>false</CreateVsixContainer>
+    <DeployExtension>false</DeployExtension>
+    <DeployVSTemplates>false</DeployVSTemplates>
+    <CopyVsixManifestToOutput>false</CopyVsixManifestToOutput>
+    <CopyBuildOutputToOutputDirectory>false</CopyBuildOutputToOutputDirectory>
+    <CopyOutputSymbolsToOutputDirectory>false</CopyOutputSymbolsToOutputDirectory>
+    <MinimumVisualStudioVersion>15.0</MinimumVisualStudioVersion>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>4.0</OldToolsVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <VSTemplate Include="Template.vstemplate">
+      <SubType>Designer</SubType>
+    </VSTemplate>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Addin\Addin.csproj">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Addin\AddinCommandBars.cs" />
+    <Content Include="Addin\Resources\Command1.png" />
+    <Content Include="Addin\Resources\Command1_sm.png" />
+    <Content Include="Addin\Resources\Command2.png" />
+    <Content Include="Addin\Resources\Command2_sm.png" />
+    <Content Include="Addin\Resources\TogglePanel.png" />
+    <Content Include="Addin\Resources\TogglePanel_sm.png" />
+    <Content Include="Addin\ThisAddIn.cs" />
+    <Content Include="Addin\ThisAddIn.Designer.cs" />
+    <Content Include="Addin\ThisAddIn.Designer.xml" />
+    <Content Include="Addin\AddinRibbon.cs" />
+    <Content Include="Addin\PanelFrame.cs" />
+    <Content Include="Addin\PanelManager.cs" />
+    <Content Include="Addin\TheForm.cs" />
+    <Content Include="Addin\TheForm.Designer.cs" />
+    <Content Include="Addin\TheForm.resx">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Addin\Interop\Extensibility.dll" />
+    <Content Include="Addin\Interop\Microsoft.Office.Interop.Visio.dll" />
+    <Content Include="Addin\Interop\Office.DLL" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Addin\Resources\Ribbon.xml" />
+    <Content Include="Addin\Template.vstemplate">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Addin\Properties\AssemblyInfo.cs" />
+    <Content Include="Addin\Properties\Resources.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Addin\Properties\Resources.Designer.cs" />
+    <Content Include="IconCS.ico" />
+    <Content Include="Setup\build\VisioWixExtension.dll" />
+    <Content Include="Setup\Product.wxs">
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Setup\Setup.vstemplate">
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Setup\Setup.wixproj">
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Setup\build\VisioWixExtension.xsd">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Setup\License.rtf" />
+    <None Include="Setup\Stencil_1_M.vss" />
+    <None Include="Setup\Template_1_M.vst" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Addin\AddinRibbonComponent.resx">
+      <DependentUpon>AddinRibbonComponent.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Addin\AddinRibbonComponent.cs" />
+    <Content Include="Addin\AddinRibbonComponent.Designer.cs">
+      <DependentUpon>AddinRibbonComponent.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\VSSDK\Microsoft.VsSDK.targets" Condition="false" />
+</Project>

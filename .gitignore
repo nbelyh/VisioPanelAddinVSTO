@@ -219,3 +219,5 @@ PanelAddinWizardTestApp/Data/X2_M.vst
 *.vst
 PanelAddinWizardTestApp/Data/X1_M.vss
 *.vss
+/.vs
+/packages
