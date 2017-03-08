@@ -22,8 +22,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisioWixExtension", "VisioW
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WixExtension", "WixExtension", "{25387522-997C-4E2F-AB8A-90F1E1754FFF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VSIX.2017", "VSIX\VSIX.2017.csproj", "{19981F63-B7DE-45FA-8126-B0E4429C96F9}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -62,8 +60,6 @@ Global
 		{814CBD03-4FFB-471A-AAF4-F5E04ADEE783}.Debug|x86.Build.0 = Debug|Any CPU
 		{814CBD03-4FFB-471A-AAF4-F5E04ADEE783}.Release|x86.ActiveCfg = Release|Any CPU
 		{814CBD03-4FFB-471A-AAF4-F5E04ADEE783}.Release|x86.Build.0 = Release|Any CPU
-		{19981F63-B7DE-45FA-8126-B0E4429C96F9}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{19981F63-B7DE-45FA-8126-B0E4429C96F9}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
