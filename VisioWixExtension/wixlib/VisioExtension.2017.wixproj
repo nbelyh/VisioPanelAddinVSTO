@@ -12,14 +12,17 @@
     <Cultures>en-us</Cultures>
     <Name>VisioExtension.2017</Name>
     <OutputPath>..\wixext\\</OutputPath>
-    <IntermediateOutputPath>$(Configuration)\obj\</IntermediateOutputPath>
-    <OutputPath>$(SolutionDir)\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>$(Configuration).2017\obj\</IntermediateOutputPath>
+    <OutputPath>$(SolutionDir)\$(Configuration).2017\</OutputPath>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DefineConstants>VS2017</DefineConstants>
+    <OutputPath>$(SolutionDir)\$(Configuration).2017\</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <DefineConstants>Debug</DefineConstants>
+    <DefineConstants>Debug;VS2017</DefineConstants>
+    <OutputPath>$(SolutionDir)\$(Configuration).2017\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="VisioExtension.wxs" />

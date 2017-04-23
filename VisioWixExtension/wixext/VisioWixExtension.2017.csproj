@@ -33,7 +33,7 @@
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <TargetFrameworkProfile />
-    <OutputPath>$(SolutionDir)\$(Configuration)\</OutputPath>
+    <OutputPath>$(SolutionDir)\$(Configuration).2017\</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -43,6 +43,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <OutputPath>..\..\Debug.2017\</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -51,6 +52,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <OutputPath>..\..\Release.2017\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="TableFields.cs" />
@@ -72,7 +74,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Data\Messages.resources" />
-    <EmbeddedResource Include="$(SolutionDir)\$(Configuration)\Visio.wixlib">
+    <EmbeddedResource Include="$(SolutionDir)\$(Configuration).2017\Visio.wixlib">
       <Link>Data\Visio.wixlib</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="Xsd\VisioWixExtension.xsd">
@@ -105,9 +107,9 @@
     <Exec Command="&quot;%WIX%\SDK\MsgGen.exe&quot; Data\Messages.xml Data\Messages.cs" />
   </Target>
   <Target Name="AfterBuild">
-    <Copy SourceFiles="$(SolutionDir)\$(Configuration)\VisioWixExtension.dll" DestinationFiles="$(SolutionDir)\TemplateCS\Setup\build\VisioWixExtension.dll" />
+    <Copy SourceFiles="$(SolutionDir)\$(Configuration).2017\VisioWixExtension.dll" DestinationFiles="$(SolutionDir)\TemplateCS\Setup\build\VisioWixExtension.dll" />
     <Copy SourceFiles="Xsd\VisioWixExtension.xsd" DestinationFiles="$(SolutionDir)\TemplateCS\Setup\build\VisioWixExtension.xsd" />
-    <Copy SourceFiles="$(SolutionDir)\$(Configuration)\VisioWixExtension.dll" DestinationFiles="$(SolutionDir)\TemplateVB\Setup\build\VisioWixExtension.dll" />
+    <Copy SourceFiles="$(SolutionDir)\$(Configuration).2017\VisioWixExtension.dll" DestinationFiles="$(SolutionDir)\TemplateVB\Setup\build\VisioWixExtension.dll" />
     <Copy SourceFiles="Xsd\VisioWixExtension.xsd" DestinationFiles="$(SolutionDir)\TemplateVB\Setup\build\VisioWixExtension.xsd" />
   </Target>
 </Project>
