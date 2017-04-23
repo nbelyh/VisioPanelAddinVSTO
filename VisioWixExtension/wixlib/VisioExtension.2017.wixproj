@@ -10,7 +10,7 @@
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' AND '$(MSBuildExtensionsPath32)' != '' ">$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
     <Cultures>en-us</Cultures>
-    <Name>VisioExtension</Name>
+    <Name>VisioExtension.2017</Name>
     <OutputPath>..\wixext\\</OutputPath>
     <IntermediateOutputPath>$(Configuration)\obj\</IntermediateOutputPath>
     <OutputPath>$(SolutionDir)\$(Configuration)\</OutputPath>

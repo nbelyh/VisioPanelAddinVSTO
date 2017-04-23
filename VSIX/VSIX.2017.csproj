@@ -45,31 +45,31 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="Key.2017.snk" />
-    <None Include="source.extension.2017.vsixmanifest" >
+    <None Include="manifest_2017\source.extension.vsixmanifest">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TemplateCS\TemplateCS.2017.csproj">
       <Project>{5133DED2-2448-4536-8F18-8FD6E50EAD4D}</Project>
-      <Name>TemplateCS</Name>
+      <Name>TemplateCS.2017</Name>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
       <TemplateType>Project</TemplateType>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <VSIXSubPath>TemplateCS</VSIXSubPath>
+      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
     </ProjectReference>
     <ProjectReference Include="..\TemplateVB\TemplateVB.2017.vbproj">
       <Project>{75B8D080-8DB7-4418-91FB-5E0501ACFEC1}</Project>
-      <Name>TemplateVB</Name>
+      <Name>TemplateVB.2017</Name>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
       <TemplateType>Project</TemplateType>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <VSIXSubPath>TemplateVB</VSIXSubPath>
+      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
     </ProjectReference>
     <ProjectReference Include="..\Wizard\PanelAddinWizard.2017.csproj">
       <Project>{B214D62D-7872-4D80-9387-ABBFAAF57A2C}</Project>
-      <Name>PanelAddinWizard</Name>
-      <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3b</IncludeOutputGroupsInVSIX>
+      <Name>PanelAddinWizard.2017</Name>
+      <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
       <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
     </ProjectReference>
   </ItemGroup>
