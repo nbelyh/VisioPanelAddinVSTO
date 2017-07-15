@@ -279,14 +279,14 @@ namespace PanelAddinWizardTestApp
         [STAThread]
         static void Main(string[] args)
         {
-            //var wizardForm = new WizardForm(new TestHost(), "TestAddIn");
-            //wizardForm.ShowDialog();
+            var wizardForm = new WizardForm(new TestHost(), "TestAddIn");
+            wizardForm.ShowDialog();
 
-            XmlWizardOptionsManager.PanelAddinWizardTestApp(() => DoTests("VisualStudio.DTE.10.0"));
+            //XmlWizardOptionsManager.PanelAddinWizardTestApp(() => DoTests("VisualStudio.DTE.10.0"));
 
-            XmlWizardOptionsManager.PanelAddinWizardTestApp(() => DoTests("VisualStudio.DTE.12.0"));
+            //XmlWizardOptionsManager.PanelAddinWizardTestApp(() => DoTests("VisualStudio.DTE.12.0"));
 
-            XmlWizardOptionsManager.PanelAddinWizardTestApp(() => DoTests("VisualStudio.DTE.14.0"));
+            //XmlWizardOptionsManager.PanelAddinWizardTestApp(() => DoTests("VisualStudio.DTE.14.0"));
         }
     }
 }

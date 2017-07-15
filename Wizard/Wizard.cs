@@ -33,10 +33,10 @@ namespace PanelAddinWizard
 	[Designer(typeof(WizardDesigner))]
 	public class Wizard : UserControl
 	{
-		private const int FooterAreaHeight = 48;
-		private readonly Point _offsetCancel = new Point(84, 36);
-		private readonly Point _offsetNext = new Point(168, 36);
-		private readonly Point _offsetBack = new Point(244, 36);
+		private int FooterAreaHeight;
+		private Point _offsetCancel;
+		private Point _offsetNext;
+		private Point _offsetBack;
 		
 		private WizardPage _selectedPage;
 		private readonly WizardPagesCollection _pages;
@@ -117,6 +117,7 @@ namespace PanelAddinWizard
             this.buttonCancel.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.buttonCancel.Location = new System.Drawing.Point(344, 224);
             this.buttonCancel.Name = "buttonCancel";
+            this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 8;
             this.buttonCancel.Text = "Cancel";
             this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
@@ -127,6 +128,7 @@ namespace PanelAddinWizard
             this.buttonNext.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.buttonNext.Location = new System.Drawing.Point(260, 224);
             this.buttonNext.Name = "buttonNext";
+            this.buttonNext.Size = new System.Drawing.Size(75, 23);
             this.buttonNext.TabIndex = 7;
             this.buttonNext.Text = "&Next >";
             this.buttonNext.Click += new System.EventHandler(this.buttonNext_Click);
@@ -137,6 +139,7 @@ namespace PanelAddinWizard
             this.buttonBack.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.buttonBack.Location = new System.Drawing.Point(184, 224);
             this.buttonBack.Name = "buttonBack";
+            this.buttonBack.Size = new System.Drawing.Size(75, 23);
             this.buttonBack.TabIndex = 6;
             this.buttonBack.Text = "< &Back";
             this.buttonBack.Click += new System.EventHandler(this.buttonBack_Click);
@@ -147,6 +150,7 @@ namespace PanelAddinWizard
             this.buttonHelp.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.buttonHelp.Location = new System.Drawing.Point(8, 224);
             this.buttonHelp.Name = "buttonHelp";
+            this.buttonHelp.Size = new System.Drawing.Size(75, 23);
             this.buttonHelp.TabIndex = 9;
             this.buttonHelp.Text = "&Help";
             this.buttonHelp.Visible = false;
@@ -154,6 +158,7 @@ namespace PanelAddinWizard
             // 
             // Wizard
             // 
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
             this.Controls.Add(this.buttonHelp);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonNext);
@@ -808,7 +813,15 @@ namespace PanelAddinWizard
 		{
 			// raise the Load event
 			base.OnLoad(e);
-			
+
+			Graphics g = this.CreateGraphics();
+			float DpiXfactor = g.DpiX / 96;
+			float DpiYfactor = g.DpiY / 96;
+			FooterAreaHeight = (int)(48 * DpiYfactor);
+			_offsetCancel = new Point((int)(100 * DpiXfactor), (int)(36 * DpiYfactor));
+			_offsetNext = new Point((int)((100 + 1*75 + 20) * DpiXfactor), (int)(36 * DpiYfactor));
+			_offsetBack = new Point((int)((100 + 2*75 + 30) * DpiXfactor), (int)(36 * DpiYfactor));
+
 			// activate first page, if exists
 			if (_pages.Count > 0)
 			{
@@ -823,7 +836,13 @@ namespace PanelAddinWizard
 		{
 			// raise the Resize event
 			base.OnResize(e);
+		}
 
+		/// <summary>
+		/// Raises the Paint event.
+		/// </summary>
+		protected override void OnPaint(PaintEventArgs e)
+		{
 			// resize the selected page to fit the wizard
 			if (_selectedPage != null)
 			{
@@ -832,20 +851,14 @@ namespace PanelAddinWizard
 
 			// position navigation buttons
 			buttonCancel.Location = new Point(Width - _offsetCancel.X,
-													Height - _offsetCancel.Y);
+				Height - _offsetCancel.Y);
 			buttonNext.Location = new Point(Width - _offsetNext.X,
-												Height - _offsetNext.Y);
+				Height - _offsetNext.Y);
 			buttonBack.Location = new Point(Width - _offsetBack.X,
-												Height - _offsetBack.Y);
+				Height - _offsetBack.Y);
 			buttonHelp.Location = new Point(buttonHelp.Location.X,
-												Height - _offsetBack.Y);
-		}
+				Height - _offsetBack.Y);
 
-		/// <summary>
-		/// Raises the Paint event.
-		/// </summary>
-		protected override void OnPaint(PaintEventArgs e)
-		{
 			// raise the Paint event
 			base.OnPaint(e);
 			
