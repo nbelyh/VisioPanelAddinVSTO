@@ -60,10 +60,10 @@ namespace PanelAddinWizard
     public class WizardPage : Panel
     {
         #region Consts
-        private const int HeaderAreaHeight = 64;
-        private const int HeaderGlyphSize = 32;
-        private const int HeaderTextPadding = 12;
-        private const int WelcomeGlyphWidth = 164;
+        private int HeaderAreaHeight;
+        private int HeaderGlyphSize;
+        private int HeaderTextPadding;
+        private int WelcomeGlyphWidth;
         #endregion
 
         #region Fields
@@ -178,6 +178,19 @@ namespace PanelAddinWizard
         #endregion
 
         #region Methods
+
+        protected override void OnCreateControl()
+        {
+            base.OnCreateControl();
+	        Graphics g = this.CreateGraphics();
+	        float DpiXfactor = g.DpiX / 96;
+	        float DpiYfactor = g.DpiY / 96;
+	        HeaderAreaHeight = (int)(64 * DpiYfactor);
+	        HeaderGlyphSize = (int)(48 * DpiXfactor);
+	        HeaderTextPadding = (int)(8 * DpiYfactor);
+	        WelcomeGlyphWidth = (int)(164 * DpiYfactor);
+        }
+
         /// <summary>
         /// Provides custom drawing to the wizard page.
         /// </summary>
