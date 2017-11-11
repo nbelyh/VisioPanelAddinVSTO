@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="VisioPanelAddinVSTO.UnmanagedVisio.2017" Version="1.0.8" Language="en-US" Publisher="Nikolay Belykh" />
+    <Identity Id="VisioPanelAddinVSTO.UnmanagedVisio.2017" Version="1.1.0" Language="en-US" Publisher="Nikolay Belykh" />
     <DisplayName>Extended Visio Addin Project</DisplayName>
     <Description>Creates a Microsoft Visio Add-in for Microsoft Visio which provides some user interface to start with, including toolbar and docking panel.</Description>
     <License>license.rtf</License>
