@@ -3,7 +3,11 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
 
   <Fragment>
-    <Binary Id="VisioCustomActions" SourceFile="$(var.SolutionDir)\$(var.Configuration)\VisioCustomActions.dll"/>
+    <?ifdef VS2017 ?>
+      <Binary Id="VisioCustomActions" SourceFile="$(var.SolutionDir)\$(var.Configuration).2017\VisioCustomActions.dll"/>
+    <?else ?>
+      <Binary Id="VisioCustomActions" SourceFile="$(var.SolutionDir)\$(var.Configuration)\VisioCustomActions.dll"/>
+    <?endif?>
   </Fragment>
 
   <Fragment>
