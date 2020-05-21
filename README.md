@@ -5,6 +5,11 @@ Microsoft Visio Addin based on Visual Tools for Office or vanilla COM Shared Add
 
 Published on:
 https://marketplace.visualstudio.com/items?itemName=NikolayBelyh.ExtendedVisioAddinProject
+https://marketplace.visualstudio.com/items?itemName=NikolayBelyh.ExtendedVisioAddinProject2017
+
+![](https://nikolaybelyh.gallerycdn.vsassets.io/extensions/nikolaybelyh/extendedvisioaddinproject/1.0.9/1510402210077/200050/1/06-02-2016%2019-00-05.png)
+
+![](https://nikolaybelyh.gallerycdn.vsassets.io/extensions/nikolaybelyh/extendedvisioaddinproject/1.0.9/1510402210077/200051/1/06-02-2016%2019-03-25.png)
 
 In addition to standard functionality, the project generated with this extension features the following:
 
