@@ -228,7 +228,7 @@ namespace PanelAddinWizardTestApp
                             Directory.Delete(path, true);
                             break;
                         }
-                        catch (Exception e)
+                        catch
                         {
                             System.Threading.Thread.Sleep(1000);
                         }
