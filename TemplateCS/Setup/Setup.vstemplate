@@ -11,6 +11,7 @@
     <DefaultName>Setup</DefaultName>
     <ProvideDefaultName>true</ProvideDefaultName>
     <Icon>IconCS.ico</Icon>
+    <Hidden>true</Hidden>
   </TemplateData>
   <TemplateContent>
     <Project File="Setup.wixproj" ReplaceParameters="true">

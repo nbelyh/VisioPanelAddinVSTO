@@ -5,8 +5,11 @@
     <DefaultName>ExtendedVisioAddin</DefaultName>
     <Description>Creates Extended Visio C# Addin Project and WiX installer project</Description>
     <ProjectType>CSharp</ProjectType>
-    <RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
     <Icon>IconCS.ico</Icon>
+    <Hidden>false</Hidden>
+    <LanguageTag>csharp</LanguageTag>
+    <PlatformTag>windows</PlatformTag>
+    <ProjectTypeTag>office</ProjectTypeTag>
   </TemplateData>
   <TemplateContent>
     <ProjectCollection>

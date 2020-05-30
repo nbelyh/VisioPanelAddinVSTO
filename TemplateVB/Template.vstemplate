@@ -5,8 +5,11 @@
     <DefaultName>ExtendedVisioAddin</DefaultName>
     <Description>Creates Extended Visio VB.NET Addin Project and WiX installer project</Description>
     <ProjectType>VisualBasic</ProjectType>
-    <RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
     <Icon>IconVB.ico</Icon>
+    <Hidden>false</Hidden>
+    <LanguageTag>visualbasic</LanguageTag>
+    <PlatformTag>windows</PlatformTag>
+    <ProjectTypeTag>office</ProjectTypeTag>
   </TemplateData>
   <TemplateContent>
     <ProjectCollection>

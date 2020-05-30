@@ -11,6 +11,7 @@
     <DefaultName>ExtendedVisioAddin</DefaultName>
     <ProvideDefaultName>true</ProvideDefaultName>
     <Icon>IconVB.ico</Icon>
+    <Hidden>true</Hidden>
   </TemplateData>
   <TemplateContent>
     <Project File="Addin.vbproj" ReplaceParameters="true">
