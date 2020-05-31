@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26403.7
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VSIX.2017", "VSIX\VSIX.2017.csproj", "{6C783367-F675-4B8A-8FAF-81AE9E8BE2DF}"
 EndProject
@@ -27,39 +27,50 @@ EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
+		Release_WixExtension|x86 = Release_WixExtension|x86
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{6C783367-F675-4B8A-8FAF-81AE9E8BE2DF}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{6C783367-F675-4B8A-8FAF-81AE9E8BE2DF}.Debug|x86.Build.0 = Debug|Any CPU
+		{6C783367-F675-4B8A-8FAF-81AE9E8BE2DF}.Release_WixExtension|x86.ActiveCfg = Release|Any CPU
 		{6C783367-F675-4B8A-8FAF-81AE9E8BE2DF}.Release|x86.ActiveCfg = Release|Any CPU
 		{6C783367-F675-4B8A-8FAF-81AE9E8BE2DF}.Release|x86.Build.0 = Release|Any CPU
 		{5133DED2-2448-4536-8F18-8FD6E50EAD4D}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{5133DED2-2448-4536-8F18-8FD6E50EAD4D}.Debug|x86.Build.0 = Debug|Any CPU
+		{5133DED2-2448-4536-8F18-8FD6E50EAD4D}.Release_WixExtension|x86.ActiveCfg = Release|Any CPU
 		{5133DED2-2448-4536-8F18-8FD6E50EAD4D}.Release|x86.ActiveCfg = Release|Any CPU
 		{5133DED2-2448-4536-8F18-8FD6E50EAD4D}.Release|x86.Build.0 = Release|Any CPU
 		{B214D62D-7872-4D80-9387-ABBFAAF57A2C}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{B214D62D-7872-4D80-9387-ABBFAAF57A2C}.Debug|x86.Build.0 = Debug|Any CPU
+		{B214D62D-7872-4D80-9387-ABBFAAF57A2C}.Release_WixExtension|x86.ActiveCfg = Release|Any CPU
 		{B214D62D-7872-4D80-9387-ABBFAAF57A2C}.Release|x86.ActiveCfg = Release|Any CPU
 		{B214D62D-7872-4D80-9387-ABBFAAF57A2C}.Release|x86.Build.0 = Release|Any CPU
 		{75B8D080-8DB7-4418-91FB-5E0501ACFEC1}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{75B8D080-8DB7-4418-91FB-5E0501ACFEC1}.Debug|x86.Build.0 = Debug|Any CPU
+		{75B8D080-8DB7-4418-91FB-5E0501ACFEC1}.Release_WixExtension|x86.ActiveCfg = Release|Any CPU
 		{75B8D080-8DB7-4418-91FB-5E0501ACFEC1}.Release|x86.ActiveCfg = Release|Any CPU
 		{75B8D080-8DB7-4418-91FB-5E0501ACFEC1}.Release|x86.Build.0 = Release|Any CPU
 		{BC34960E-B314-4118-990B-55C3908A4C51}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{BC34960E-B314-4118-990B-55C3908A4C51}.Debug|x86.Build.0 = Debug|Any CPU
+		{BC34960E-B314-4118-990B-55C3908A4C51}.Release_WixExtension|x86.ActiveCfg = Release|Any CPU
 		{BC34960E-B314-4118-990B-55C3908A4C51}.Release|x86.ActiveCfg = Release|Any CPU
 		{BC34960E-B314-4118-990B-55C3908A4C51}.Release|x86.Build.0 = Release|Any CPU
 		{554A8562-462B-4F2F-9947-CD9728F73F6B}.Debug|x86.ActiveCfg = Debug|x86
 		{554A8562-462B-4F2F-9947-CD9728F73F6B}.Debug|x86.Build.0 = Debug|x86
+		{554A8562-462B-4F2F-9947-CD9728F73F6B}.Release_WixExtension|x86.ActiveCfg = Release|x86
+		{554A8562-462B-4F2F-9947-CD9728F73F6B}.Release_WixExtension|x86.Build.0 = Release|x86
 		{554A8562-462B-4F2F-9947-CD9728F73F6B}.Release|x86.ActiveCfg = Release|x86
 		{554A8562-462B-4F2F-9947-CD9728F73F6B}.Release|x86.Build.0 = Release|x86
 		{48663322-5C06-477B-9591-7A80E3F09EE2}.Debug|x86.ActiveCfg = Debug|Win32
 		{48663322-5C06-477B-9591-7A80E3F09EE2}.Debug|x86.Build.0 = Debug|Win32
+		{48663322-5C06-477B-9591-7A80E3F09EE2}.Release_WixExtension|x86.ActiveCfg = Release|Win32
+		{48663322-5C06-477B-9591-7A80E3F09EE2}.Release_WixExtension|x86.Build.0 = Release|Win32
 		{48663322-5C06-477B-9591-7A80E3F09EE2}.Release|x86.ActiveCfg = Release|Win32
 		{48663322-5C06-477B-9591-7A80E3F09EE2}.Release|x86.Build.0 = Release|Win32
 		{814CBD03-4FFB-471A-AAF4-F5E04ADEE783}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{814CBD03-4FFB-471A-AAF4-F5E04ADEE783}.Debug|x86.Build.0 = Debug|Any CPU
+		{814CBD03-4FFB-471A-AAF4-F5E04ADEE783}.Release_WixExtension|x86.ActiveCfg = Release|Any CPU
 		{814CBD03-4FFB-471A-AAF4-F5E04ADEE783}.Release|x86.ActiveCfg = Release|Any CPU
 		{814CBD03-4FFB-471A-AAF4-F5E04ADEE783}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
@@ -70,5 +81,8 @@ Global
 		{554A8562-462B-4F2F-9947-CD9728F73F6B} = {25387522-997C-4E2F-AB8A-90F1E1754FFF}
 		{48663322-5C06-477B-9591-7A80E3F09EE2} = {25387522-997C-4E2F-AB8A-90F1E1754FFF}
 		{814CBD03-4FFB-471A-AAF4-F5E04ADEE783} = {25387522-997C-4E2F-AB8A-90F1E1754FFF}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {53CCDF7B-15D3-48DA-ADD2-EE7B44D09208}
 	EndGlobalSection
 EndGlobal

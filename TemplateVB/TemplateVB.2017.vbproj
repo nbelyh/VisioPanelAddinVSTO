@@ -131,7 +131,12 @@
       <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\VisioWixExtension\wixext\VisioWixExtension.2017.csproj">
+      <Project>{814cbd03-4ffb-471a-aaf4-f5e04adee783}</Project>
+      <Name>VisioWixExtension.2017</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.vb" />
   </ItemGroup>
