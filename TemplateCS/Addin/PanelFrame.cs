@@ -43,6 +43,9 @@ namespace $csprojectname$
         private const int GW_CHILD = 5;
         private const int GW_HWNDNEXT = 2;
 
+        private const int GWL_EXSTYLE = (-20);
+        private const int WS_EX_COMPOSITED = 0x02000000;
+
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         private struct RECT
         {
@@ -89,12 +92,10 @@ namespace $csprojectname$
             {
                 if (_visioWindow != null && _form != null)
                 {
-                    var childWindowHandle = _form.Handle;
-
                     _form.Hide();
 
-                    SetWindowLong(childWindowHandle, GWL_STYLE, WS_OVERLAPPED);
-                    SetParent(childWindowHandle, (IntPtr)0);
+                    SetWindowLong(_form.Handle, GWL_STYLE, WS_OVERLAPPED);
+                    SetParent(_form.Handle, (IntPtr)0);
 
                     _visioWindow.Close();
                     _visioWindow = null;
@@ -129,11 +130,9 @@ namespace $csprojectname$
 
                 if (_form != null)
                 {
-                    IntPtr childWindowHandle = _form.Handle;
-
                     _visioWindow = visioParentWindow.Windows.Add(
                         _form.Text,
-                        (int)VisWindowStates.visWSDockedRight | (int)VisWindowStates.visWSAnchorMerged,
+                        (int)VisWindowStates.visWSDockedRight | (int)VisWindowStates.visWSAnchorMerged | (int)VisWindowStates.visWSVisible,
                         VisWinTypes.visAnchorBarAddon,
                         0,
                         0,
@@ -145,18 +144,16 @@ namespace $csprojectname$
 
                     _visioWindow.BeforeWindowClosed += OnBeforeWindowClosed;
 
-                    _visioWindow.Visible = false;
-
                     var parentWindowHandle = (IntPtr)_visioWindow.WindowHandle32;
 
-                    SetWindowLong(childWindowHandle, GWL_STYLE, WS_CHILD);
-                    SetParent(childWindowHandle, parentWindowHandle);
+                    SetWindowLong(_form.Handle, GWL_STYLE, WS_CHILD);
+                    SetWindowLong(_form.Handle, GWL_EXSTYLE, WS_EX_COMPOSITED);
+                    SetParent(_form.Handle, parentWindowHandle);
 
                     _form.Show();
 
                     JiggleWindow(parentWindowHandle);
 
-                    _visioWindow.Visible = true;
                     _visioWindow.Activate();
 
                     retVal = _visioWindow;

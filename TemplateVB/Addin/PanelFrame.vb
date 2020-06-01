@@ -41,6 +41,9 @@ Public NotInheritable Class PanelFrame
     Private Const GW_CHILD As Integer = 5
     Private Const GW_HWNDNEXT As Integer = 2
 
+    Private Const GWL_EXSTYLE As Integer = (-20)
+    Private Const WS_EX_COMPOSITED As Integer = &H2000000
+
     <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Auto)> _
     Private Structure RECT
         Public left As Integer
@@ -78,12 +81,11 @@ Public NotInheritable Class PanelFrame
     Public Sub DestroyWindow()
         Try
             If _visioWindow IsNot Nothing AndAlso _form IsNot Nothing Then
-                Dim childWindowHandle = _form.Handle
 
                 _form.Hide()
 
-                SetWindowLong(childWindowHandle, GWL_STYLE, WS_OVERLAPPED)
-                SetParent(childWindowHandle, CType(0, IntPtr))
+                SetWindowLong(_form.Handle, GWL_STYLE, WS_OVERLAPPED)
+                SetParent(_form.Handle, CType(0, IntPtr))
 
                 _visioWindow.Close()
                 _visioWindow = Nothing
@@ -110,19 +112,17 @@ Public NotInheritable Class PanelFrame
             End If
 
             If _form IsNot Nothing Then
-                Dim childWindowHandle As IntPtr = _form.Handle
 
-                _visioWindow = visioParentWindow.Windows.Add(_form.Text, CInt(VisWindowStates.visWSDockedRight) Or CInt(VisWindowStates.visWSAnchorMerged), VisWinTypes.visAnchorBarAddon, 0, 0, 300, _
+                _visioWindow = visioParentWindow.Windows.Add(_form.Text, CInt(VisWindowStates.visWSDockedRight) Or CInt(VisWindowStates.visWSAnchorMerged) Or CInt(VisWindowStates.visWSVisible), VisWinTypes.visAnchorBarAddon, 0, 0, 300,
                                                              300, AddonWindowMergeId, String.Empty, 0)
 
                 AddHandler _visioWindow.BeforeWindowClosed, AddressOf OnBeforeWindowClosed
 
-                _visioWindow.Visible = False
-
                 Dim parentWindowHandle = CType(_visioWindow.WindowHandle32, IntPtr)
 
-                SetWindowLong(childWindowHandle, GWL_STYLE, WS_CHILD)
-                SetParent(childWindowHandle, parentWindowHandle)
+                SetWindowLong(_form.Handle, GWL_STYLE, WS_CHILD)
+                SetWindowLong(_form.Handle, GWL_EXSTYLE, WS_EX_COMPOSITED)
+                SetParent(_form.Handle, parentWindowHandle)
 
                 _form.Show()
 
