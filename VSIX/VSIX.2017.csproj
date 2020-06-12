@@ -10,7 +10,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>VisioPanelAddinVSIX</RootNamespace>
-    <AssemblyName>VisioPanelVSTOAddinVSIX_2017</AssemblyName>
+    <AssemblyName>VisioPanelVSTOAddinVSIX_2019</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <GeneratePkgDefFile>false</GeneratePkgDefFile>
     <IncludeAssemblyInVSIXContainer>false</IncludeAssemblyInVSIXContainer>
