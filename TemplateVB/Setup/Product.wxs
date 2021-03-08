@@ -65,13 +65,17 @@
     <UI>
       $endif$$if$ ($WixUI$ == WixUI_Minimal)
       <UIRef Id="WixUI_Minimal"/>
+      <Property Id="ALLUSERS" Value="1" />
       $endif$$if$ ($WixUI$ == WixUI_Mondo)
       <UIRef Id="WixUI_Mondo"/>
+      <Property Id="ALLUSERS" Value="1" />
       $endif$$if$ ($WixUI$ == WixUI_InstallDir)
       <UIRef Id="WixUI_InstallDir"/>
+      <Property Id="ALLUSERS" Value="1" />
       <Property Id="WIXUI_INSTALLDIR" Value="APPLICATIONFOLDER" />
       $endif$$if$ ($WixUI$ == WixUI_InstallDirNoLicense)
       <UIRef Id="WixUI_InstallDir"/>
+      <Property Id="ALLUSERS" Value="1" />
       <Property Id="WIXUI_INSTALLDIR" Value="APPLICATIONFOLDER" />
       <!-- Skip license dialog -->
       <Publish Dialog="WelcomeDlg"
