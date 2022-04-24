@@ -27,6 +27,7 @@
     <CopyBuildOutputToOutputDirectory>false</CopyBuildOutputToOutputDirectory>
     <CopyOutputSymbolsToOutputDirectory>false</CopyOutputSymbolsToOutputDirectory>
     <MinimumVisualStudioVersion>15.0</MinimumVisualStudioVersion>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -54,6 +55,7 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Addin\AddinCommandBars.vb" />
+    <Content Include="Addin\Interop\stdole.dll" />
     <Content Include="Addin\Resources\Command1.png" />
     <Content Include="Addin\Resources\Command1_sm.png" />
     <Content Include="Addin\Resources\Command2.png" />

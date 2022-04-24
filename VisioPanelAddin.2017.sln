@@ -10,8 +10,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PanelAddinWizard.2017", "Wi
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "TemplateVB.2017", "TemplateVB\TemplateVB.2017.vbproj", "{75B8D080-8DB7-4418-91FB-5E0501ACFEC1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PanelAddinWizardTestApp.2017", "PanelAddinWizardTestApp\PanelAddinWizardTestApp.2017.csproj", "{BC34960E-B314-4118-990B-55C3908A4C51}"
-EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "VisioExtension.2017", "VisioWixExtension\wixlib\VisioExtension.2017.wixproj", "{554A8562-462B-4F2F-9947-CD9728F73F6B}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VisioCustomActions.2017", "VisioWixExtension\ca\VisioCustomActions.2017.vcxproj", "{48663322-5C06-477B-9591-7A80E3F09EE2}"
@@ -92,5 +90,6 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {53CCDF7B-15D3-48DA-ADD2-EE7B44D09208}
+		SolutionGuid = {7920DEA6-03EC-4851-89CB-883ABAAD8783}
 	EndGlobalSection
 EndGlobal

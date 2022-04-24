@@ -11,8 +11,8 @@
     <RootNamespace>$csprojectname$</RootNamespace>
     <NoStandardLibraries>false</NoStandardLibraries>
     <AssemblyName>$csprojectname$</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+	<TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+	<TargetFrameworkProfile />
   </PropertyGroup>
   $if$ ($vstoAddin$ == true)
   <PropertyGroup>
@@ -98,10 +98,10 @@
       <HintPath>Interop\Microsoft.Office.Interop.Visio.dll</HintPath>
     </Reference>
     <Reference Include="stdole, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <SpecificVersion>False</SpecificVersion>
-      <Private>False</Private>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </Reference>
+      <SpecificVersion>True</SpecificVersion>
+	  <EmbedInteropTypes>True</EmbedInteropTypes>
+	  <HintPath>Interop\stdole.dll</HintPath>
+	</Reference>
   </ItemGroup>
   $if$ ($installExtensibilityInterop$ == true)
   <ItemGroup>
@@ -110,6 +110,7 @@
   $endif$$if$ ($installVisioInterops$ == true)
   <ItemGroup>
     <None Include="Interop\Office.dll" />
+	<None Include="Interop\stdole.dll" />
     <None Include="Interop\Microsoft.Office.Interop.Visio.dll" />
   </ItemGroup>
   $endif$$if$ ($commandbars$ == true)
