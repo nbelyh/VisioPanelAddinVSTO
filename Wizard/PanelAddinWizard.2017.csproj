@@ -39,11 +39,6 @@
     <AssemblyOriginatorKeyFile>PanelAddinWizard.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.VisualStudio.TemplateWizardInterface, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>Resources\Microsoft.VisualStudio.TemplateWizardInterface.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -105,11 +100,11 @@
     <None Include="Resources\IconVB.ico" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="envdte80">
-      <Version>8.0.3</Version>
+    <PackageReference Include="Microsoft.VisualStudio.SDK">
+      <Version>17.1.32210.191</Version>
     </PackageReference>
-    <PackageReference Include="Microsoft.VisualStudio.Shell.15.0">
-      <Version>15.0.26201</Version>
+    <PackageReference Include="Microsoft.VisualStudio.TemplateWizardInterface">
+      <Version>17.1.32210.191</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

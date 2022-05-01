@@ -23,7 +23,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using PanelAddinWizard.Properties;
-using Microsoft.Win32;
+// using Microsoft.Win32;
 
 #endregion
 
@@ -122,10 +122,10 @@ namespace PanelAddinWizard
         string GetDefaultManufacturerName()
         {
             var osHive = Environment.Is64BitOperatingSystem 
-                ? RegistryView.Registry64 
-                : RegistryView.Default;
+                ? Microsoft.Win32.RegistryView.Registry64 
+                : Microsoft.Win32.RegistryView.Default;
 
-            using (var baseKey = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, osHive))
+            using (var baseKey = Microsoft.Win32.RegistryKey.OpenBaseKey(Microsoft.Win32.RegistryHive.LocalMachine, osHive))
             {
                 if (baseKey != null)
                 {

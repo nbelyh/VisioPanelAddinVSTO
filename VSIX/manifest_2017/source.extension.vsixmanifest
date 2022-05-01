@@ -28,7 +28,7 @@
 		</InstallationTarget>
 	</Installation>
     <Dependencies>
-        <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
+        <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.7.2,)" />
     </Dependencies>
     <Assets>
         <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="PanelAddinWizard.2017" Path="|PanelAddinWizard.2017|" AssemblyName="|PanelAddinWizard.2017;AssemblyName|" />
