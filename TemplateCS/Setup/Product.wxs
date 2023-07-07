@@ -88,15 +88,28 @@
                Event="NewDialog"
                Value="WelcomeDlg"
                Order="2">1</Publish>
-      $endif$$if$ ($WixUI$ == WixUI_Advanced)
+      $endif$$if$ ($WixUI$ == WixUI_Advanced_DefaultAdmin)
       <UIRef Id="WixUI_Advanced"/>
       <Property Id="ALLUSERS" Value="2" />
       <Property Id="ApplicationFolderName" Value="$csprojectname$" />
       <Property Id="WixAppFolder" Value="WixPerMachineFolder" />
 
-      <Publish Dialog="InstallScopeDlg" Control="Next" Property="MSIINSTALLPERUSER" Value="1" >WixAppFolder = "WixPerUserFolder"</Publish>
-      <Publish Dialog="InstallScopeDlg" Control="Next" Property="MSIINSTALLPERUSER" Value="{}" >WixAppFolder = "WixPerMachineFolder"</Publish>
-    $endif$$if$ ($EnableWixUI$ == true)</UI>
+      <Publish Dialog="InstallScopeDlg" Control="Next" Property="MSIINSTALLPERUSER" Value="1" Order="2">WixAppFolder = "WixPerUserFolder"</Publish>
+      <Publish Dialog="InstallScopeDlg" Control="Next" Property="MSIINSTALLPERUSER" Value="{}" Order="2">WixAppFolder = "WixPerMachineFolder"</Publish>
+      <Publish Dialog="InstallScopeDlg" Control="Next" Event="DoAction" Value="WixSetDefaultPerMachineFolder" Order="3">WixAppFolder = "WixPerMachineFolder"</Publish>
+      <Publish Dialog="InstallScopeDlg" Control="Next" Event="DoAction" Value="WixSetDefaultPerUserFolder" Order="3">WixAppFolder = "WixPerUserFolder"</Publish>
+      $endif$$if$ ($WixUI$ == WixUI_Advanced_DefaultUser)
+      <UIRef Id="WixUI_Advanced"/>
+      <Property Id="ALLUSERS" Value="2" />
+      <Property Id="MSIINSTALLPERUSER" Value="1" />
+      <Property Id="ApplicationFolderName" Value="$csprojectname$" />
+      <Property Id="WixAppFolder" Value="WixPerUserFolder" />
+
+      <Publish Dialog="InstallScopeDlg" Control="Next" Property="MSIINSTALLPERUSER" Value="1" Order="2">WixAppFolder = "WixPerUserFolder"</Publish>
+      <Publish Dialog="InstallScopeDlg" Control="Next" Property="MSIINSTALLPERUSER" Value="{}" Order="2">WixAppFolder = "WixPerMachineFolder"</Publish>
+      <Publish Dialog="InstallScopeDlg" Control="Next" Event='DoAction' Value="WixSetDefaultPerMachineFolder" Order="3">WixAppFolder = "WixPerMachineFolder"</Publish>
+      <Publish Dialog="InstallScopeDlg" Control="Next" Event='DoAction' Value="WixSetDefaultPerUserFolder" Order="3">WixAppFolder = "WixPerUserFolder"</Publish>
+      $endif$$if$ ($EnableWixUI$ == true)</UI>
     $endif$
   </Product>
 

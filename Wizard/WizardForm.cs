@@ -524,7 +524,8 @@ namespace PanelAddinWizard
             "WixUI_InstallDir",
             "WixUI_InstallDirNoLicense",
             "WixUI_Mondo",
-            "WixUI_Advanced"});
+            "WixUI_Advanced_DefaultUser",
+            "WixUI_Advanced_DefaultAdmin"});
             this.comboSetupUI.Location = new System.Drawing.Point(59, 345);
             this.comboSetupUI.Name = "comboSetupUI";
             this.comboSetupUI.Size = new System.Drawing.Size(262, 21);
